@@ -1,6 +1,13 @@
+export interface Namespace {
+    name?: string;
+    namespaces: Namespace[];
+    classes: Class[];
+}
+
 export interface Class {
     name: string;
-    extends?: string;
+    namespace?: string;
+    parent?: string;
 
     properties: Property[];
     methods: Method[];
