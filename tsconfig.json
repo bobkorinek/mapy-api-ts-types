@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "noImplicitAny": false,
+        "target": "es6",
+        "allowSyntheticDefaultImports": true,
+        "moduleResolution": "node",
+        "lib": [
+            "es6",
+            "dom",
+            "dom.iterable",
+            "es2017"
+        ]
+    },
+    "exclude": [
+        "node_modules"
+    ]
+}
