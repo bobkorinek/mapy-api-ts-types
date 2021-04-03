@@ -10,6 +10,7 @@ export const parseClass = (doc: Document): Class => {
         name: parsedName.class,
         namespace: parsedName.ns,
         methods: methods,
+        parent: getParentClass(doc),
         properties: []
     };
 }
@@ -21,4 +22,14 @@ export const parseName = (className: string) => {
         class: parts.groups['class'],
         ns: parts.groups['ns'] ? parts.groups['ns'] : null
     }
+}
+
+export const getParentClass = (doc: Document) => {
+    const parentLinkElement = doc.querySelector('#content>p.description>a');
+
+    if (parentLinkElement) {
+        return parentLinkElement.textContent.trim();
+    }
+
+    return null;
 }

@@ -16,7 +16,7 @@ export const extractMethods = (page: Document): Method[] => {
 
 const parseMethod = (detailElement: HTMLElement): Method => {
     const text = detailElement.textContent.trim();
-    const match = text.match(/(?:\{(?<type>.*?)\})?.*?(?<name>[^.]+)\((?<args>.*)\)$/);
+    const match = text.match(/(?<static><statická>)?[\t\n]*?(?:\{(?<type>.*?)\})?.*?(?<name>[^.]+)\((?<args>.*)\)$/m);
 
     if (match) {
         const description = detailElement.nextElementSibling.classList.contains('description')
@@ -29,14 +29,13 @@ const parseMethod = (detailElement: HTMLElement): Method => {
             name: match.groups['name'].trim(),
             arguments: parsedArguments,
             type: type,
-            static: false,
+            static: Boolean(match.groups['static']),
             comment: description,
         }
     }
 
     return null;
 }
-
 
 const getContentElement = (page: Document) => page.getElementById('content');
 
