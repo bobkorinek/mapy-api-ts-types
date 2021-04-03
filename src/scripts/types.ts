@@ -1,5 +1,6 @@
 export interface Namespace {
     name?: string;
+    parent?: Namespace;
     namespaces: Namespace[];
     classes: Class[];
 }

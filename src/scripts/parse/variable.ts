@@ -5,7 +5,7 @@ export const resolveType = (type: string) => {
 
     if (type === 'int' || type === 'float') {
         return 'number';
-    } else if (type === 'bool') {
+    } else if (type === 'bool' || type === 'Boolean') {
         return 'boolean';
     } else if (type === 'event') {
         return 'Event';

@@ -1,7 +1,8 @@
 import { Class, Method, Namespace } from "./types"
 import * as fs from 'fs';
+import * as path from 'path';
 
-export const exportClasses = (classes: Class[], filePath: string = __dirname + '/out.ts') => {
+export const exportClasses = (classes: Class[], filePath: string = path.dirname(__dirname) + '/types/mapycz.d.ts') => {
     const root: Namespace = {
         namespaces: [],
         classes: []
@@ -11,7 +12,7 @@ export const exportClasses = (classes: Class[], filePath: string = __dirname + '
 
     const file = fs.createWriteStream(filePath);
 
-    file.write(createNamesapce(root));
+    file.write(createNamespace(root));
 
     file.close();
 }
@@ -29,6 +30,7 @@ const assignToNamespace = (c: Class, ns: Namespace, nsParts: string[]) => {
         } else {
             const newNs = {
                 name: nsPart,
+                parent: ns,
                 classes: [],
                 namespaces: []
             };
@@ -40,10 +42,12 @@ const assignToNamespace = (c: Class, ns: Namespace, nsParts: string[]) => {
     }
 }
 
-const createClass = (c: Class) => 'class ' + c.name + (c.parent ? ' extends ' + c.parent : '') + ' {\n\n' + createMethods(c) + '}\n';
+const createClass = (c: Class, ns: Namespace) => (ns.parent ? '' : 'export declare ') + 'class ' + c.name + (c.parent ? ' extends ' + c.parent : '') + ' {\n\n' + createMethods(c) + '}\n\n';
 
 const createMethods = (c: Class) => c.methods.map(m => (m.comment ? '/**\n* ' + m.comment + '\n*/\n' : '') + (m.static ? 'static ' : '') + m.name + '(' + createArguments(m) + '): ' + (typeof m.type === 'string' ? m.type : m.type.join(' | ')) + ';\n').join('\n');
 
 const createArguments = (m: Method) => m.arguments.map(a => a.name + ':' + (typeof a.type === 'string' ? a.type : a.type.join(' | '))).join(', ');
 
-const createNamesapce = (ns: Namespace) => (ns.name ? 'namespace ' + ns.name : 'export { }\n\ndeclare global') + ' {\n' + ns.classes.map(createClass).join('\n') + ns.namespaces.map(createNamesapce).join('\n') + '}\n';
+const createNamespace = (ns: Namespace) => (ns.parent ? (ns.parent.parent ? '' : 'export declare ') + 'namespace ' + ns.name + ' {\n' : '') + ns.classes.map((c) => createClass(c, ns)).join('\n') + ns.namespaces.map(createNamespace).join('\n') + (ns.parent ? '}\n\n' : '');
+
+
