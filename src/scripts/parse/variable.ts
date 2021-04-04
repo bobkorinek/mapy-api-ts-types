@@ -3,7 +3,7 @@ export const resolveType = (type: string) => {
         return 'unknown';
     }
 
-    if (type === 'int' || type === 'float') {
+    if (type === 'int' || type === 'float' || type === 'Number') {
         return 'number';
     } else if (type === 'bool' || type === 'Boolean') {
         return 'boolean';
@@ -29,8 +29,6 @@ export const resolveType = (type: string) => {
 
     if (arrayMatch) {
         return 'Array<' + resolveType(arrayMatch.groups['type']) + '>';
-    } else if (type.match('JAK.*')) {
-        return 'unknown';
     }
 
     return type;
