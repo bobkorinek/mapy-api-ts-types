@@ -160,7 +160,7 @@ declare class SMap {
     /**
     * Hlavní konstruktor map.
     */
-    constructor(container: Node, center: SMap.Coords, zoom: number, options: object);
+    constructor(container: Node, center?: SMap.Coords, zoom?: number, options?: object);
 
     /**
     * Všechny destruktory dělají toto: 
@@ -208,7 +208,7 @@ declare class SMap {
     /**
     * Nastaví orientaci
     */
-    setOrientation(o: number, animate: boolean): void;
+    setOrientation(o: number, animate?: boolean): void;
 
     /**
     * Nastaví projekci
@@ -248,12 +248,12 @@ declare class SMap {
     /**
     * Nastaví kurzor mapovému rodiči
     */
-    setCursor(cursor: string | null, x: number, y: number): void;
+    setCursor(cursor: string | null, x?: number, y?: number): void;
 
     /**
     * Nastaví mapě nový střed.
     */
-    setCenter(center: SMap.Coords | SMap.Pixel, animate: boolean): void;
+    setCenter(center: SMap.Coords | SMap.Pixel, animate?: boolean): void;
 
     /**
     * Dojde ke zmene zoomu od toho soucasneho?
@@ -263,12 +263,12 @@ declare class SMap {
     /**
     * Nastaví mapě zoom
     */
-    setZoom(z: number | string, fixedPoint: SMap.Pixel | SMap.Coords, animate: boolean): void;
+    setZoom(z: number | string, fixedPoint?: SMap.Pixel | SMap.Coords, animate?: boolean): void;
 
     /**
     * Nastaví střed i zoom
     */
-    setCenterZoom(center: SMap.Coords, zoom: number, animate: boolean): void;
+    setCenterZoom(center: SMap.Coords, zoom: number, animate?: boolean): void;
 
     /**
     * Vrátí střed
@@ -283,12 +283,12 @@ declare class SMap {
     /**
     * Spočítá střed a zoom pro množinu bodů
     */
-    computeCenterZoom(arr: Array<SMap.Coords>, usePadding: boolean): Array<SMap.Coords>;
+    computeCenterZoom(arr: Array<SMap.Coords>, usePadding?: boolean): Array<SMap.Coords>;
 
     /**
     * Přidá do mapy vrstvu
     */
-    addLayer(l: SMap.Layer, before: boolean): SMap.Layer;
+    addLayer(l: SMap.Layer, before?: boolean): SMap.Layer;
 
     /**
     * Odebere vrstvu z mapy
@@ -308,7 +308,7 @@ declare class SMap {
     /**
     * Přidá do mapy ovládací prvek
     */
-    addControl(c: SMap.Control, placement: object): void;
+    addControl(c: SMap.Control, placement?: object): void;
 
     /**
     * Vrátí seznam ovládacích prvků
@@ -374,22 +374,22 @@ declare class SMap {
     * Nahradí v zadaném řetězci všechny placeholdery {nazev} aktuálními hodnotami.
     Povolené hodnoty: cx, cy, lbx, lby, rtx, rty, lx, rx, by, ty, zoom, zoom[+-][12], orientation.
     */
-    formatString(template: string, customValues: object): string;
+    formatString(template: string, customValues?: object): string;
 
     /**
     * Test, jsou-li na zadaném místě (či aktuálním středu) dostupné šikmé snímky
     */
-    isObliqueAvailable(coords: SMap.Coords): void;
+    isObliqueAvailable(coords?: SMap.Coords): void;
 
     /**
     * Test, jsou-li na zadaném místě (či aktuálním středu) dostupné letecké snímky
     */
-    isOphotoAvailable(coords: SMap.Coords): void;
+    isOphotoAvailable(coords?: SMap.Coords): void;
 
     /**
     * Nové souřadnice, které se od zadaných na zadaném zoomu liší o padding mapy
     */
-    adjustCoordsByPadding(coords: SMap.Coords, zoom: number, projection: SMap.Projection): SMap.Coords;
+    adjustCoordsByPadding(coords: SMap.Coords, zoom?: number, projection?: SMap.Projection): SMap.Coords;
 
     /**
     * Přepnout do režimu plynulého zoomu
@@ -404,7 +404,7 @@ declare class SMap {
     /**
     * Pustit animaci s daným cílem
     */
-    zoomAnimationTarget(targetZoom: number, sourceZoom: number): void;
+    zoomAnimationTarget(targetZoom: number, sourceZoom?: number): void;
 
     /**
     * Konec režimu plynulého zoomu
@@ -467,7 +467,7 @@ declare namespace SMap {
         /**
         * Převod na pixel
         */
-        toPixel(map: SMap, zoom: number): SMap.Pixel;
+        toPixel(map: SMap, zoom?: number): SMap.Pixel;
 
         /**
         * Vrátí duplikát
@@ -488,7 +488,7 @@ declare namespace SMap {
         * Spočte obloukovou vzdálenost (haversinový vzorec) mezi touto a druhou souřadnicí v zadané nadmořské výšce.
         Výchozí výška je 0 m.n.m., aproximováno na 6371009 metrů.
         */
-        distance(target: SMap.Coords, altitude: number): number;
+        distance(target: SMap.Coords, altitude?: number): number;
 
         distanceMiro(): void;
 
@@ -500,7 +500,7 @@ declare namespace SMap {
         /**
         * Převede souřadnice do WGS 84
         */
-        toWGS84(format: number): Array<number> | Array<string>;
+        toWGS84(format?: number): Array<number> | Array<string>;
 
         /**
         * Převede souřadnice do PP
@@ -523,7 +523,7 @@ declare namespace SMap {
         /**
         * Ověří, jsou-li tyto souřadnice v průhledu mapy
         */
-        inMap(map: SMap, usePadding: boolean): void;
+        inMap(map: SMap, usePadding?: boolean): void;
 
         /**
         * Tovární metoda - výroba souřadnic z Mercator metrů (epsg:3857)
@@ -577,7 +577,7 @@ declare namespace SMap {
         /**
         * Převod na pixel
         */
-        toPixel(map: SMap, zoom: number): SMap.Pixel;
+        toPixel(map: SMap, zoom?: number): SMap.Pixel;
 
         /**
         * Vrátí duplikát
@@ -598,7 +598,7 @@ declare namespace SMap {
         * Spočte obloukovou vzdálenost (haversinový vzorec) mezi touto a druhou souřadnicí v zadané nadmořské výšce.
         Výchozí výška je 0 m.n.m., aproximováno na 6371009 metrů.
         */
-        distance(target: SMap.Coords, altitude: number): number;
+        distance(target: SMap.Coords, altitude?: number): number;
 
         distanceMiro(): void;
 
@@ -610,7 +610,7 @@ declare namespace SMap {
         /**
         * Převede souřadnice do WGS 84
         */
-        toWGS84(format: number): Array<number> | Array<string>;
+        toWGS84(format?: number): Array<number> | Array<string>;
 
         /**
         * Převede souřadnice do PP
@@ -632,7 +632,7 @@ declare namespace SMap {
         /**
         * Ověří, jsou-li tyto souřadnice v průhledu mapy
         */
-        inMap(map: SMap, usePadding: boolean): void;
+        inMap(map: SMap, usePadding?: boolean): void;
 
         /**
         * Vrátí nadmořskou výšku.
@@ -647,7 +647,7 @@ declare namespace SMap {
         /**
         * Převod do OpenLocation formátu.
         */
-        toOLC(codeLength: number): string;
+        toOLC(codeLength?: number): string;
 
         /**
         * Převod z MGRS formátu na SMap.Coords
@@ -657,7 +657,7 @@ declare namespace SMap {
         /**
         * Převod do MGRS formátu.
         */
-        toMGRS(precision: number): string;
+        toMGRS(precision?: number): string;
 
         /**
         * Tovární metoda - výroba souřadnic z Mercator metrů (epsg:3857)
@@ -783,7 +783,7 @@ declare namespace SMap {
     class Marker extends SMap.IOwned {
         static FotoPOI;
 
-        constructor(coords: SMap.Coords, id: string | false, options: object);
+        constructor(coords: SMap.Coords, id: string | false, options?: object);
 
         /**
         * Statická tovární metoda - výroba značky z XML
@@ -953,7 +953,7 @@ declare namespace SMap {
     }
 
     class Card extends SMap.IOwned {
-        constructor(width: number, options: object);
+        constructor(width?: number, options?: object);
 
         $destructor(): void;
 
@@ -1081,7 +1081,7 @@ declare namespace SMap {
         /**
         * Převod na souřadnice
         */
-        toCoords(map: SMap, zoom: number): SMap.Coords;
+        toCoords(map: SMap, zoom?: number): SMap.Coords;
 
         /**
         * Přičtení jiného pixelu
@@ -1106,7 +1106,7 @@ declare namespace SMap {
         /**
         * Vynásobí pixel konstantou či párem konstant
         */
-        scale(sx: number, sy: number): void;
+        scale(sx: number, sy?: number): void;
 
         /**
         * Spočte euklidovskou vzdálenost k jinému pixelu
@@ -1131,7 +1131,7 @@ declare namespace SMap {
         /**
         * Převod na souřadnice
         */
-        toCoords(map: SMap, zoom: number): SMap.Coords;
+        toCoords(map: SMap, zoom?: number): SMap.Coords;
 
         /**
         * Přičtení jiného pixelu
@@ -1156,7 +1156,7 @@ declare namespace SMap {
         /**
         * Vynásobí pixel konstantou či párem konstant
         */
-        scale(sx: number, sy: number): void;
+        scale(sx: number, sy?: number): void;
 
         /**
         * Spočte euklidovskou vzdálenost k jinému pixelu
@@ -1177,7 +1177,7 @@ declare namespace SMap {
     class Route extends JAK.Signals {
         static ROUTE_TURIST_TYPES;
 
-        constructor(coords: Array<SMap.Coords>, callback: Function, params: object);
+        constructor(coords: Array<SMap.Coords>, callback: Function, params?: object);
 
         static formatRouteDistance(): void;
 
@@ -1329,7 +1329,7 @@ declare namespace SMap {
         /**
         * Vytvoření našeptávače - je potřeba zadat vstupní input a volitelné parametry.
         */
-        constructor(input: Element, options: Object);
+        constructor(input: Element, options?: Object);
 
         /**
         * Funkce pro upravu url parametru.
@@ -1359,12 +1359,12 @@ declare namespace SMap {
         /**
         * Přidání posluchače signálu.
         */
-        addListener(name: string, cb: Function, scope: Object): void;
+        addListener(name: string, cb: Function, scope?: Object): void;
 
         /**
         * Odstranění posluchače signálu.
         */
-        removeListener(name: string, cb: Function, scope: Object): void;
+        removeListener(name: string, cb: Function, scope?: Object): void;
 
         /**
         * Odstranění našeptávače.
@@ -1445,7 +1445,7 @@ declare namespace SMap {
         /**
         * Vytvoření provideru pro zajištění dat našeptávače.
         */
-        constructor(options: Object);
+        constructor(options?: Object);
 
         /**
         * Nastaveni ze suggestu pro zpetnou kombalitu.
@@ -1633,7 +1633,7 @@ declare namespace SMap {
         }
 
         class GPX extends SMap.Layer.Multi {
-            constructor(xmlDoc: XMLDocument, id: string, options: object);
+            constructor(xmlDoc: XMLDocument, id: string, options?: object);
 
             static parseCoords(): void;
 
@@ -1743,7 +1743,7 @@ declare namespace SMap {
         }
 
         class Geometry extends SMap.Layer {
-            constructor(id: any, options: object);
+            constructor(id: any, options?: object);
 
             $destructor(): void;
 
@@ -1859,7 +1859,7 @@ declare namespace SMap {
             /**
             * Nová položka do HUDu
             */
-            addItem(node: Node, placement: object, prepend: boolean): void;
+            addItem(node: Node, placement: object, prepend?: boolean): void;
 
             /**
             * Zruší položku z HUDu
@@ -1942,7 +1942,7 @@ declare namespace SMap {
             /**
             * Přidání nového obrázku
             */
-            addImage(url: string, leftTop: SMap.Coords, rightBottom: SMap.Coords, opacity: number): string;
+            addImage(url: string, leftTop: SMap.Coords, rightBottom: SMap.Coords, opacity?: number): string;
 
             /**
             * Odebere dříve přidaný obrázek
@@ -2021,7 +2021,7 @@ declare namespace SMap {
         }
 
         class KML extends SMap.Layer.Multi {
-            constructor(xmlDoc: XMLDocument, id: string, options: object);
+            constructor(xmlDoc: XMLDocument, id: string, options?: object);
 
             filter(): void;
 
@@ -2132,7 +2132,7 @@ declare namespace SMap {
         }
 
         class Marker extends SMap.Layer {
-            constructor(options: object);
+            constructor(options?: object);
 
             $destructor(): void;
 
@@ -2144,12 +2144,12 @@ declare namespace SMap {
             /**
             * Přidá do vrstvy značku nebo značky
             */
-            addMarker(marker: SMap.Marker | Array<SMap.Marker>, noRedraw: boolean): void;
+            addMarker(marker: SMap.Marker | Array<SMap.Marker>, noRedraw?: boolean): void;
 
             /**
             * Odebere značku nebo značky z vrstvy
             */
-            removeMarker(marker: SMap.Marker | Array<SMap.Marker>, noRedraw: boolean): void;
+            removeMarker(marker: SMap.Marker | Array<SMap.Marker>, noRedraw?: boolean): void;
 
             /**
             * Odebere všechny značky
@@ -2459,7 +2459,7 @@ declare namespace SMap {
 
             static DEFAULT_OPTIONS;
 
-            constructor(id: string, url: string, options: object);
+            constructor(id: string, url: string, options?: object);
 
             /**
             * Za běhu změní vrstvě nějaké nastavení (a následně ji plně překreslí)
@@ -3027,7 +3027,7 @@ declare namespace SMap {
 
     namespace Control {
         class Compass {
-            constructor(options: object);
+            constructor(options?: object);
 
             setOwner(): void;
 
@@ -3055,14 +3055,14 @@ declare namespace SMap {
             /**
             * Otevře menu na zadané pixelové pozici
             */
-            open(event: Event, coords: SMap.Coords): void;
+            open(event: Event, coords?: SMap.Coords): void;
 
             close(): void;
 
             /**
             * Přidá položku menu
             */
-            addItem(item: SMap.Control.ContextMenu.Item, pos: number): void;
+            addItem(item: SMap.Control.ContextMenu.Item, pos?: number): void;
 
             /**
             * Odebere existující položku menu
@@ -3138,7 +3138,7 @@ declare namespace SMap {
         }
 
         class Keyboard extends SMap.Control {
-            constructor(mode: number, options: object);
+            constructor(mode: number, options?: object);
 
             setOwner(): void;
 
@@ -3166,7 +3166,7 @@ declare namespace SMap {
         }
 
         class Layer {
-            constructor(options: object);
+            constructor(options?: object);
 
             $destructor(): void;
 
@@ -3200,7 +3200,7 @@ declare namespace SMap {
         }
 
         class Minimap {
-            constructor(width: number, height: number, options: object);
+            constructor(width?: number, height?: number, options?: object);
 
             setOwner(): void;
 
@@ -3228,7 +3228,7 @@ declare namespace SMap {
         }
 
         class Mouse extends SMap.Control {
-            constructor(mode: number, options: object);
+            constructor(mode: number, options?: object);
 
             setOwner(): void;
 
@@ -3256,7 +3256,7 @@ declare namespace SMap {
         }
 
         class Orientation {
-            constructor(options: object);
+            constructor(options?: object);
 
             /**
             * Vrátí kontejner prvku
@@ -3300,12 +3300,12 @@ declare namespace SMap {
             /**
             * Konstruktor
             */
-            constructor(options: object);
+            constructor(options?: object);
 
             /**
             * Zobrazeni kapičky ke středu
             */
-            setCoords(center: SMap.Coords, alwaysShow: boolean): void;
+            setCoords(center?: SMap.Coords, alwaysShow?: boolean): void;
 
             /**
             * Překreslení kapky na obrazovce.
@@ -3316,7 +3316,7 @@ declare namespace SMap {
         }
 
         class Rosette {
-            constructor(options: object);
+            constructor(options?: object);
 
             $destructor(): void;
 
@@ -3339,7 +3339,7 @@ declare namespace SMap {
             /**
             * starý formát:
             */
-            constructor(conf: number, conf: Object);
+            constructor(conf?: number, conf?: Object);
 
             setOwner(): void;
 
@@ -3380,14 +3380,14 @@ declare namespace SMap {
         }
 
         class Sync extends SMap.Control {
-            constructor(options: object);
+            constructor(options?: object);
 
             setOwner(): void;
 
             /**
             * Změna odsazení mapy odspodu
             */
-            setBottomSpace(bottomSpace: number): void;
+            setBottomSpace(bottomSpace?: number): void;
 
             $destructor(): void;
 
@@ -3424,7 +3424,7 @@ declare namespace SMap {
         }
 
         class Zoom {
-            constructor(labels: object, options: object);
+            constructor(labels: object, options?: object);
 
             $destructor(): void;
 
@@ -3540,7 +3540,7 @@ declare namespace SMap {
 
     namespace Marker {
         class Cluster extends SMap.Marker {
-            constructor(id: any, options: object);
+            constructor(id: any, options?: object);
 
             /**
             * Přidání značky do shluku
@@ -3622,7 +3622,7 @@ declare namespace SMap {
         }
 
         class Clusterer {
-            constructor(map: SMap, maxDistance: number, clusterCtor: Function);
+            constructor(map: SMap, maxDistance?: number, clusterCtor?: Function);
 
             /**
             * Vše vyčistit
@@ -3703,12 +3703,12 @@ declare namespace SMap {
             /**
             * Změna vizuálu značky.
             */
-            setVisual(visual: object): void;
+            setVisual(visual?: object): void;
 
             /**
             * Zapnutí/vypnutí animace zvětšování obsahu markeru.
             */
-            setActive(state: boolean, noAnim: boolean): void;
+            setActive(state: boolean, noAnim?: boolean): void;
 
             /**
             * Nastavení callback funkce pro naplnění obsahu vizitky.
@@ -3827,7 +3827,7 @@ declare namespace SMap {
                 /**
                 * Dekorační metoda - nevolat přímo, ale přes marker.decorate()
                 */
-                decorate(marker: SMap.Marker, options: object): void;
+                decorate(marker: SMap.Marker, options?: object): void;
             }
 
             class RelativeAnchor extends JAK.AbstractDecorator {
@@ -3892,7 +3892,7 @@ declare namespace SMap {
         }
 
         class Marker extends SMap.Marker {
-            constructor(coords: SMap.Coords, id: string | false, options: object);
+            constructor(coords: SMap.Coords, id: string | false, options?: object);
 
             setAngle(): void;
 
@@ -4052,7 +4052,7 @@ declare namespace SMap {
         }
 
         class Scene {
-            constructor(parent: Node, options: object);
+            constructor(parent: Node, options?: object);
 
             $destructor(): void;
 
@@ -4064,7 +4064,7 @@ declare namespace SMap {
             /**
             * Zobrazit konkrétní místo
             */
-            show(place: SMap.Pano.Place, options: object): void;
+            show(place: SMap.Pano.Place, options?: object): void;
 
             getContainer(): void;
 
@@ -4179,17 +4179,17 @@ declare namespace SMap {
             /**
             * Přidání startu. Pokud již nějaký start existuje, smaže se a místo něj se přidá nový. Parametry určují, jak se bude plánovat z tohoto bodu k dalšímu.
             */
-            addStart(coords: object, options: object): object;
+            addStart(coords?: object, options?: object): object;
 
             /**
             * Přidání cíle. Pokud již nějaký cíl existuje, smaže se a místo něj se přidá nový.
             */
-            addDestination(coords: object, options: object): object;
+            addDestination(coords?: object, options?: object): object;
 
             /**
             * Přidání průjezdního bodu. Přidává se vždy před cílový bod. Parametry určují, jak se bude plánovat z tohoto bodu k dalšímu.
             */
-            addWaypoint(coords: object, options: object): object;
+            addWaypoint(coords?: object, options?: object): object;
 
             /**
             * Získání url do plánovače na mapy.cz
@@ -4223,7 +4223,7 @@ declare namespace SMap {
             /**
             * Statická tovární metoda: asynchronně začne vytvářet projekci; až je vyrobena, zavolá callback.
             */
-            static create(center: SMap.Coords, orientation: number, callback: Function, errorCallback: Function): void;
+            static create(center: SMap.Coords, orientation: number, callback: Function, errorCallback?: Function): void;
 
             static fromXML(): void;
 

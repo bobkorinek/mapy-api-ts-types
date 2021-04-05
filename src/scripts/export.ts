@@ -72,5 +72,5 @@ const createProperties = (c: Class, ns: Namespace) => c.properties.length === 0 
 
 const createMethods = (c: Class) => c.methods.map(m => (m.comment ? '/**\n* ' + m.comment + '\n*/\n' : '') + (m.static ? 'static ' : '') + m.name + '(' + createArguments(m) + ')' + createType(m.type) + ';\n').join('\n');
 
-const createArguments = (m: Method) => m.arguments.map(a => a.name + createType(a.type)).join(', ');
+const createArguments = (m: Method) => m.arguments.map(a => a.name + (a.optional ? '?' : '') + createType(a.type)).join(', ');
 
