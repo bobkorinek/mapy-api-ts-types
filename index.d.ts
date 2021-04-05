@@ -158,6 +158,11 @@ declare class SMap {
     static LOOKUP_GEOMETRY;
 
     /**
+    * Hlavní konstruktor map.
+    */
+    constructor(container: Node, center: SMap.Coords, zoom: number, options: object);
+
+    /**
     * Všechny destruktory dělají toto: 
     - vymažou kontejner, pokud prvek nějaký má 
     - zavolají destruktor všech podřízených prvků 
@@ -278,7 +283,7 @@ declare class SMap {
     /**
     * Spočítá střed a zoom pro množinu bodů
     */
-    computeCenterZoom(arr: Array<SMap.Coords>, usePadding: boolean): array;
+    computeCenterZoom(arr: Array<SMap.Coords>, usePadding: boolean): Array<SMap.Coords>;
 
     /**
     * Přidá do mapy vrstvu
@@ -421,6 +426,11 @@ declare class SMap {
 
 declare namespace SMap {
     class Coords {
+        /**
+        * Konstruktor je lepší nepoužívat, namísto toho vyrábět souřadnice pomocí továrních metod
+        */
+        constructor(x: number, y: number);
+
         /**
         * Tovární metoda - výroba souřadnic z události
         */
@@ -627,7 +637,7 @@ declare namespace SMap {
         /**
         * Vrátí nadmořskou výšku.
         */
-        getAltitude(): Promise;
+        getAltitude(): JAK.Promise<number, { data: object, status: number }>;
 
         /**
         * Převod z OpenLocation formátu na SMap.Coords
@@ -666,9 +676,10 @@ declare namespace SMap {
         wrap(): void;
     }
 
-
     class Layer extends SMap.IOwned {
         static Vector;
+
+        constructor(id: any);
 
         $destructor(): void;
 
@@ -748,8 +759,9 @@ declare namespace SMap {
         setOwner(owner: SMap.IOwned): void;
     }
 
-
     class Control extends SMap.IOwned {
+        constructor();
+
         $destructor(): void;
 
         /**
@@ -768,9 +780,10 @@ declare namespace SMap {
         getMap(): SMap;
     }
 
-
     class Marker extends SMap.IOwned {
         static FotoPOI;
+
+        constructor(coords: SMap.Coords, id: string | false, options: object);
 
         /**
         * Statická tovární metoda - výroba značky z XML
@@ -846,9 +859,10 @@ declare namespace SMap {
         setOwner(owner: SMap.IOwned): void;
     }
 
-
     class Geometry extends SMap.IOwned {
         static Multi;
+
+        constructor(type: number, id: any, coords: SMap.Coords, options: object);
 
         $destructor(): void;
 
@@ -938,8 +952,9 @@ declare namespace SMap {
         setOwner(owner: SMap.IOwned): void;
     }
 
-
     class Card extends SMap.IOwned {
+        constructor(width: number, options: object);
+
         $destructor(): void;
 
         /**
@@ -1000,7 +1015,6 @@ declare namespace SMap {
         getMap(): SMap;
     }
 
-
     class Pano {
         static debug;
 
@@ -1038,9 +1052,13 @@ declare namespace SMap {
         create(data: Object): void;
     }
 
-
     class Geocoder {
         static METHOD;
+
+        /**
+        * Provede dopředné geokódování
+        */
+        constructor(query: string, callback: Function, options: Object);
 
         $destructor(): void;
 
@@ -1052,8 +1070,9 @@ declare namespace SMap {
         getResults(): void;
     }
 
-
     class Pixel {
+        constructor(x: number, y: number);
+
         /**
         * Tovární metoda - výroba pixelu z události
         */
@@ -1155,9 +1174,10 @@ declare namespace SMap {
         toTile(map: SMap, tileSize: number): SMap.Tile | null;
     }
 
-
     class Route extends JAK.Signals {
         static ROUTE_TURIST_TYPES;
+
+        constructor(coords: Array<SMap.Coords>, callback: Function, params: object);
 
         static formatRouteDistance(): void;
 
@@ -1207,8 +1227,9 @@ declare namespace SMap {
         route(coords: Array<SMap.Coords>, paramsArgs: Object): void;
     }
 
-
     class Tile {
+        constructor(zoom: number, tileSize: number, x: number, y: number);
+
         toString(): void;
 
         /**
@@ -1233,7 +1254,6 @@ declare namespace SMap {
         */
         toPixel(map: SMap): SMap.Pixel;
     }
-
 
     class Util {
         /**
@@ -1305,8 +1325,12 @@ declare namespace SMap {
         viewportToBounds(viewport: Object): void;
     }
 
-
     class Suggest {
+        /**
+        * Vytvoření našeptávače - je potřeba zadat vstupní input a volitelné parametry.
+        */
+        constructor(input: Element, options: Object);
+
         /**
         * Funkce pro upravu url parametru.
         */
@@ -1385,8 +1409,12 @@ declare namespace SMap {
         isActive(): boolean;
     }
 
-
     class SuggestItem {
+        /**
+        * Pro vytvoření položky jsou nutné vstupní data a pozice položky v seznamu.
+        */
+        constructor(data: Object, pos: number);
+
         /**
         * Odstranění položky našeptávače.
         */
@@ -1413,8 +1441,12 @@ declare namespace SMap {
         getPosition(): number;
     }
 
-
     class SuggestProvider {
+        /**
+        * Vytvoření provideru pro zajištění dat našeptávače.
+        */
+        constructor(options: Object);
+
         /**
         * Nastaveni ze suggestu pro zpetnou kombalitu.
         */
@@ -1423,7 +1455,7 @@ declare namespace SMap {
         /**
         * Funkce vrací promise s daty pro našeptávač.
         */
-        get(phrase: string): JAK.Promise;
+        get(phrase: string): JAK.Promise<unknown, unknown>;
 
         /**
         * Zrušení requestu.
@@ -1451,7 +1483,6 @@ declare namespace SMap {
         dataParams(data: Object): void;
     }
 
-
     class IOwned {
         /**
         * Zjistí (směrem nahoru) mapu
@@ -1464,8 +1495,9 @@ declare namespace SMap {
         setOwner(owner: SMap.IOwned): void;
     }
 
-
     class Projection extends SMap.IOwned {
+        constructor();
+
         getCode(): void;
 
         getMatrixSet(): void;
@@ -1509,6 +1541,11 @@ declare namespace SMap {
 
     namespace Layer {
         class Canvas extends SMap.Layer {
+            /**
+            * Constructor Canvasove vrstvy
+            */
+            constructor(id: any, layerId: number);
+
             $destructor(): void;
 
             clear(): void;
@@ -1595,8 +1632,9 @@ declare namespace SMap {
             setOwner(owner: SMap.IOwned): void;
         }
 
-
         class GPX extends SMap.Layer.Multi {
+            constructor(xmlDoc: XMLDocument, id: string, options: object);
+
             static parseCoords(): void;
 
             /**
@@ -1704,8 +1742,9 @@ declare namespace SMap {
             getMap(): SMap;
         }
 
-
         class Geometry extends SMap.Layer {
+            constructor(id: any, options: object);
+
             $destructor(): void;
 
             supportsAnimation(): void;
@@ -1810,8 +1849,9 @@ declare namespace SMap {
             setOwner(owner: SMap.IOwned): void;
         }
 
-
         class HUD extends SMap.Layer {
+            constructor(id: any);
+
             clear(): void;
 
             enable(): void;
@@ -1894,8 +1934,9 @@ declare namespace SMap {
             setOwner(owner: SMap.IOwned): void;
         }
 
-
         class Image extends SMap.Layer {
+            constructor(id: string);
+
             supportsAnimation(): void;
 
             /**
@@ -1979,8 +2020,9 @@ declare namespace SMap {
             setOwner(owner: SMap.IOwned): void;
         }
 
-
         class KML extends SMap.Layer.Multi {
+            constructor(xmlDoc: XMLDocument, id: string, options: object);
+
             filter(): void;
 
             /**
@@ -2089,8 +2131,9 @@ declare namespace SMap {
             getMap(): SMap;
         }
 
-
         class Marker extends SMap.Layer {
+            constructor(options: object);
+
             $destructor(): void;
 
             /**
@@ -2205,8 +2248,9 @@ declare namespace SMap {
             setOwner(owner: SMap.IOwned): void;
         }
 
-
         class Multi extends SMap.Layer {
+            constructor(id: any);
+
             $destructor(): void;
 
             /**
@@ -2300,8 +2344,9 @@ declare namespace SMap {
             getMap(): SMap;
         }
 
-
         class Smart extends SMap.Layer {
+            constructor(id: any);
+
             /**
             * Vrátí podřízené vrstvy
             */
@@ -2409,11 +2454,12 @@ declare namespace SMap {
             setOwner(owner: SMap.IOwned): void;
         }
 
-
         class Tile extends SMap.Layer {
             static Oblique;
 
             static DEFAULT_OPTIONS;
+
+            constructor(id: string, url: string, options: object);
 
             /**
             * Za běhu změní vrstvě nějaké nastavení (a následně ji plně překreslí)
@@ -2504,8 +2550,9 @@ declare namespace SMap {
             setOwner(owner: SMap.IOwned): void;
         }
 
-
         class Turist extends SMap.Layer {
+            constructor(id: any);
+
             /**
             * Změna viditelnosti tur. stezek
             */
@@ -2604,8 +2651,9 @@ declare namespace SMap {
             setOwner(owner: SMap.IOwned): void;
         }
 
-
         class WMS extends SMap.Layer.Tile {
+            constructor(id: any, url: string, params: object);
+
             redraw(): void;
 
             /**
@@ -2692,9 +2740,10 @@ declare namespace SMap {
             */
             setOwner(owner: SMap.IOwned): void;
         }
-
 
         class WMTS extends SMap.Layer.Tile {
+            constructor(id: any, url: string, params: object, options: object);
+
             /**
             * Za běhu změní vrstvě nějaké nastavení (a následně ji plně překreslí)
             */
@@ -2780,8 +2829,9 @@ declare namespace SMap {
             setOwner(owner: SMap.IOwned): void;
         }
 
-
         class Winter extends SMap.Layer {
+            constructor(id: any);
+
             $destructor(): void;
 
             /**
@@ -2862,6 +2912,8 @@ declare namespace SMap {
 
         namespace Smart {
             class Turist extends SMap.Layer.Smart {
+                constructor(id: any);
+
                 /**
                 * Změna viditelnosti tur. stezek
                 */
@@ -2970,14 +3022,13 @@ declare namespace SMap {
                 */
                 setOwner(owner: SMap.IOwned): void;
             }
-
         }
-
     }
-
 
     namespace Control {
         class Compass {
+            constructor(options: object);
+
             setOwner(): void;
 
             /**
@@ -2993,8 +3044,9 @@ declare namespace SMap {
             getMap(): SMap;
         }
 
-
         class ContextMenu extends SMap.Control {
+
+            constructor();
 
             $destructor(): void;
 
@@ -3045,8 +3097,9 @@ declare namespace SMap {
             getMap(): SMap;
         }
 
-
         class Copyright {
+            constructor();
+
             setOwner(): void;
 
             addCopyright(): void;
@@ -3066,8 +3119,9 @@ declare namespace SMap {
             getMap(): SMap;
         }
 
-
         class Image extends SMap.Control.Visible {
+            constructor(url: string);
+
             setOwner(): void;
 
             /**
@@ -3083,8 +3137,9 @@ declare namespace SMap {
             getMap(): SMap;
         }
 
-
         class Keyboard extends SMap.Control {
+            constructor(mode: number, options: object);
+
             setOwner(): void;
 
             /**
@@ -3110,8 +3165,9 @@ declare namespace SMap {
             getMap(): SMap;
         }
 
-
         class Layer {
+            constructor(options: object);
+
             $destructor(): void;
 
             setOwner(): void;
@@ -3143,8 +3199,9 @@ declare namespace SMap {
             getMap(): SMap;
         }
 
-
         class Minimap {
+            constructor(width: number, height: number, options: object);
+
             setOwner(): void;
 
             /**
@@ -3170,8 +3227,9 @@ declare namespace SMap {
             getMap(): SMap;
         }
 
-
         class Mouse extends SMap.Control {
+            constructor(mode: number, options: object);
+
             setOwner(): void;
 
             /**
@@ -3197,8 +3255,9 @@ declare namespace SMap {
             getMap(): SMap;
         }
 
-
         class Orientation {
+            constructor(options: object);
+
             /**
             * Vrátí kontejner prvku
             */
@@ -3217,8 +3276,9 @@ declare namespace SMap {
             getMap(): SMap;
         }
 
-
         class Overview {
+            constructor(url: string);
+
             setOwner(): void;
 
             /**
@@ -3234,9 +3294,13 @@ declare namespace SMap {
             getMap(): SMap;
         }
 
-
         class Pointer {
             static readonly TYPES;
+
+            /**
+            * Konstruktor
+            */
+            constructor(options: object);
 
             /**
             * Zobrazeni kapičky ke středu
@@ -3251,8 +3315,9 @@ declare namespace SMap {
             setOwner(): void;
         }
 
-
         class Rosette {
+            constructor(options: object);
+
             $destructor(): void;
 
             setOwner(): void;
@@ -3269,9 +3334,13 @@ declare namespace SMap {
             */
             getMap(): SMap;
         }
-
 
         class Scale {
+            /**
+            * starý formát:
+            */
+            constructor(conf: number, conf: Object);
+
             setOwner(): void;
 
             /**
@@ -3287,8 +3356,9 @@ declare namespace SMap {
             getMap(): SMap;
         }
 
-
         class Selection {
+            constructor(thickness: number);
+
             setOwner(): void;
 
             /**
@@ -3309,8 +3379,9 @@ declare namespace SMap {
             getMap(): SMap;
         }
 
-
         class Sync extends SMap.Control {
+            constructor(options: object);
+
             setOwner(): void;
 
             /**
@@ -3331,8 +3402,9 @@ declare namespace SMap {
             getMap(): SMap;
         }
 
-
         class Visible extends SMap.Control {
+            constructor();
+
             /**
             * Vrátí kontejner prvku
             */
@@ -3351,8 +3423,9 @@ declare namespace SMap {
             getMap(): SMap;
         }
 
-
         class Zoom {
+            constructor(labels: object, options: object);
+
             $destructor(): void;
 
             setZoom(): void;
@@ -3387,8 +3460,9 @@ declare namespace SMap {
             getMap(): SMap;
         }
 
-
         class ZoomNotification {
+            constructor();
+
             setOwner(): void;
 
             /**
@@ -3411,6 +3485,8 @@ declare namespace SMap {
 
         namespace ContextMenu {
             class Coords extends SMap.Control.ContextMenu.Item {
+                constructor(label: string);
+
                 setCoords(): void;
 
                 /**
@@ -3419,8 +3495,9 @@ declare namespace SMap {
                 click(e: Event, menu: SMap.Control.ContextMenu): void;
             }
 
-
             class Item {
+                constructor(label: string);
+
                 $destructor(): void;
 
                 /**
@@ -3437,16 +3514,18 @@ declare namespace SMap {
                 getContainer(): void;
             }
 
-
             class Separator extends SMap.Control.ContextMenu.Item {
+                constructor(label: string);
+
                 /**
                 * Vyvoláno po kliknutí na položku
                 */
                 click(e: Event, menu: SMap.Control.ContextMenu): void;
             }
 
-
             class Zoom extends SMap.Control.ContextMenu.Item {
+                constructor(label: string, zoomDiff: number);
+
                 setCoords(): void;
 
                 click(): void;
@@ -3456,14 +3535,13 @@ declare namespace SMap {
                 */
                 click(e: Event, menu: SMap.Control.ContextMenu): void;
             }
-
         }
-
     }
-
 
     namespace Marker {
         class Cluster extends SMap.Marker {
+            constructor(id: any, options: object);
+
             /**
             * Přidání značky do shluku
             */
@@ -3543,8 +3621,9 @@ declare namespace SMap {
             setOwner(owner: SMap.IOwned): void;
         }
 
-
         class Clusterer {
+            constructor(map: SMap, maxDistance: number, clusterCtor: Function);
+
             /**
             * Vše vyčistit
             */
@@ -3578,15 +3657,15 @@ declare namespace SMap {
             compute(): void;
         }
 
-
         class Feature {
         }
-
 
         class POI extends SMap.Marker {
             static nodeName;
 
             static VISUAL;
+
+            constructor(coords: SMap.Coords, id: any, options: object);
 
             static fromXML(): void;
 
@@ -3732,7 +3811,6 @@ declare namespace SMap {
                 getCard(): SMap.Card;
             }
 
-
             class Draggable extends JAK.AbstractDecorator {
                 /**
                 * Dekorační metoda - nevolat přímo, ale přes marker.decorate()
@@ -3745,14 +3823,12 @@ declare namespace SMap {
                 setDrag(state: boolean): void;
             }
 
-
             class ImageMap extends JAK.AbstractDecorator {
                 /**
                 * Dekorační metoda - nevolat přímo, ale přes marker.decorate()
                 */
                 decorate(marker: SMap.Marker, options: object): void;
             }
-
 
             class RelativeAnchor extends JAK.AbstractDecorator {
                 /**
@@ -3761,18 +3837,14 @@ declare namespace SMap {
                 decorate(marker: SMap.Marker, options: object): void;
             }
 
-
             class Shadow extends JAK.AbstractDecorator {
                 /**
                 * Dekorační metoda - nevolat přímo, ale přes marker.decorate()
                 */
                 decorate(marker: SMap.Marker, url: string): void;
             }
-
         }
-
     }
-
 
     namespace Geometry {
         class Feature {
@@ -3789,14 +3861,13 @@ declare namespace SMap {
 
                 draw(): void;
             }
-
         }
-
     }
-
 
     namespace Pano {
         class Clickmask {
+            constructor();
+
             /**
             * Vrati soupis palety, tj. potencialne blizkych panoramat
             */
@@ -3808,8 +3879,9 @@ declare namespace SMap {
             getIndex(dx: number, dy: number): null | number;
         }
 
-
         class Layer {
+            constructor();
+
             enable(): void;
 
             disable(): void;
@@ -3819,8 +3891,9 @@ declare namespace SMap {
             redraw(): void;
         }
 
-
         class Marker extends SMap.Marker {
+            constructor(coords: SMap.Coords, id: string | false, options: object);
+
             setAngle(): void;
 
             setCoords(): void;
@@ -3889,8 +3962,9 @@ declare namespace SMap {
             setOwner(owner: SMap.IOwned): void;
         }
 
-
         class Nav {
+            constructor();
+
             $destructor(): void;
 
             /**
@@ -3908,8 +3982,9 @@ declare namespace SMap {
             handleEvent(): void;
         }
 
-
         class Place {
+            constructor();
+
             setTileImages(): void;
 
             build(gl: WebGL): void;
@@ -3956,8 +4031,9 @@ declare namespace SMap {
             static fromImage(): void;
         }
 
-
         class Renderer {
+            constructor();
+
             static get(): void;
 
             $destructor(): void;
@@ -3975,8 +4051,9 @@ declare namespace SMap {
             syncPort(): void;
         }
 
-
         class Scene {
+            constructor(parent: Node, options: object);
+
             $destructor(): void;
 
             /**
@@ -4013,8 +4090,9 @@ declare namespace SMap {
             handleEvent(): void;
         }
 
-
         class Sphere {
+            constructor();
+
             $destructor(): void;
 
             isDirty(): void;
@@ -4036,8 +4114,9 @@ declare namespace SMap {
             drawDebug(): void;
         }
 
-
         class Tile {
+            constructor(gl: WebGL, position: Array<number>, data: object);
+
             $destructor(): void;
 
             setBackgroundTexture(): void;
@@ -4051,8 +4130,9 @@ declare namespace SMap {
             drawDebug(): void;
         }
 
-
         class WebGL extends SMap.Pano.Renderer {
+            constructor();
+
             static isSupported(): void;
 
             $destructor(): void;
@@ -4069,25 +4149,31 @@ declare namespace SMap {
 
             syncPort(): void;
         }
-
     }
-
 
     namespace Geocoder {
         class Reverse extends SMap.Geocoder {
             static METHOD;
 
             /**
+            * Provede zpětné geokódování
+            */
+            constructor(coords: SMap.Coords, callback: Function, options: Object);
+
+            /**
             * Přeruší probíhající požadavek
             */
             abort(): void;
         }
-
     }
-
 
     namespace URL {
         class Route {
+            /**
+            * Konstruktor
+            */
+            constructor();
+
             $destructor(): void;
 
             /**
@@ -4110,27 +4196,29 @@ declare namespace SMap {
             */
             toString(): string;
         }
-
     }
-
 
     namespace Projection {
         class Krovak {
+            constructor();
+
             project(): void;
 
             unproject(): void;
         }
-
 
         class Mercator {
+            constructor();
+
             project(): void;
 
             unproject(): void;
         }
-
 
         class Oblique extends SMap.Projection {
             static CORS;
+
+            constructor(id: string, config: object, orientation: number, coord: SMap.Coords);
 
             /**
             * Statická tovární metoda: asynchronně začne vytvářet projekci; až je vyrobena, zavolá callback.
@@ -4196,9 +4284,10 @@ declare namespace SMap {
             setOwner(owner: SMap.IOwned): void;
         }
 
-
         class Robinson {
             static K;
+
+            constructor();
 
             getWorldSize(): void;
 
@@ -4207,8 +4296,9 @@ declare namespace SMap {
             unproject(): void;
         }
 
-
         class UTM33 {
+            constructor();
+
             project(): void;
 
             unproject(): void;
@@ -4216,13 +4306,16 @@ declare namespace SMap {
 
         namespace Oblique {
             class Matrix {
+                constructor();
+
                 mulByVector(): void;
 
                 transpose(): void;
             }
 
-
             class Triangle {
+                constructor();
+
                 containsPoint(): void;
 
                 rayIntersection(): void;
@@ -4230,8 +4323,9 @@ declare namespace SMap {
                 interpolatePoint(): void;
             }
 
-
             class Vector {
+                constructor();
+
                 getPoint(): void;
 
                 norm(): void;
@@ -4248,11 +4342,6 @@ declare namespace SMap {
 
                 minus(): void;
             }
-
         }
-
     }
-
 }
-
-
