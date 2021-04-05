@@ -2,7 +2,7 @@ import { Class, Method, Namespace } from "./types"
 import * as fs from 'fs';
 import * as path from 'path';
 
-export const exportClasses = (classes: Class[], filePath: string = path.dirname(__dirname) + '/types/mapycz.d.ts') => {
+export const exportClasses = (classes: Class[], filePath: string) => {
     const root: Namespace = {
         namespaces: [],
         classes: []
@@ -10,11 +10,15 @@ export const exportClasses = (classes: Class[], filePath: string = path.dirname(
 
     classes.forEach(c => assignToNamespace(c, root, c.namespace ? c.namespace.split('.') : []));
 
-    const file = fs.createWriteStream(filePath);
+    writeToFile(() => createNamespace(root), filePath)
+}
 
-    file.write(createNamespace(root));
-
-    file.close();
+const writeToFile = (data: () => string, filePath: string, JAKFilePath: string = path.dirname(__dirname) + '/types/jak.d.ts') => {
+    fs.copyFile(JAKFilePath, filePath, (e) => {
+        if (!e) {
+            fs.appendFile(filePath, '\n' + data(), () => null);
+        }
+    });
 }
 
 const assignToNamespace = (c: Class, ns: Namespace, nsParts: string[]) => {
@@ -42,12 +46,12 @@ const assignToNamespace = (c: Class, ns: Namespace, nsParts: string[]) => {
     }
 }
 
-const createClass = (c: Class, ns: Namespace) => (ns.parent ? '' : 'export declare ') + 'class ' + c.name + (c.parent ? ' extends ' + c.parent : '') + ' {\n\n' + createMethods(c) + '}\n\n';
+const createClass = (c: Class, ns: Namespace) => (ns.parent ? '' : 'declare ') + 'class ' + c.name + (c.parent ? ' extends ' + c.parent : '') + ' {\n\n' + createMethods(c) + '}\n\n';
 
 const createMethods = (c: Class) => c.methods.map(m => (m.comment ? '/**\n* ' + m.comment + '\n*/\n' : '') + (m.static ? 'static ' : '') + m.name + '(' + createArguments(m) + '): ' + (typeof m.type === 'string' ? m.type : m.type.join(' | ')) + ';\n').join('\n');
 
 const createArguments = (m: Method) => m.arguments.map(a => a.name + ':' + (typeof a.type === 'string' ? a.type : a.type.join(' | '))).join(', ');
 
-const createNamespace = (ns: Namespace) => (ns.parent ? (ns.parent.parent ? '' : 'export declare ') + 'namespace ' + ns.name + ' {\n' : '') + ns.classes.map((c) => createClass(c, ns)).join('\n') + ns.namespaces.map(createNamespace).join('\n') + (ns.parent ? '}\n\n' : '');
+const createNamespace = (ns: Namespace) => (ns.parent ? (ns.parent.parent ? '' : 'declare ') + 'namespace ' + ns.name + ' {\n' : '') + ns.classes.map((c) => createClass(c, ns)).join('\n') + ns.namespaces.map(createNamespace).join('\n') + (ns.parent ? '}\n\n' : '');
 
 
