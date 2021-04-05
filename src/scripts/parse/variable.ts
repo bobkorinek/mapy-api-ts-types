@@ -43,6 +43,9 @@ export const resolveType = (type: string) => {
 
         case 'xmlDoc':
             return 'XMLDocument'
+
+        case 'coords':
+            return 'SMap.Coords';
     }
 
     const arrayMatch = type.match(/Array(?:[<\[](?<type>.+?)[>\]])?/);
