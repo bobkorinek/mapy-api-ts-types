@@ -1,5 +1,5 @@
-export namespace JAK {
-    export class Signals {
+declare namespace JAK {
+    class Signals {
         addListener(type: string, handleFunction: string, sender: object): void;
 
         removeListener(id: string): void;
@@ -9,7 +9,7 @@ export namespace JAK {
         makeEvent(type: string, data: object): void;
     }
 
-    export class Promise<T, R> {
+    class Promise<T, R> {
         constructor(resolver: (resolve: (result: T) => any, reject: (result: R) => any) => any);
 
         when(all: Promise<any, any>[]);
@@ -19,15 +19,15 @@ export namespace JAK {
         chain(promise);
     }
 
-    export class Vector {
+    class Vector {
 
     }
 
-    export abstract class AbstractDecorator {
+    abstract class AbstractDecorator {
         decorate<T extends object>(instance: T): T;
     }
 
-    export class EXIF {
+    class EXIF {
         constructor(data: number[]);
 
         getTags(): Array<unknown>;
