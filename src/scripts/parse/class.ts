@@ -1,4 +1,5 @@
 import { Class } from "../types";
+import { parseTypes } from "./argument";
 import { extractMethods } from "./method";
 import { parseProperties } from "./property";
 
@@ -29,7 +30,7 @@ export const getParentClass = (doc: Document) => {
     const parentLinkElement = doc.querySelector('#content>p.description>a');
 
     if (parentLinkElement) {
-        return parentLinkElement.textContent.trim();
+        return parseTypes(parentLinkElement.textContent.trim()) as string;
     }
 
     return null;

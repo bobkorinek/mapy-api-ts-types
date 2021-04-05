@@ -26,14 +26,18 @@ const getPropertyTable = (page: Document, callback: (table: HTMLTableElement) =>
     })
 }
 
-const mapProperties = <T>(table: HTMLTableElement, callback: MapPropertyCallback<T>): Array<T> => {
+const mapProperties = (table: HTMLTableElement, callback: MapPropertyCallback<Property>): Array<Property> => {
     const rowCount = table.rows.length;
-    const result: Array<T> = [];
+    const result: Array<Property> = [];
 
     for (let i = 0; i < rowCount; i++) {
         const row = table.rows.item(i);
         if (row.firstElementChild.classList.contains('attributes') && row.lastElementChild.classList.contains('nameDescription')) {
-            result.push(callback(row.firstElementChild as HTMLTableCellElement, row.lastElementChild as HTMLTableCellElement));
+            const property = callback(row.firstElementChild as HTMLTableCellElement, row.lastElementChild as HTMLTableCellElement);
+
+            if (!result.find(p => p.name === property.name)) {
+                result.push(property);
+            }
         }
     }
 

@@ -23,6 +23,8 @@ export const resolveType = (type: string) => {
         return 'WebGLProgram';
     } else if (type === 'id') {
         return 'any';
+    } else if (type === 'JAK.ISignals') {
+        return 'JAK.Signals';
     }
 
     const arrayMatch = type.match(/Array(?:[<\[](?<type>.+?)[>\]])?/);

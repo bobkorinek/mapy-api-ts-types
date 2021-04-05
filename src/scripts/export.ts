@@ -1,4 +1,4 @@
-import { Class, Method, Namespace } from "./types"
+import { Class, Method, Namespace, Property } from "./types"
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -46,12 +46,21 @@ const assignToNamespace = (c: Class, ns: Namespace, nsParts: string[]) => {
     }
 }
 
-const createClass = (c: Class, ns: Namespace) => (ns.parent ? '' : 'declare ') + 'class ' + c.name + (c.parent ? ' extends ' + c.parent : '') + ' {\n\n' + createMethods(c) + '}\n\n';
+const filterDupliciteStaticProperties = (c: Class, ns: Namespace) => c.properties.filter(p => {
+    const sameNamespace = ns.namespaces.find(cns => cns.name === c.name);
+
+    return !sameNamespace || (!sameNamespace.classes.find(cc => cc.name === p.name) && !sameNamespace.namespaces.find(cns => cns.name === p.name));
+})
+
+const propertyAccessMap = { 'normal': '', 'static': 'static ', 'constant': 'static readonly ' };
+
+const createNamespace = (ns: Namespace) => (ns.parent ? (ns.parent.parent ? '' : 'declare ') + 'namespace ' + ns.name + ' {\n' : '') + ns.classes.map((c) => createClass(c, ns)).join('\n') + ns.namespaces.map(createNamespace).join('\n') + (ns.parent ? '}\n\n' : '');
+
+const createClass = (c: Class, ns: Namespace) => (ns.parent ? '' : 'declare ') + 'class ' + c.name + (c.parent ? ' extends ' + c.parent : '') + ' {\n' + createProperties(c, ns) + createMethods(c) + '}\n\n';
+
+const createProperties = (c: Class, ns: Namespace) => c.properties.length === 0 ? '' : (filterDupliciteStaticProperties(c, ns).map(p => propertyAccessMap[p.access] + p.name + ';\n').join('\n') + '\n');
 
 const createMethods = (c: Class) => c.methods.map(m => (m.comment ? '/**\n* ' + m.comment + '\n*/\n' : '') + (m.static ? 'static ' : '') + m.name + '(' + createArguments(m) + '): ' + (typeof m.type === 'string' ? m.type : m.type.join(' | ')) + ';\n').join('\n');
 
 const createArguments = (m: Method) => m.arguments.map(a => a.name + ':' + (typeof a.type === 'string' ? a.type : a.type.join(' | '))).join(', ');
-
-const createNamespace = (ns: Namespace) => (ns.parent ? (ns.parent.parent ? '' : 'declare ') + 'namespace ' + ns.name + ' {\n' : '') + ns.classes.map((c) => createClass(c, ns)).join('\n') + ns.namespaces.map(createNamespace).join('\n') + (ns.parent ? '}\n\n' : '');
-
 
