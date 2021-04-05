@@ -19,6 +19,10 @@ export namespace JAK {
         chain(promise);
     }
 
+    export class Vector {
+
+    }
+
     export abstract class AbstractDecorator {
         decorate<T extends object>(instance: T): T;
     }
