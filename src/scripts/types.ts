@@ -16,7 +16,7 @@ export interface Class {
 
 export interface Method {
     name: string;
-    type: Type | Type[];
+    type?: Type | Type[];
     arguments: Argument[];
     static: boolean;
     comment?: string;
@@ -29,7 +29,7 @@ export interface Variable {
 }
 
 export interface Property extends Variable {
-    access: 'normal' | 'static' | 'constant';
+    access: PropertyAccess;
 }
 
 export interface Argument extends Variable {
@@ -38,3 +38,5 @@ export interface Argument extends Variable {
 }
 
 export type Type = string;
+
+export type PropertyAccess = 'normal' | 'static' | 'constant';

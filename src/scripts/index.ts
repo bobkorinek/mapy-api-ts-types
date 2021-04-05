@@ -1,5 +1,5 @@
-import { parsePage } from "./parse";
+import { parse } from "./parse/page";
 
 const testUrl = 'http://api.mapy.cz/doc/SMap.html';
 
-parsePage(testUrl);
+parse();

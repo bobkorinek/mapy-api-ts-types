@@ -1,5 +1,6 @@
 import { Class } from "../types";
 import { extractMethods } from "./method";
+import { parseProperties } from "./property";
 
 export const parseClass = (doc: Document): Class => {
     const methods = extractMethods(doc);
@@ -11,7 +12,7 @@ export const parseClass = (doc: Document): Class => {
         namespace: parsedName.ns,
         methods: methods,
         parent: getParentClass(doc),
-        properties: []
+        properties: parseProperties(doc)
     };
 }
 
