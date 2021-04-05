@@ -1,4 +1,4 @@
-import { Class, Method, Namespace, Property } from "./types"
+import { Class, Method, Namespace, Property, Type } from "./types"
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -54,13 +54,23 @@ const filterDupliciteStaticProperties = (c: Class, ns: Namespace) => c.propertie
 
 const propertyAccessMap = { 'normal': '', 'static': 'static ', 'constant': 'static readonly ' };
 
-const createNamespace = (ns: Namespace) => (ns.parent ? (ns.parent.parent ? '' : 'declare ') + 'namespace ' + ns.name + ' {\n' : '') + ns.classes.map((c) => createClass(c, ns)).join('\n') + ns.namespaces.map(createNamespace).join('\n') + (ns.parent ? '}\n\n' : '');
+const createType = (type: Type | Type[]) => {
+    if (!type) {
+        return '';
+    } else if (typeof type === 'string') {
+        return ': ' + type;
+    } else {
+        return ': ' + type.join(' | ');
+    }
+}
 
-const createClass = (c: Class, ns: Namespace) => (ns.parent ? '' : 'declare ') + 'class ' + c.name + (c.parent ? ' extends ' + c.parent : '') + ' {\n' + createProperties(c, ns) + createMethods(c) + '}\n\n';
+const createNamespace = (ns: Namespace) => (ns.parent ? (ns.parent.parent ? '' : 'declare ') + 'namespace ' + ns.name + ' {\n' : '') + ns.classes.map((c) => createClass(c, ns)).join('\n\n') + (ns.classes.length !== 0 && ns.namespaces.length !== 0 ? '\n\n' : '') + ns.namespaces.map(createNamespace).join('\n\n') + (ns.parent ? '}' : '' + '\n');
+
+const createClass = (c: Class, ns: Namespace) => (ns.parent ? '' : 'declare ') + 'class ' + c.name + (c.parent ? ' extends ' + c.parent : '') + ' {\n' + createProperties(c, ns) + createMethods(c) + '}';
 
 const createProperties = (c: Class, ns: Namespace) => c.properties.length === 0 ? '' : (filterDupliciteStaticProperties(c, ns).map(p => propertyAccessMap[p.access] + p.name + ';\n').join('\n') + '\n');
 
-const createMethods = (c: Class) => c.methods.map(m => (m.comment ? '/**\n* ' + m.comment + '\n*/\n' : '') + (m.static ? 'static ' : '') + m.name + '(' + createArguments(m) + '): ' + (typeof m.type === 'string' ? m.type : m.type.join(' | ')) + ';\n').join('\n');
+const createMethods = (c: Class) => c.methods.map(m => (m.comment ? '/**\n* ' + m.comment + '\n*/\n' : '') + (m.static ? 'static ' : '') + m.name + '(' + createArguments(m) + ')' + createType(m.type) + ';\n').join('\n');
 
-const createArguments = (m: Method) => m.arguments.map(a => a.name + ':' + (typeof a.type === 'string' ? a.type : a.type.join(' | '))).join(', ');
+const createArguments = (m: Method) => m.arguments.map(a => a.name + createType(a.type)).join(', ');
 

@@ -5,16 +5,32 @@ import { resolveType } from "./variable";
 export const extractMethods = (page: Document): Method[] => {
     const methods: Method[] = [];
 
+    const constructor = parseMethod(getConstructorDetailElement(page));
+
+    if (constructor) {
+        methods.push({ ...constructor, name: 'constructor', type: null });
+    }
+
     forEachContentElement(page, 'Metody - detailně', (detailElement) => {
         if (detailElement.classList.contains('fixedFont')) {
-            methods.push(parseMethod(detailElement));
+            const parsedMethod = parseMethod(detailElement);
+
+            if (detailElement) {
+                methods.push(parsedMethod);
+            }
         }
     });
 
     return methods;
 }
 
+const getConstructorDetailElement = (page: Document) => page.querySelector<HTMLElement>('#content>div.details>div.fixedFont');
+
 const parseMethod = (detailElement: HTMLElement): Method => {
+    if (!detailElement) {
+        return null;
+    }
+
     const text = detailElement.textContent.trim();
     const match = text.match(/(?<static><statická>)?[\t\n]*?(?:\{(?<type>.*?)\})?.*?(?<name>[^.]+)\((?<args>.*)\)$/m);
 

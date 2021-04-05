@@ -3,28 +3,46 @@ export const resolveType = (type: string) => {
         return 'unknown';
     }
 
-    if (type === 'int' || type === 'float' || type === 'Number') {
-        return 'number';
-    } else if (type === 'bool' || type === 'Boolean') {
-        return 'boolean';
-    } else if (type === 'event') {
-        return 'Event';
-    } else if (type === 'node') {
-        return 'Node';
-    } else if (type === 'type') {
-        return 'unknown';
-    } else if (type === 'function') {
-        return 'Function';
-    } else if (type === 'String') {
-        return 'string';
-    } else if (type === 'webgl') {
-        return 'WebGL';
-    } else if (type === 'webglprogram') {
-        return 'WebGLProgram';
-    } else if (type === 'id') {
-        return 'any';
-    } else if (type === 'JAK.ISignals') {
-        return 'JAK.Signals';
+    switch (type) {
+        case 'int':
+        case 'float':
+        case 'Number':
+        case 'integer':
+            return 'number';
+
+        case 'bool':
+        case 'Boolean':
+            return 'boolean';
+
+        case 'event':
+            return 'Event';
+
+        case 'node':
+            return 'Node';
+
+        case 'type':
+            return 'unknown';
+
+        case 'function':
+            return 'Function';
+
+        case 'String':
+            return 'string';
+
+        case 'webgl':
+            return 'WebGL';
+
+        case 'webglprogram':
+            return 'WebGLProgram';
+
+        case 'id':
+            return 'any';
+
+        case 'JAK.ISignals':
+            return 'JAK.Signals';
+
+        case 'xmlDoc':
+            return 'XMLDocument'
     }
 
     const arrayMatch = type.match(/Array(?:[<\[](?<type>.+?)[>\]])?/);

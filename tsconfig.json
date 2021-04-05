@@ -10,5 +10,9 @@
             "dom.iterable",
             "es2017"
         ]
-    }
+    },
+    "exclude": [
+        "./src/types/**/*",
+        "./raw.index.d.ts"
+    ]
 }
