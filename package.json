@@ -1,6 +1,6 @@
 {
   "name": "@types/mapycz",
-  "version": "0.1",
+  "version": "1.0.0",
   "scripts": {
     "test": "./node_modules/mocha/bin/mocha --require ts-node/register tests/**/*.ts"
   },
