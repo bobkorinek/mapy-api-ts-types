@@ -1,6 +1,6 @@
 # Mapy API - TypeScript typy
 *Jazyky*:
-[English](https://github.com/chriskorinek/mapycz-types/blob/master/README.md)
+[English](https://github.com/chriskorinek/mapy-api-ts-types/blob/master/README.md)
 
 ## Obsah
 * [Popis](#popis)
@@ -17,7 +17,7 @@ vytvořeny za základě všech dostupných informací z [dokumentace pro
 Knihovna není zatím jako NPM package, ale můžete jí přes `npm`
 nainstalovat následovně: 
 ```sh
-npm install -D 'https://github.com/chriskorinek/mapycz-types'
+npm install -D 'https://github.com/chriskorinek/mapy-api-ts-types'
 ```
 >Případně můžete za URL
 dosadit `#<version-number>` nebo `#<commit-hash>`, jestli chcete 

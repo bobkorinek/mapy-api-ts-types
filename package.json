@@ -1,6 +1,8 @@
 {
   "name": "@types/mapycz",
   "version": "1.0.0",
+  "license": "MIT",
+  "homepage": "https://github.com/chriskorinek/mapy-api-ts-types",
   "scripts": {
     "test": "./node_modules/mocha/bin/mocha --require ts-node/register tests/**/*.ts"
   },
