@@ -1,8 +1,15 @@
 {
   "name": "@types/mapycz",
+  "description": "TypeScript types for Mapy API",
   "version": "1.0.0",
   "license": "MIT",
   "homepage": "https://github.com/chriskorinek/mapy-api-ts-types",
+  "contributors": [
+    {
+      "name": "Kryštof Kořínek",
+      "url": "https://github.com/chriskorinek"
+    }
+  ],
   "scripts": {
     "test": "./node_modules/mocha/bin/mocha --require ts-node/register tests/**/*.ts"
   },
