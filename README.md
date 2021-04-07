@@ -1,16 +1,26 @@
-# Mapy API - typy pro TypeScript
-Knihovna obsahuje rozhraní pro všechny třídy, metody a vlastnosti z
-knihovny [API Mapycz](http://api.mapy.cz). Všechny tyto typy jsou
-vytvořeny za základě všech dostupných informací z [dokumentace pro
-API Mapycz verze 4.13](http://api.mapy.cz).
+# Mapy API - TypeScript types
+*Languages*:
+[Čeština](https://github.com/chriskorinek/mapycz-types/blob/master/README.cs.md)
 
-## Instalace
-Knihovna není zatím jako NPM package, ale můžete jí přes `npm`
-nainstalovat následovně: `npm install -D
-'https://github.com/chriskorinek/mapycz-types'` (případně můžete za URL
-dosadit `#<version-number>` nebo `#<commit-hash>`, jestli chcete 
-specifikovat konkrétní verzi knihovny).
-### Alternativní instalace
-Alternativně si můžete zkopírovat soubor `index.d.ts` do vašeho adresáře a
-následně adresář tohoto souboru uveďte v souboru `tsconfig.json` u 
-proměnné [`rootTypes`](https://www.typescriptlang.org/tsconfig#typeRoots).
+## Contents
+* [Description](#description)
+* [Installation](#installation)
+    - [Alternative installation](#alternative-installation)
+
+## Description
+Library contains interfaces for all classes, methods and properties from 
+[*Mapy API* library](http://api.mapy.cz). All these types are created based
+on [*Mapy API* documentation](http://api.mapy.cz) for version 4.13.
+
+## Installation
+Library is not yet as NPM package, but you can install it via `npm` like this: 
+```sh
+npm install -D 'https://github.com/chriskorinek/mapycz-types'
+```
+>Optionally you can insert `#<version-number>` or `#<commit-hash>` after the URL
+for specifying the library version.
+
+### Alternative installation
+You might alternatively copy the `index.d.ts` to your directory and specify this
+directory inside the `tsconfig.json` file in
+[`rootTypes`](https://www.typescriptlang.org/tsconfig#typeRoots) option.
