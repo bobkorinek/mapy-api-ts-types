@@ -1,5 +1,19 @@
 declare namespace JAK {
     class Signals {
+        addListener(owner: object, type: string, handleFunction: string, sender: object): void;
+
+        removeListener(id: string): void;
+
+        removeListeners(array: string[]): void;
+
+        makeEvent(type: string, data: object): void;
+    }
+
+    interface ISignals {
+        setInteface(intefaceName: string): JAK.Signals;
+
+        getInteface(): JAK.Signals;
+
         addListener(type: string, handleFunction: string, sender: object): void;
 
         removeListener(id: string): void;

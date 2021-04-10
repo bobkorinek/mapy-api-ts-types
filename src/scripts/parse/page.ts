@@ -1,7 +1,7 @@
 import * as http from 'http';
 import { JSDOM } from 'jsdom';
-import { Class } from "../types";
-import { parseClass } from './class';
+import { Class, Interface } from "../types";
+import { parseStructure } from './structure';
 
 export const parse = (): Promise<Class[]> => {
     return new Promise<Class[]>((resolve) => {
@@ -32,9 +32,9 @@ export const parse = (): Promise<Class[]> => {
     });
 }
 
-export const parsePage = async (url: string): Promise<Class> => {
+export const parsePage = async (url: string): Promise<Class | Interface> => {
     return loadPage(url)
-        .then((doc) => parseClass(doc));
+        .then((doc) => parseStructure(doc));
 }
 
 const loadPage = (url: string): Promise<Document> => {

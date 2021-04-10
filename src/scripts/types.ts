@@ -3,13 +3,23 @@ export interface Namespace {
     parent?: Namespace;
     namespaces: Namespace[];
     classes: Class[];
+    interfaces: Interface[];
+}
+
+export interface Interface {
+    type: 'interface';
+    name: string;
+    namespace?: string;
+    extends?: string[];
+    methods: Method[];
 }
 
 export interface Class {
+    type: 'class';
     name: string;
     namespace?: string;
-    parent?: string;
-
+    extends?: string;
+    implements?: string[];
     properties: Property[];
     methods: Method[];
 }

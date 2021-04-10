@@ -38,9 +38,6 @@ export const resolveType = (type: string) => {
         case 'id':
             return 'any';
 
-        case 'JAK.ISignals':
-            return 'JAK.Signals';
-
         case 'xmlDoc':
             return 'XMLDocument'
 
