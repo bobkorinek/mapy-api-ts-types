@@ -97,6 +97,11 @@ const createComment = (o: Method | Class | Interface | Property) => {
     if (o.comment) {
         commentSections.push(o.comment);
     }
+    if ('events' in o) {
+        o.events.forEach(e => {
+            commentSections.push('@fires ' + e.name + (e.comment ? ' ' + e.comment : ''));
+        })
+    }
     if (o.url) {
         commentSections.push('@see ' + o.url);
     }

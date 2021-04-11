@@ -1,4 +1,4 @@
-import { Class, Interface } from "../types";
+import { Class, Event, Interface } from "../types";
 import { parseTypes } from "./argument";
 import { parseSentence } from "./comment";
 import { extractMethods } from "./method";
@@ -23,6 +23,7 @@ export const parseStructure = (doc: Document, url?: string): Class | Interface =
         return {
             ...data,
             extends: info.parent,
+            events: info.events,
             implements: info.interfaces,
             properties: parseProperties(doc, url)
         } as Class;
@@ -49,6 +50,7 @@ export const parseInfo = (doc: Document) => {
     const result = {
         parent: null,
         interfaces: [],
+        events: [],
         comment: null
     }
     if (descriptionElement) {
@@ -66,9 +68,30 @@ export const parseInfo = (doc: Document) => {
                 .map(t => parseTypes(t.trim()) as string)
                 .forEach(o => isInterface(o) ? result.interfaces.push(o) : (result.parent = o));
         }
+
+        if (descriptionElement.nextElementSibling?.tagName === 'UL') {
+            result.events = parseEvents(descriptionElement.nextElementSibling as HTMLUListElement);
+        }
     }
 
     return result;
+}
+
+const parseEvents = (eventsElement: HTMLUListElement) => {
+    const events: Event[] = [];
+
+    for (const eventElement of eventsElement.children) {
+        const match = eventElement.textContent.trim().match('^(?<name>[^ ]+)(?: - (?<comment>.*))?');
+
+        if (match) {
+            events.push({
+                name: match.groups['name'],
+                comment: match.groups['comment'] ? parseSentence(match.groups['comment']) : null
+            })
+        }
+    }
+
+    return events;
 }
 
 export const isInterface = (name: string) => Boolean(name.match(/(?:^|\.)I[A-Z][^.]*$/));

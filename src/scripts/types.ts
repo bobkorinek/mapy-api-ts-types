@@ -24,6 +24,7 @@ export interface Class extends Link {
     properties: Property[];
     methods: Method[];
     comment?: string;
+    events: Event[];
 }
 
 export interface Method extends Link {
@@ -52,6 +53,11 @@ export interface Property extends Variable, Link {
 export interface Argument extends Variable {
     defaultValue?: string;
     optional?: boolean;
+}
+
+export interface Event {
+    name: string;
+    comment?: string;
 }
 
 export type Type = string;
