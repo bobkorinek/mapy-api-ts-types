@@ -32,6 +32,7 @@ export interface Method extends Link {
     arguments: Argument[];
     static: boolean;
     comment?: string;
+    returnComment?: string;
 }
 
 export interface Variable {

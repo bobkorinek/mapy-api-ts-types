@@ -1,20 +1,25 @@
 import { Property, PropertyAccess } from "../types";
+import { parseSentence } from "./comment";
 
-export const parseProperties = (page: Document): Array<Property> => {
+export const parseProperties = (page: Document, url?: string): Array<Property> => {
     let result = [];
 
     getPropertyTable(page, (table) => {
-        result = mapProperties(table, parseProperty)
+        result = mapProperties(table, (accessCell, infoCell) => parseProperty(accessCell, infoCell, url))
     });
 
     return result;
 }
 
-export const parseProperty: MapPropertyCallback<Property> = (accessCell: HTMLTableCellElement, infoCell: HTMLTableCellElement) => {
+export const parseProperty: MapPropertyCallback<Property> = (accessCell: HTMLTableCellElement, infoCell: HTMLTableCellElement, url?: string) => {
+    const name = parsePropertyName(infoCell);
+
     return {
-        name: parsePropertyName(infoCell),
+        name: name,
         access: parsePropertyAccess(accessCell),
-        type: 'unknown'
+        type: 'unknown',
+        url: url ? url + '#' + name : null,
+        comment: parsePropertyComment(infoCell)
     }
 }
 
@@ -59,6 +64,16 @@ const parsePropertyName = (infoCell: HTMLTableCellElement) => {
     return infoCell.firstElementChild.textContent.trim().replace(/^.+\./, '');
 }
 
+const parsePropertyComment = (infoCell: HTMLTableCellElement): string => {
+    const commentElement = infoCell.lastElementChild;
+
+    if (commentElement && commentElement.classList.contains('description')) {
+        return parseSentence(commentElement.textContent);
+    }
+
+    return null;
+}
+
 interface MapPropertyCallback<T> {
-    (accessCell: HTMLTableCellElement, infoCell: HTMLTableCellElement): T;
+    (accessCell: HTMLTableCellElement, infoCell: HTMLTableCellElement, url?: string): T;
 }

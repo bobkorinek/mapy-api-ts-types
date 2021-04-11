@@ -9,7 +9,9 @@ export const extractMethods = (page: Document, url?: string): Method[] => {
     const constructor = parseMethod(getConstructorDetailElement(page), url);
 
     if (constructor) {
-        methods.push({ ...constructor, name: 'constructor', type: null, url: null });
+        if (constructor.arguments.length > 0) {
+            methods.push({ ...constructor, name: 'constructor', type: null, url: null });
+        }
     }
 
     forEachContentElement(page, 'Metody - detailně', (detailElement) => {
@@ -36,10 +38,12 @@ const parseMethod = (detailElement: HTMLElement, url?: string): Method => {
     const match = text.match(/(?<static><statická>)?[\t\n]*?(?:\{(?<type>.*?)\})?.*?(?<name>[^.]+)\((?<args>.*)\)$/m);
 
     if (match) {
+        const detailListElement = getDetailListElement(detailElement);
+        const returnValueDetailElement = getReturnValueDetailElement(detailListElement);
         const description = detailElement.nextElementSibling.classList.contains('description')
             ? detailElement.nextElementSibling.textContent.trim() : null;
 
-        const parsedArguments = parseMethodArguments(match.groups['args'], getDetailListElement(detailElement));
+        const parsedArguments = parseMethodArguments(match.groups['args'], detailListElement);
         const type = match.groups['type'] ? match.groups['type'].trim().split('|').map(resolveType) : 'void';
         const name = match.groups['name'].trim();
 
@@ -49,7 +53,8 @@ const parseMethod = (detailElement: HTMLElement, url?: string): Method => {
             type: type,
             static: Boolean(match.groups['static']),
             comment: parseSentence(description),
-            url: url ? url + '#' + name : null
+            url: url ? url + '#' + name : null,
+            returnComment: parseReturnValueComment(returnValueDetailElement)
         }
     }
 
@@ -71,6 +76,24 @@ const getDetailListElement = (detailElement: HTMLElement): HTMLElement => {
 
     return null;
 };
+
+const getReturnValueDetailElement = (detailListElement: HTMLElement) => {
+    if (detailListElement && detailListElement.nextElementSibling && detailListElement.nextElementSibling.classList.contains('detailList')) {
+        return detailListElement.nextElementSibling as HTMLElement;
+    }
+
+    return null;
+}
+
+const parseReturnValueComment = (returnValueDetailElement: HTMLElement) => {
+    if (returnValueDetailElement) {
+        if (returnValueDetailElement?.lastElementChild?.lastChild) {
+            return parseSentence(returnValueDetailElement.lastElementChild.lastChild.textContent);
+        }
+    }
+
+    return null;
+}
 
 const forEachContentElement = (page: Document, startHeader: string, callback: (element: HTMLElement) => any) => {
     const elements = getContentElements(page);

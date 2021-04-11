@@ -24,7 +24,7 @@ export const parseStructure = (doc: Document, url?: string): Class | Interface =
             ...data,
             extends: info.parent,
             implements: info.interfaces,
-            properties: parseProperties(doc)
+            properties: parseProperties(doc, url)
         } as Class;
     } else {
         return {
