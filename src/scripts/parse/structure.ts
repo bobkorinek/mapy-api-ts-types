@@ -1,33 +1,35 @@
 import { Class, Interface } from "../types";
 import { parseTypes } from "./argument";
+import { parseSentence } from "./comment";
 import { extractMethods } from "./method";
 import { parseProperties } from "./property";
 
-export const parseStructure = (doc: Document): Class | Interface => {
-    const methods = extractMethods(doc);
+export const parseStructure = (doc: Document, url?: string): Class | Interface => {
+    const methods = extractMethods(doc, url);
     const headerElement = doc.querySelector('#content>h1');
     const parsedName = parseName(headerElement?.textContent.trim().replace('Třída ', ''));
-    const parents = getParents(doc);
+    const info = parseInfo(doc);
 
     const data = {
         name: parsedName.name,
         type: isInterface(parsedName.name) ? 'interface' : 'class',
         namespace: parsedName.ns,
         methods: methods,
+        url: url,
+        comment: info.comment
     };
 
     if (data.type === 'class') {
         return {
             ...data,
-            extends: parents.parent,
-            implements: parents.interfaces,
+            extends: info.parent,
+            implements: info.interfaces,
             properties: parseProperties(doc)
-
         } as Class;
     } else {
         return {
             ...data,
-            extends: parents.interfaces,
+            extends: info.interfaces,
         } as Interface;
     }
 }
@@ -41,20 +43,29 @@ export const parseName = (className: string) => {
     }
 }
 
-export const getParents = (doc: Document) => {
-    const parentLinkElement = doc.querySelector('#content>p.description>a');
+export const parseInfo = (doc: Document) => {
+    const descriptionElement = doc.querySelector('#content>p.description');
+    const parentLinkElement = descriptionElement?.querySelector(':scope>a');
     const result = {
         parent: null,
-        interfaces: []
+        interfaces: [],
+        comment: null
     }
+    if (descriptionElement) {
+        const commentMatch = descriptionElement.textContent.trim().match(/(?:(?!Rozšiřuje|Posílá tyto signály:).)*/s);
 
-    if (parentLinkElement) {
-        parentLinkElement
-            .textContent
-            .trim()
-            .split(', ')
-            .map(t => parseTypes(t.trim()) as string)
-            .forEach(o => isInterface(o) ? result.interfaces.push(o) : (result.parent = o));
+        if (commentMatch) {
+            result.comment = parseSentence(commentMatch.toString());
+        }
+
+        if (parentLinkElement) {
+            parentLinkElement
+                .textContent
+                .trim()
+                .split(', ')
+                .map(t => parseTypes(t.trim()) as string)
+                .forEach(o => isInterface(o) ? result.interfaces.push(o) : (result.parent = o));
+        }
     }
 
     return result;

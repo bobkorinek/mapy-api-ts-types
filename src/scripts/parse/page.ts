@@ -1,6 +1,7 @@
 import * as http from 'http';
 import { JSDOM } from 'jsdom';
 import { Class, Interface } from "../types";
+import { SMAP_DOC_URL } from '../vars';
 import { parseStructure } from './structure';
 
 export const parse = (): Promise<Class[]> => {
@@ -34,7 +35,7 @@ export const parse = (): Promise<Class[]> => {
 
 export const parsePage = async (url: string): Promise<Class | Interface> => {
     return loadPage(url)
-        .then((doc) => parseStructure(doc));
+        .then((doc) => parseStructure(doc, url));
 }
 
 const loadPage = (url: string): Promise<Document> => {
@@ -51,8 +52,8 @@ const loadPage = (url: string): Promise<Document> => {
     });
 }
 
-const getUrls = async (indexUrl: string = 'http://api.mapy.cz/doc/SMap.html'): Promise<Array<string>> => {
-    const prefix = 'http://api.mapy.cz/doc/';
+const getUrls = async (indexUrl: string = SMAP_DOC_URL + '/SMap.html'): Promise<Array<string>> => {
+    const prefix = SMAP_DOC_URL + '/';
     const urls = [];
 
     const doc = await loadPage(indexUrl);

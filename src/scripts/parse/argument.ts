@@ -1,4 +1,5 @@
 import { Argument, Type } from "../types";
+import { parseSentence } from "./comment";
 import { resolveType } from "./variable";
 
 export const parseMethodArguments = (methodsArguments: string, detailList: HTMLElement): Argument[] => {
@@ -19,7 +20,7 @@ export const parseMethodArguments = (methodsArguments: string, detailList: HTMLE
             const argCommentElement = detailList.children.item(i + 1);
             const parsedArgument = parseArgument(argDetailElement.textContent.trim());
 
-            parsedArgument.comment = argCommentElement.textContent.trim();
+            parsedArgument.comment = parseComment(argCommentElement);
 
             variables.push(parsedArgument)
         }
@@ -67,4 +68,12 @@ export const parseTypes = (types: string): Type | Type[] => {
     }
 
     return resolvedTypes;
+}
+
+const parseComment = (commentElement: Element) => {
+    if (!commentElement) {
+        return null;
+    }
+
+    return parseSentence(commentElement.textContent);
 }

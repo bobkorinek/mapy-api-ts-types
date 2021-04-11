@@ -1,0 +1,1 @@
+export const SMAP_DOC_URL = 'http://api.mapy.cz/doc';

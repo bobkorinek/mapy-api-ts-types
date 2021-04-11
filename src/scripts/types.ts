@@ -6,15 +6,16 @@ export interface Namespace {
     interfaces: Interface[];
 }
 
-export interface Interface {
+export interface Interface extends Link {
     type: 'interface';
     name: string;
     namespace?: string;
     extends?: string[];
     methods: Method[];
+    comment?: string;
 }
 
-export interface Class {
+export interface Class extends Link {
     type: 'class';
     name: string;
     namespace?: string;
@@ -22,9 +23,10 @@ export interface Class {
     implements?: string[];
     properties: Property[];
     methods: Method[];
+    comment?: string;
 }
 
-export interface Method {
+export interface Method extends Link {
     name: string;
     type?: Type | Type[];
     arguments: Argument[];
@@ -38,7 +40,11 @@ export interface Variable {
     comment?: string;
 }
 
-export interface Property extends Variable {
+interface Link {
+    url?: string;
+}
+
+export interface Property extends Variable, Link {
     access: PropertyAccess;
 }
 

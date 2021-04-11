@@ -1,19 +1,20 @@
 import { Method } from "../types";
 import { parseMethodArguments } from "./argument";
+import { parseSentence } from "./comment";
 import { resolveType } from "./variable";
 
-export const extractMethods = (page: Document): Method[] => {
+export const extractMethods = (page: Document, url?: string): Method[] => {
     const methods: Method[] = [];
 
-    const constructor = parseMethod(getConstructorDetailElement(page));
+    const constructor = parseMethod(getConstructorDetailElement(page), url);
 
     if (constructor) {
-        methods.push({ ...constructor, name: 'constructor', type: null });
+        methods.push({ ...constructor, name: 'constructor', type: null, url: null });
     }
 
     forEachContentElement(page, 'Metody - detailně', (detailElement) => {
         if (detailElement.classList.contains('fixedFont')) {
-            const parsedMethod = parseMethod(detailElement);
+            const parsedMethod = parseMethod(detailElement, url);
 
             if (detailElement) {
                 methods.push(parsedMethod);
@@ -26,7 +27,7 @@ export const extractMethods = (page: Document): Method[] => {
 
 const getConstructorDetailElement = (page: Document) => page.querySelector<HTMLElement>('#content>div.details>div.fixedFont');
 
-const parseMethod = (detailElement: HTMLElement): Method => {
+const parseMethod = (detailElement: HTMLElement, url?: string): Method => {
     if (!detailElement) {
         return null;
     }
@@ -40,13 +41,15 @@ const parseMethod = (detailElement: HTMLElement): Method => {
 
         const parsedArguments = parseMethodArguments(match.groups['args'], getDetailListElement(detailElement));
         const type = match.groups['type'] ? match.groups['type'].trim().split('|').map(resolveType) : 'void';
+        const name = match.groups['name'].trim();
 
         return {
-            name: match.groups['name'].trim(),
+            name: name,
             arguments: parsedArguments,
             type: type,
             static: Boolean(match.groups['static']),
-            comment: description,
+            comment: parseSentence(description),
+            url: url ? url + '#' + name : null
         }
     }
 
