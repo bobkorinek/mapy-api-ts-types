@@ -1,3 +1,4 @@
+//@ts-nocheck
 declare namespace JAK {
   class Signals {
     addListener(owner: object, type: string, handleFunction: string, sender: object): void;
@@ -377,10 +378,10 @@ declare class SMap {
   constructor(container: Node, center?: SMap.Coords, zoom?: number, options?: object);
 
   /**
-   * Všechny destruktory dělají toto: 
-  - vymažou kontejner, pokud prvek nějaký má 
-  - zavolají destruktor všech podřízených prvků 
-  - odvěsí své události 
+   * Všechny destruktory dělají toto:
+  - vymažou kontejner, pokud prvek nějaký má
+  - zavolají destruktor všech podřízených prvků
+  - odvěsí své události
   Nedochází tedy k selektivnímu odvěšování - na to se používá .removeXXX().
    * @see http://api.mapy.cz/doc/SMap.html#$destructor
    */
@@ -1200,12 +1201,12 @@ declare namespace SMap {
     /**
      * Nastaví vrstvě sadu copyrightů.
      * @see http://api.mapy.cz/doc/SMap.Layer.html#setCopyright
-     * @param {object} copyright Objekt, jehož každá položka specifikuje zoom nebo interval a odpovídající copyright. Příklad: 
-    copyright = { 
-      "-3":  "copy1", 
-      "4-5": "copy2", 
-      "6":   "copy3", 
-      "7-": "copy4", 
+     * @param {object} copyright Objekt, jehož každá položka specifikuje zoom nebo interval a odpovídající copyright. Příklad:
+    copyright = {
+      "-3":  "copy1",
+      "4-5": "copy2",
+      "6":   "copy3",
+      "7-": "copy4",
     }.
      */
     setCopyright(copyright: object): void;
@@ -2015,7 +2016,7 @@ declare namespace SMap {
 
     /**
      * Vrátí výsledek plánování. Je to objekt s těmito hlavními vlastnostmi:
-    
+
     geometry – pole souřadnic geometrie trasy
     altitude – pole nadmořských výšek pro jednotlivé body geometrie
     points – pole průjezdních bodů; každý bod je další (zatím nedokumentovaný) složitý objekt
@@ -2584,12 +2585,12 @@ declare namespace SMap {
       /**
        * Nastaví vrstvě sadu copyrightů.
        * @see http://api.mapy.cz/doc/SMap.Layer.Canvas.html#setCopyright
-       * @param {object} copyright Objekt, jehož každá položka specifikuje zoom nebo interval a odpovídající copyright. Příklad: 
-      copyright = { 
-        "-3":  "copy1", 
-        "4-5": "copy2", 
-        "6":   "copy3", 
-        "7-": "copy4", 
+       * @param {object} copyright Objekt, jehož každá položka specifikuje zoom nebo interval a odpovídající copyright. Příklad:
+      copyright = {
+        "-3":  "copy1",
+        "4-5": "copy2",
+        "6":   "copy3",
+        "7-": "copy4",
       }.
        */
       setCopyright(copyright: object): void;
@@ -2792,12 +2793,12 @@ declare namespace SMap {
       /**
        * Nastaví vrstvě sadu copyrightů.
        * @see http://api.mapy.cz/doc/SMap.Layer.GPX.html#setCopyright
-       * @param {object} copyright Objekt, jehož každá položka specifikuje zoom nebo interval a odpovídající copyright. Příklad: 
-      copyright = { 
-        "-3":  "copy1", 
-        "4-5": "copy2", 
-        "6":   "copy3", 
-        "7-": "copy4", 
+       * @param {object} copyright Objekt, jehož každá položka specifikuje zoom nebo interval a odpovídající copyright. Příklad:
+      copyright = {
+        "-3":  "copy1",
+        "4-5": "copy2",
+        "6":   "copy3",
+        "7-": "copy4",
       }.
        */
       setCopyright(copyright: object): void;
@@ -2935,12 +2936,12 @@ declare namespace SMap {
       /**
        * Nastaví vrstvě sadu copyrightů.
        * @see http://api.mapy.cz/doc/SMap.Layer.Geometry.html#setCopyright
-       * @param {object} copyright Objekt, jehož každá položka specifikuje zoom nebo interval a odpovídající copyright. Příklad: 
-      copyright = { 
-        "-3":  "copy1", 
-        "4-5": "copy2", 
-        "6":   "copy3", 
-        "7-": "copy4", 
+       * @param {object} copyright Objekt, jehož každá položka specifikuje zoom nebo interval a odpovídající copyright. Příklad:
+      copyright = {
+        "-3":  "copy1",
+        "4-5": "copy2",
+        "6":   "copy3",
+        "7-": "copy4",
       }.
        */
       setCopyright(copyright: object): void;
@@ -3063,12 +3064,12 @@ declare namespace SMap {
       /**
        * Nastaví vrstvě sadu copyrightů.
        * @see http://api.mapy.cz/doc/SMap.Layer.HUD.html#setCopyright
-       * @param {object} copyright Objekt, jehož každá položka specifikuje zoom nebo interval a odpovídající copyright. Příklad: 
-      copyright = { 
-        "-3":  "copy1", 
-        "4-5": "copy2", 
-        "6":   "copy3", 
-        "7-": "copy4", 
+       * @param {object} copyright Objekt, jehož každá položka specifikuje zoom nebo interval a odpovídající copyright. Příklad:
+      copyright = {
+        "-3":  "copy1",
+        "4-5": "copy2",
+        "6":   "copy3",
+        "7-": "copy4",
       }.
        */
       setCopyright(copyright: object): void;
@@ -3221,12 +3222,12 @@ declare namespace SMap {
       /**
        * Nastaví vrstvě sadu copyrightů.
        * @see http://api.mapy.cz/doc/SMap.Layer.Image.html#setCopyright
-       * @param {object} copyright Objekt, jehož každá položka specifikuje zoom nebo interval a odpovídající copyright. Příklad: 
-      copyright = { 
-        "-3":  "copy1", 
-        "4-5": "copy2", 
-        "6":   "copy3", 
-        "7-": "copy4", 
+       * @param {object} copyright Objekt, jehož každá položka specifikuje zoom nebo interval a odpovídající copyright. Příklad:
+      copyright = {
+        "-3":  "copy1",
+        "4-5": "copy2",
+        "6":   "copy3",
+        "7-": "copy4",
       }.
        */
       setCopyright(copyright: object): void;
@@ -3413,12 +3414,12 @@ declare namespace SMap {
       /**
        * Nastaví vrstvě sadu copyrightů.
        * @see http://api.mapy.cz/doc/SMap.Layer.KML.html#setCopyright
-       * @param {object} copyright Objekt, jehož každá položka specifikuje zoom nebo interval a odpovídající copyright. Příklad: 
-      copyright = { 
-        "-3":  "copy1", 
-        "4-5": "copy2", 
-        "6":   "copy3", 
-        "7-": "copy4", 
+       * @param {object} copyright Objekt, jehož každá položka specifikuje zoom nebo interval a odpovídající copyright. Příklad:
+      copyright = {
+        "-3":  "copy1",
+        "4-5": "copy2",
+        "6":   "copy3",
+        "7-": "copy4",
       }.
        */
       setCopyright(copyright: object): void;
@@ -3567,12 +3568,12 @@ declare namespace SMap {
       /**
        * Nastaví vrstvě sadu copyrightů.
        * @see http://api.mapy.cz/doc/SMap.Layer.Marker.html#setCopyright
-       * @param {object} copyright Objekt, jehož každá položka specifikuje zoom nebo interval a odpovídající copyright. Příklad: 
-      copyright = { 
-        "-3":  "copy1", 
-        "4-5": "copy2", 
-        "6":   "copy3", 
-        "7-": "copy4", 
+       * @param {object} copyright Objekt, jehož každá položka specifikuje zoom nebo interval a odpovídající copyright. Příklad:
+      copyright = {
+        "-3":  "copy1",
+        "4-5": "copy2",
+        "6":   "copy3",
+        "7-": "copy4",
       }.
        */
       setCopyright(copyright: object): void;
@@ -3732,12 +3733,12 @@ declare namespace SMap {
       /**
        * Nastaví vrstvě sadu copyrightů.
        * @see http://api.mapy.cz/doc/SMap.Layer.Multi.html#setCopyright
-       * @param {object} copyright Objekt, jehož každá položka specifikuje zoom nebo interval a odpovídající copyright. Příklad: 
-      copyright = { 
-        "-3":  "copy1", 
-        "4-5": "copy2", 
-        "6":   "copy3", 
-        "7-": "copy4", 
+       * @param {object} copyright Objekt, jehož každá položka specifikuje zoom nebo interval a odpovídající copyright. Příklad:
+      copyright = {
+        "-3":  "copy1",
+        "4-5": "copy2",
+        "6":   "copy3",
+        "7-": "copy4",
       }.
        */
       setCopyright(copyright: object): void;
@@ -3879,12 +3880,12 @@ declare namespace SMap {
       /**
        * Nastaví vrstvě sadu copyrightů.
        * @see http://api.mapy.cz/doc/SMap.Layer.Smart.html#setCopyright
-       * @param {object} copyright Objekt, jehož každá položka specifikuje zoom nebo interval a odpovídající copyright. Příklad: 
-      copyright = { 
-        "-3":  "copy1", 
-        "4-5": "copy2", 
-        "6":   "copy3", 
-        "7-": "copy4", 
+       * @param {object} copyright Objekt, jehož každá položka specifikuje zoom nebo interval a odpovídající copyright. Příklad:
+      copyright = {
+        "-3":  "copy1",
+        "4-5": "copy2",
+        "6":   "copy3",
+        "7-": "copy4",
       }.
        */
       setCopyright(copyright: object): void;
@@ -4045,12 +4046,12 @@ declare namespace SMap {
       /**
        * Nastaví vrstvě sadu copyrightů.
        * @see http://api.mapy.cz/doc/SMap.Layer.Tile.html#setCopyright
-       * @param {object} copyright Objekt, jehož každá položka specifikuje zoom nebo interval a odpovídající copyright. Příklad: 
-      copyright = { 
-        "-3":  "copy1", 
-        "4-5": "copy2", 
-        "6":   "copy3", 
-        "7-": "copy4", 
+       * @param {object} copyright Objekt, jehož každá položka specifikuje zoom nebo interval a odpovídající copyright. Příklad:
+      copyright = {
+        "-3":  "copy1",
+        "4-5": "copy2",
+        "6":   "copy3",
+        "7-": "copy4",
       }.
        */
       setCopyright(copyright: object): void;
@@ -4167,12 +4168,12 @@ declare namespace SMap {
       /**
        * Nastaví vrstvě sadu copyrightů.
        * @see http://api.mapy.cz/doc/SMap.Layer.Turist.html#setCopyright
-       * @param {object} copyright Objekt, jehož každá položka specifikuje zoom nebo interval a odpovídající copyright. Příklad: 
-      copyright = { 
-        "-3":  "copy1", 
-        "4-5": "copy2", 
-        "6":   "copy3", 
-        "7-": "copy4", 
+       * @param {object} copyright Objekt, jehož každá položka specifikuje zoom nebo interval a odpovídající copyright. Příklad:
+      copyright = {
+        "-3":  "copy1",
+        "4-5": "copy2",
+        "6":   "copy3",
+        "7-": "copy4",
       }.
        */
       setCopyright(copyright: object): void;
@@ -4331,12 +4332,12 @@ declare namespace SMap {
       /**
        * Nastaví vrstvě sadu copyrightů.
        * @see http://api.mapy.cz/doc/SMap.Layer.WMS.html#setCopyright
-       * @param {object} copyright Objekt, jehož každá položka specifikuje zoom nebo interval a odpovídající copyright. Příklad: 
-      copyright = { 
-        "-3":  "copy1", 
-        "4-5": "copy2", 
-        "6":   "copy3", 
-        "7-": "copy4", 
+       * @param {object} copyright Objekt, jehož každá položka specifikuje zoom nebo interval a odpovídající copyright. Příklad:
+      copyright = {
+        "-3":  "copy1",
+        "4-5": "copy2",
+        "6":   "copy3",
+        "7-": "copy4",
       }.
        */
       setCopyright(copyright: object): void;
@@ -4466,12 +4467,12 @@ declare namespace SMap {
       /**
        * Nastaví vrstvě sadu copyrightů.
        * @see http://api.mapy.cz/doc/SMap.Layer.WMTS.html#setCopyright
-       * @param {object} copyright Objekt, jehož každá položka specifikuje zoom nebo interval a odpovídající copyright. Příklad: 
-      copyright = { 
-        "-3":  "copy1", 
-        "4-5": "copy2", 
-        "6":   "copy3", 
-        "7-": "copy4", 
+       * @param {object} copyright Objekt, jehož každá položka specifikuje zoom nebo interval a odpovídající copyright. Příklad:
+      copyright = {
+        "-3":  "copy1",
+        "4-5": "copy2",
+        "6":   "copy3",
+        "7-": "copy4",
       }.
        */
       setCopyright(copyright: object): void;
@@ -4562,12 +4563,12 @@ declare namespace SMap {
       /**
        * Nastaví vrstvě sadu copyrightů.
        * @see http://api.mapy.cz/doc/SMap.Layer.Winter.html#setCopyright
-       * @param {object} copyright Objekt, jehož každá položka specifikuje zoom nebo interval a odpovídající copyright. Příklad: 
-      copyright = { 
-        "-3":  "copy1", 
-        "4-5": "copy2", 
-        "6":   "copy3", 
-        "7-": "copy4", 
+       * @param {object} copyright Objekt, jehož každá položka specifikuje zoom nebo interval a odpovídající copyright. Příklad:
+      copyright = {
+        "-3":  "copy1",
+        "4-5": "copy2",
+        "6":   "copy3",
+        "7-": "copy4",
       }.
        */
       setCopyright(copyright: object): void;
@@ -4735,12 +4736,12 @@ declare namespace SMap {
         /**
          * Nastaví vrstvě sadu copyrightů.
          * @see http://api.mapy.cz/doc/SMap.Layer.Smart.Turist.html#setCopyright
-         * @param {object} copyright Objekt, jehož každá položka specifikuje zoom nebo interval a odpovídající copyright. Příklad: 
-        copyright = { 
-          "-3":  "copy1", 
-          "4-5": "copy2", 
-          "6":   "copy3", 
-          "7-": "copy4", 
+         * @param {object} copyright Objekt, jehož každá položka specifikuje zoom nebo interval a odpovídající copyright. Příklad:
+        copyright = {
+          "-3":  "copy1",
+          "4-5": "copy2",
+          "6":   "copy3",
+          "7-": "copy4",
         }.
          */
         setCopyright(copyright: object): void;
@@ -5391,7 +5392,7 @@ declare namespace SMap {
       /**
        * Starý formát:.
        * @param {number} [conf=1] Počet dílků v měřítku ()
-      
+
       nový formát:.
        * @param {Object} [conf]
        */
