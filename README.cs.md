@@ -26,4 +26,4 @@ specifikovat konkrétní verzi knihovny.
 ### Alternativní instalace
 Alternativně si můžete zkopírovat soubor `index.d.ts` do vašeho adresáře a
 následně adresář tohoto souboru uveďte v souboru `tsconfig.json` u 
-proměnné [`rootTypes`](https://www.typescriptlang.org/tsconfig#typeRoots).
+proměnné [`typeRoots`](https://www.typescriptlang.org/tsconfig#typeRoots).

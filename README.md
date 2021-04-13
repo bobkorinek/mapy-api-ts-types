@@ -23,4 +23,4 @@ for specifying the library version.
 ### Alternative installation
 You might alternatively copy the `index.d.ts` to your directory and specify this
 directory inside the `tsconfig.json` file in
-[`rootTypes`](https://www.typescriptlang.org/tsconfig#typeRoots) option.
+[`typeRoots`](https://www.typescriptlang.org/tsconfig#typeRoots) option.
