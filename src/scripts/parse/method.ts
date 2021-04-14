@@ -3,7 +3,7 @@ import { parseMethodArguments } from "./argument";
 import { parseSentence } from "./comment";
 import { resolveType } from "./variable";
 
-export const extractMethods = (page: Document, url?: string): Method[] => {
+export const parseMethods = (page: Document, url?: string): Method[] => {
     const methods: Method[] = [];
 
     const constructor = parseMethod(getConstructorDetailElement(page), url);
@@ -24,7 +24,7 @@ export const extractMethods = (page: Document, url?: string): Method[] => {
         }
     });
 
-    return methods;
+    return methods.filter(filterUniqueMethods);
 }
 
 const getConstructorDetailElement = (page: Document) => page.querySelector<HTMLElement>('#content>div.details>div.fixedFont');
@@ -95,6 +95,8 @@ const parseReturnValueComment = (returnValueDetailElement: HTMLElement) => {
     return null;
 }
 
+const filterUniqueMethods = (method: Method, index: number, self: Array<Method>) => self.findIndex(m => m.name === method.name) === index;
+
 const forEachContentElement = (page: Document, startHeader: string, callback: (element: HTMLElement) => any) => {
     const elements = getContentElements(page);
 
@@ -112,4 +114,3 @@ const forEachContentElement = (page: Document, startHeader: string, callback: (e
         }
     }
 }
-

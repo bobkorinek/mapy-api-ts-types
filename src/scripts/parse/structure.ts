@@ -1,11 +1,11 @@
 import { Class, Event, Interface } from "../types";
 import { parseTypes } from "./argument";
 import { parseSentence } from "./comment";
-import { extractMethods } from "./method";
+import { parseMethods } from "./method";
 import { parseProperties } from "./property";
 
 export const parseStructure = (doc: Document, url?: string): Class | Interface => {
-    const methods = extractMethods(doc, url);
+    const methods = parseMethods(doc, url);
     const headerElement = doc.querySelector('#content>h1');
     const parsedName = parseName(headerElement?.textContent.trim().replace('Třída ', ''));
     const info = parseInfo(doc);
