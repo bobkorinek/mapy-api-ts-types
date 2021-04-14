@@ -2,6 +2,7 @@ import { Class, Interface, Namespace } from "./types"
 import { createNamespace } from "./export/namespace";
 import * as fs from 'fs';
 import * as path from 'path';
+import { resolveExceptions } from "./resolve";
 
 export const exportStructures = (structures: (Class | Interface)[], filePath: string) => {
     const root: Namespace = {
@@ -12,7 +13,9 @@ export const exportStructures = (structures: (Class | Interface)[], filePath: st
 
     structures.forEach(s => assignToNamespace(s, root, s.namespace ? s.namespace.split('.') : []));
 
-    writeToFile(() => createNamespace(root), filePath)
+    const createRootNamespace = () => createNamespace(resolveExceptions(root));
+
+    writeToFile(createRootNamespace, filePath)
 }
 
 const writeToFile = (data: () => string, filePath: string, JAKFilePath: string = path.dirname(__dirname) + '/types/jak.d.ts') => {
