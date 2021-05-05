@@ -63,3 +63,50 @@ export interface Event {
 export type Type = string;
 
 export type PropertyAccess = 'normal' | 'static' | 'constant';
+
+//#region Page structures
+
+export interface Page {
+    name: string;
+    extends?: string;
+    implements?: string[];
+    events: Page.Event[];
+    description?: string;
+    constructorSection?: Page.MethodSection;
+    propertySections: Page.PropertySection[];
+    methodSections: Page.MethodSection[];
+}
+
+export namespace Page {
+    export interface Event {
+        name: string;
+        description?: string;
+    }
+
+    export interface PropertySection {
+        name: string;
+        visibility?: string;
+    }
+
+    export interface MethodSection {
+        name: string;
+        argumentSections: ArgumentSection[];
+        returnValueSection?: ReturnValueSection;
+        description?: string;
+    }
+
+    export interface ArgumentSection {
+        name: string;
+        type?: string;
+        description?: string;
+        optional?: boolean;
+        default?: string;
+    }
+
+    export interface ReturnValueSection {
+        type?: string;
+        description?: string;
+    }
+}
+
+////#endregion Page structures
