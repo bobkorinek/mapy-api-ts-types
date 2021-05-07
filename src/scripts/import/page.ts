@@ -73,6 +73,7 @@ const parseMethodSection = (methodSection: SectionElements): Page.MethodSection 
         argumentSections: [],
         description: methodSection?.description?.textContent.trim(),
         returnValueSection: null,
+        type: getMethodReturnTypeElement(methodSection)?.textContent.match(/\{(?<type>[^}]+)\}/)?.groups['type'],
     };
 };
 
@@ -153,6 +154,12 @@ const getSections = (doc: Document, header: string): SectionElements[] => {
     };
 
     return getNext(sectionsHeader.nextElementSibling).reverse();
+};
+
+const getMethodReturnTypeElement = (methodSection: SectionElements) => {
+    const firstEle = methodSection.main.firstElementChild;
+
+    return firstEle.classList.contains('light') ? firstEle : null;
 };
 
 //#endregion Selectors

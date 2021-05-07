@@ -90,6 +90,7 @@ export namespace Page {
 
     export interface MethodSection {
         name: string;
+        type?: string;
         argumentSections: ArgumentSection[];
         returnValueSection?: ReturnValueSection;
         description?: string;
