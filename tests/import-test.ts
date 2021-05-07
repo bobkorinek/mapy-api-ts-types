@@ -134,9 +134,11 @@ describe('import', () => {
 
             const method = page.methodSections[0];
 
-            assert.strictEqual(method.name, 'removeCard', "Expected the method to have name 'computeCenterZoom'");
+            assert.strictEqual(method.name, 'removeCard', "Expected the method to have name 'removeCard'");
             assert.strictEqual(method.description, 'Zavře vizitku', 'Expected the method to have description');
         });
+
+        it("import method's argument section", () => {});
 
         it("find page's constructor section", () => {
             const doc = createDoc(`<h1 class="classTitle">Třída SMap</h1>
