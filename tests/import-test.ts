@@ -122,36 +122,20 @@ describe('import', () => {
             const doc = createDoc(`<h1 class="classTitle">Třída SMap</h1>
                 <p class="description">SMap Mapa</p>
                 <div class="sectionTitle">Metody - detailně</div>
-                <a name="computeCenterZoom"> </a>
+                <a name="removeCard"> </a>
                 <div class="fixedFont">
                     <span class="light">{array}</span>
-                    <b>computeCenterZoom</b>(arr, usePadding)
+                    <b>removeCard</b>()
                 </div>
-                <div class="description">Spočítá střed a zoom pro množinu bodů</div>
-                <dl class="detailList">
-                    <dt class="heading">Parametry:</dt>
-                    <dt>
-                        <span class="light fixedFont">{Array[<a href="SMap.Coords.html#">SMap.Coords</a>]}</span>
-                        <b>arr</b>
-                    </dt>
-                    <dd>Pole souřadnic</dd>
-                    <dt>
-                        <span class="light fixedFont">{bool}</span>
-                        <b>usePadding</b>
-                        <em>volitelný, výchozí: false</em>
-                    </dt>
-                    <dd>Má-li se průhled zúžit o paddingy způsobené ovládacími prvky</dd>
-                </dl>
-                <dl class="detailList">
-                </dl>
+                <div class="description">Zavře vizitku</div>
             `);
 
             const page = importPage(doc);
 
             const method = page.methodSections[0];
 
-            assert.strictEqual(method.name, 'computeCenterZoom', "Expected the method to have name 'computeCenterZoom'");
-            assert.strictEqual(method.description, 'Spočítá střed a zoom pro množinu bodů', 'Expected the method to have description');
+            assert.strictEqual(method.name, 'removeCard', "Expected the method to have name 'computeCenterZoom'");
+            assert.strictEqual(method.description, 'Zavře vizitku', 'Expected the method to have description');
         });
 
         it("find page's constructor section", () => {
