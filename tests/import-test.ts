@@ -14,7 +14,7 @@ describe('import', () => {
 
             const page = importPage(doc);
 
-            assert.strictEqual('SMap.Layer', page.name);
+            assert.strictEqual(page.name, 'SMap.Layer');
         });
 
         it("import page's events", () => {
@@ -32,20 +32,14 @@ describe('import', () => {
 
             const page = importPage(doc);
 
-            assert.deepStrictEqual(
-                {
-                    name: 'map-redraw',
-                    description: 'Obecná změna stavu mapy (střed, zoom, natočení)',
-                } as Page.Event,
-                page.events[0]
-            );
-            assert.deepStrictEqual(
-                {
-                    name: 'map-unlock',
-                    description: 'Odemknutí mapy',
-                } as Page.Event,
-                page.events[1]
-            );
+            assert.deepStrictEqual(page.events[0], {
+                name: 'map-redraw',
+                description: 'Obecná změna stavu mapy (střed, zoom, natočení)',
+            } as Page.Event);
+            assert.deepStrictEqual(page.events[1], {
+                name: 'map-unlock',
+                description: 'Odemknutí mapy',
+            } as Page.Event);
         });
 
         it("import page's property sections", () => {
@@ -69,20 +63,95 @@ describe('import', () => {
 
             const page = importPage(doc);
 
-            assert.deepStrictEqual(
-                {
-                    name: 'MOUSE_PAN',
-                    visibility: 'konstanta',
-                } as Page.PropertySection,
-                page.propertySections[0]
-            );
-            assert.deepStrictEqual(
-                {
-                    name: 'Card',
-                    visibility: 'statická',
-                } as Page.PropertySection,
-                page.propertySections[1]
-            );
+            assert.deepStrictEqual(page.propertySections[0], {
+                name: 'MOUSE_PAN',
+                visibility: 'konstanta',
+            } as Page.PropertySection);
+            assert.deepStrictEqual(page.propertySections[1], {
+                name: 'Card',
+                visibility: 'statická',
+            } as Page.PropertySection);
+        });
+
+        it("import page's method section", () => {
+            const doc = createDoc(`<h1 class="classTitle">Třída SMap</h1>
+                <p class="description">SMap Mapa</p>
+                <div class="sectionTitle">Metody - detailně</div>
+                <a name="computeCenterZoom"> </a>
+                <div class="fixedFont">
+                    <span class="light">{array}</span>
+                    <b>computeCenterZoom</b>(arr, usePadding)
+                </div>
+                <div class="description">Spočítá střed a zoom pro množinu bodů</div>
+                <dl class="detailList">
+                    <dt class="heading">Parametry:</dt>
+                    <dt>
+                        <span class="light fixedFont">{Array[<a href="SMap.Coords.html#">SMap.Coords</a>]}</span>
+                        <b>arr</b>
+                    </dt>
+                    <dd>Pole souřadnic</dd>
+                    <dt>
+                        <span class="light fixedFont">{bool}</span>
+                        <b>usePadding</b>
+                        <em>volitelný, výchozí: false</em>
+                    </dt>
+                    <dd>Má-li se průhled zúžit o paddingy způsobené ovládacími prvky</dd>
+                </dl>
+                <dl class="detailList">
+                    <dt class="heading">Vrací:</dt>
+                    <dt>
+                        <!-- returny u funkci -->
+                    </dt>
+                    <dd>
+                        <span class="light fixedFont">{array}</span>
+                        <b></b>
+                        Střed a zoom
+                    </dd>
+                </dl>
+            `);
+
+            const page = importPage(doc);
+
+            const method = page.methodSections[0];
+
+            assert.strictEqual(method.name, 'computeCenterZoom', "Expected the method to have name 'computeCenterZoom'");
+            assert.strictEqual(method.description, 'Spočítá střed a zoom pro množinu bodů', 'Expected the method to have description');
+        });
+
+        it("import page's method section", () => {
+            const doc = createDoc(`<h1 class="classTitle">Třída SMap</h1>
+                <p class="description">SMap Mapa</p>
+                <div class="sectionTitle">Metody - detailně</div>
+                <a name="computeCenterZoom"> </a>
+                <div class="fixedFont">
+                    <span class="light">{array}</span>
+                    <b>computeCenterZoom</b>(arr, usePadding)
+                </div>
+                <div class="description">Spočítá střed a zoom pro množinu bodů</div>
+                <dl class="detailList">
+                    <dt class="heading">Parametry:</dt>
+                    <dt>
+                        <span class="light fixedFont">{Array[<a href="SMap.Coords.html#">SMap.Coords</a>]}</span>
+                        <b>arr</b>
+                    </dt>
+                    <dd>Pole souřadnic</dd>
+                    <dt>
+                        <span class="light fixedFont">{bool}</span>
+                        <b>usePadding</b>
+                        <em>volitelný, výchozí: false</em>
+                    </dt>
+                    <dd>Má-li se průhled zúžit o paddingy způsobené ovládacími prvky</dd>
+                </dl>
+                <dl class="detailList">
+                </dl>
+            `);
+
+            const page = importPage(doc);
+
+            const method = page.methodSections[0];
+
+            assert.strictEqual(method.name, 'computeCenterZoom', "Expected the method to have name 'computeCenterZoom'");
+            assert.strictEqual(method.description, 'Spočítá střed a zoom pro množinu bodů', 'Expected the method to have description');
         });
 
         it("find page's constructor section", () => {

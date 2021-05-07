@@ -8,7 +8,7 @@ export const importPage = (doc: Document): Page => {
         events: parseListOfEvents(getListOfEvents(doc)),
         propertySections: parsePropertySections(getPropertiesSections(doc)),
         constructorSection: parseMethodSection(getConstructorSection(doc)),
-        methodSections: [],
+        methodSections: getMethodsSections(doc).map(parseMethodSection),
     };
 };
 
@@ -69,9 +69,9 @@ const parseMethodSection = (methodSection: SectionElements): Page.MethodSection 
     }
 
     return {
-        name: methodSection.main.firstElementChild.textContent.trim(),
+        name: methodSection.main.querySelector('b').textContent.trim(),
         argumentSections: [],
-        description: '',
+        description: methodSection?.description?.textContent.trim(),
         returnValueSection: null,
     };
 };
@@ -95,6 +95,8 @@ const getListOfEvents = (doc: Document) => {
 const getConstructorSection = (doc: Document): SectionElements => getSections(doc, 'Konstruktor - detail')[0];
 
 const getPropertiesSections = (doc: Document): SectionElements[] => getSections(doc, 'Vlastnosti - detailně');
+
+const getMethodsSections = (doc: Document): SectionElements[] => getSections(doc, 'Metody - detailně');
 
 const getSectionsHeader = (doc: Document, header: string) => {
     for (const titleElement of doc.querySelectorAll('div.sectionTitle')) {
