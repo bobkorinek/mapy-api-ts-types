@@ -136,9 +136,50 @@ describe('import', () => {
 
             assert.strictEqual(method.name, 'removeCard', "Expected the method to have name 'removeCard'");
             assert.strictEqual(method.description, 'Zavře vizitku', 'Expected the method to have description');
+            assert.strictEqual(method.type, 'array', 'Expected the method to have return type of array');
         });
 
-        it("import method's argument section", () => {});
+        it("import method's argument section", () => {
+            const doc = createDoc(`<h1 class="classTitle">Třída SMap</h1>
+                <p class="description">SMap Mapa</p>
+                <div class="sectionTitle">Metody - detailně</div>
+                <a name="setCenter"> </a>
+                <div class="fixedFont">
+                    <b>setCenter</b>(center, animate)
+                </div>
+                <div class="description"></div>
+                <dt class="heading">Parametry:</dt>
+                    <dt>
+                        <span class="light fixedFont">{<a href="SMap.Coords.html#">SMap.Coords</a>|<a href="SMap.Pixel.html#">SMap.Pixel</a>}</span> 
+                        <b>center</b>
+                    </dt>
+                    <dd>Buď nová souřadnice středu, nebo pixelový posun</dd>
+                    <dt>
+                        <span class="light fixedFont">{bool}</span> 
+                        <b>animate</b>
+                        <em>volitelný, výchozí: false</em>
+                    </dt>
+                    <dd>Animovat?</dd>
+                </dl>
+            `);
+
+            const page = importPage(doc);
+
+            const method = page.methodSections[0];
+
+            const firstArgument = method.argumentSections[0];
+            const secontArgument = method.argumentSections[1];
+
+            assert.strictEqual(firstArgument.name, 'center');
+            assert.strictEqual(firstArgument.type, 'SMap.Coords|SMap.Pixel');
+            assert.strictEqual(firstArgument.description, 'Buď nová souřadnice středu, nebo pixelový posun');
+
+            assert.strictEqual(secontArgument.name, 'animate');
+            assert.strictEqual(secontArgument.type, 'bool');
+            assert.strictEqual(secontArgument.description, 'Animovat?');
+            assert.strictEqual(secontArgument.optional, true);
+            assert.strictEqual(secontArgument.default, 'false');
+        });
 
         it("find page's constructor section", () => {
             const doc = createDoc(`<h1 class="classTitle">Třída SMap</h1>
