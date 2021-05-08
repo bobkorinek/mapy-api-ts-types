@@ -13,7 +13,7 @@ export const parsePropertySections = (propertiesSections: SectionElements[]): Pa
         return [
             {
                 name: elements.main.lastElementChild.textContent.trim(),
-                visibility: visibility.groups['v'] ? visibility.groups['v'] : null,
+                visibility: visibility?.groups['v'] ? visibility.groups['v'] : null,
             },
             ...(propertiesSections[i + 1] ? parse(i + 1) : []),
         ];

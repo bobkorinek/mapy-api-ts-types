@@ -32,8 +32,8 @@ export const getSections = (doc: Document, header: string): SectionElements[] =>
             if (nextElement.tagName.toLowerCase() !== 'hr' && !nextElement.classList.contains('sectionTitle')) {
                 return getNext(e.nextElementSibling, sectionElements, i + 1);
             } else if (
-                nextElement.nextElementSibling.tagName.toLowerCase() === 'a' &&
-                nextElement.nextElementSibling.hasAttribute('name')
+                nextElement.nextElementSibling?.tagName.toLowerCase() === 'a' &&
+                nextElement.nextElementSibling?.hasAttribute('name')
             ) {
                 return [...getNext(nextElement.nextElementSibling), sectionElements];
             }

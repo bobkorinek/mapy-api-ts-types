@@ -1,8 +1,8 @@
 import * as http from 'http';
 import { JSDOM } from 'jsdom';
-import { Class, Interface } from "../types";
+import { importPage } from '../import/page';
+import { Class, Interface, Page } from '../types';
 import { SMAP_DOC_URL } from '../vars';
-import { parseStructure } from './structure';
 
 export const parse = (): Promise<Class[]> => {
     return new Promise<Class[]>((resolve) => {
@@ -17,8 +17,8 @@ export const parse = (): Promise<Class[]> => {
 
                 urls.slice(fromIndex, toIndex).forEach((url) => promises.push(parsePage(url)));
 
-                Promise.all(promises).then(loadedClasses => {
-                    loadedClasses.forEach(loadedClass => classes.push(loadedClass));
+                Promise.all(promises).then((loadedClasses) => {
+                    loadedClasses.forEach((loadedClass) => classes.push(loadedClass));
 
                     if (toIndex < urls.length) {
                         loadClassBulk(++bulkIndex);
@@ -26,17 +26,16 @@ export const parse = (): Promise<Class[]> => {
                         resolve(classes);
                     }
                 });
-            }
+            };
 
             loadClassBulk();
         });
     });
-}
+};
 
-export const parsePage = async (url: string): Promise<Class | Interface> => {
-    return loadPage(url)
-        .then((doc) => parseStructure(doc, url));
-}
+export const parsePage = async (url: string): Promise<Page> => {
+    return loadPage(url).then((doc) => importPage(doc, url));
+};
 
 const loadPage = (url: string): Promise<Document> => {
     return new Promise((resolve) => {
@@ -48,9 +47,9 @@ const loadPage = (url: string): Promise<Document> => {
             });
 
             response.on('end', () => resolve(new JSDOM(data).window.document));
-        })
+        });
     });
-}
+};
 
 const getUrls = async (indexUrl: string = SMAP_DOC_URL + '/SMap.html'): Promise<Array<string>> => {
     const prefix = SMAP_DOC_URL + '/';
@@ -58,7 +57,7 @@ const getUrls = async (indexUrl: string = SMAP_DOC_URL + '/SMap.html'): Promise<
 
     const doc = await loadPage(indexUrl);
 
-    doc.querySelectorAll<HTMLAnchorElement>('#index a').forEach(linkElement => urls.push(prefix + linkElement.href));
+    doc.querySelectorAll<HTMLAnchorElement>('#index a').forEach((linkElement) => urls.push(prefix + linkElement.href));
 
     return urls;
-}
+};

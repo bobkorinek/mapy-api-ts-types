@@ -64,15 +64,19 @@ const parseReturnTypeSection = (methodSection: SectionElements): Page.ReturnValu
 
     // Checks if node type is text (Node.TEXT_NODE = 3)
     if (returnValueElement.lastChild.nodeType === 3) {
-        return {
-            type: parseType(typeElement.textContent),
-            description: returnValueElement.lastChild.textContent.trim(),
-        };
-    } else {
-        return {
-            type: parseType(typeElement.textContent),
-        };
+        const description = returnValueElement.lastChild.textContent.trim();
+
+        if (description) {
+            return {
+                type: parseType(typeElement.textContent),
+                description: description,
+            };
+        }
     }
+
+    return {
+        type: parseType(typeElement.textContent),
+    };
 };
 
 //#region Section selectors
