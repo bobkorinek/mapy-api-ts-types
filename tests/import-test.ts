@@ -148,7 +148,8 @@ describe('import', () => {
                     <b>setCenter</b>(center, animate)
                 </div>
                 <div class="description"></div>
-                <dt class="heading">Parametry:</dt>
+                <dl class="detailList">
+                    <dt class="heading">Parametry:</dt>
                     <dt>
                         <span class="light fixedFont">{<a href="SMap.Coords.html#">SMap.Coords</a>|<a href="SMap.Pixel.html#">SMap.Pixel</a>}</span> 
                         <b>center</b>
@@ -168,17 +169,49 @@ describe('import', () => {
             const method = page.methodSections[0];
 
             const firstArgument = method.argumentSections[0];
-            const secontArgument = method.argumentSections[1];
+            const secondArgument = method.argumentSections[1];
 
             assert.strictEqual(firstArgument.name, 'center');
             assert.strictEqual(firstArgument.type, 'SMap.Coords|SMap.Pixel');
             assert.strictEqual(firstArgument.description, 'Buď nová souřadnice středu, nebo pixelový posun');
 
-            assert.strictEqual(secontArgument.name, 'animate');
-            assert.strictEqual(secontArgument.type, 'bool');
-            assert.strictEqual(secontArgument.description, 'Animovat?');
-            assert.strictEqual(secontArgument.optional, true);
-            assert.strictEqual(secontArgument.default, 'false');
+            assert.strictEqual(secondArgument.name, 'animate');
+            assert.strictEqual(secondArgument.type, 'bool');
+            assert.strictEqual(secondArgument.description, 'Animovat?');
+            assert.strictEqual(secondArgument.optional, true);
+            assert.strictEqual(secondArgument.default, 'false');
+        });
+
+        it("import method's return value section", () => {
+            const doc = createDoc(`<h1 class="classTitle">Třída SMap</h1>
+                <p class="description">SMap Mapa</p>
+                <div class="sectionTitle">Metody - detailně</div>
+                <a name="getCard"> </a>
+                <div class="fixedFont">
+                    <span class="light">{SMap.Card}</span>
+                    <b>getCard</b>()
+                </div>
+                <div class="description">Vrátí právě zobrazenou vizitku</div>
+                <dl class="detailList">
+                    <dt class="heading">Vrací:</dt>
+                    <dt>
+                        <!-- returny u funkci -->
+                    </dt>
+                    <dd>
+                        <span class="light fixedFont">{<a href="SMap.Card.html#">SMap.Card</a>}</span>
+                        <b></b>
+                        Zobrazená vizitka
+                    </dd>
+                </dl>
+            `);
+
+            const page = importPage(doc);
+
+            const method = page.methodSections[0];
+            const returnValue = method.returnValueSection;
+
+            assert.strictEqual(returnValue.type, 'SMap.Card');
+            assert.strictEqual(returnValue.description, 'Zobrazená vizitka');
         });
 
         it("find page's constructor section", () => {
