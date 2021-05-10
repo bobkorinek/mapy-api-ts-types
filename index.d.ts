@@ -784,7 +784,7 @@ declare namespace SMap {
      * @param {Event} event
      * @param {SMap} map
      */
-    fromEvent(event: Event, map: SMap): void;
+    fromEvent(event: Event, map: SMap): this;
 
     /**
      * Tovární metoda - výroba souřadnic z PP.
@@ -792,7 +792,7 @@ declare namespace SMap {
      * @param {number} PPx Xová souřadnice.
      * @param {number} PPy Yová souřadnice.
      */
-    fromPP(PPx: number, PPy: number): void;
+    fromPP(PPx: number, PPy: number): this;
 
     /**
      * Tovární metoda - výroba souřadnic z UTM33.
@@ -800,7 +800,7 @@ declare namespace SMap {
      * @param {number} x Xová souřadnice.
      * @param {number} y Yová souřadnice.
      */
-    fromUTM33(x: number, y: number): void;
+    fromUTM33(x: number, y: number): this;
 
     /**
      * Tovární metoda - výroba souřadnic z WGS 84.
@@ -808,7 +808,7 @@ declare namespace SMap {
      * @param {number} lonD Longitude (zeměpisná délka) ve stupních jako desetinné číslo nebo řetězec.
      * @param {number} latD Latitude (zeměpisná šířka) ve stupních jako desetinné číslo nebo řetězec.
      */
-    static fromWGS84(lonD: number, latD: number): void;
+    static fromWGS84(lonD: number, latD: number): this;
 
     /**
      * Tovární metoda - výroba souřadnic z (S-)JTSK.
@@ -817,14 +817,14 @@ declare namespace SMap {
      * @param {number} x
      * @param {number} y
      */
-    static fromJTSK(x: number, y: number): void;
+    static fromJTSK(x: number, y: number): this;
 
     /**
      * Tovární metoda - výroba souřadnic z EXIF GPS dat.
      * @see http://api.mapy.cz/doc/SMap.Coords.html#fromEXIF
      * @param {JAK.EXIF} exif Exif nadstavba nad obrazovými daty.
      */
-    static fromEXIF(exif: JAK.EXIF): void;
+    static fromEXIF(exif: JAK.EXIF): this;
 
     /**
      * @see http://api.mapy.cz/doc/SMap.Coords.html#stringToAltitude
@@ -1618,19 +1618,19 @@ declare namespace SMap {
      * Vrátí záhlaví vizitky.
      * @see http://api.mapy.cz/doc/SMap.Card.html#getHeader
      */
-    getHeader(): void;
+    getHeader(): HTMLElement;
 
     /**
      * Vrátí tělo vizitky.
      * @see http://api.mapy.cz/doc/SMap.Card.html#getBody
      */
-    getBody(): void;
+    getBody(): HTMLElement;
 
     /**
      * Vrátí zápatí vizitky.
      * @see http://api.mapy.cz/doc/SMap.Card.html#getFooter
      */
-    getFooter(): void;
+    getFooter(): HTMLElement;
 
     /**
      * Změní velikost na zadaný rozměr.
