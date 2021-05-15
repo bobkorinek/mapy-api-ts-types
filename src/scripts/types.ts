@@ -2,25 +2,24 @@ export interface Namespace {
     name?: string;
     parent?: Namespace;
     namespaces: Namespace[];
-    classes: Class[];
-    interfaces: Interface[];
+    structures: Structure[];
 }
 
-export interface Interface extends Link {
-    type: 'interface';
+interface StrucutreInterface extends Link {
     name: string;
     namespace?: string;
-    extends?: string[];
+    interfaces?: string[];
     methods: Method[];
     comment?: string;
 }
 
-export interface Class extends Link {
+export interface Interface extends StrucutreInterface {
+    type: 'interface';
+}
+
+export interface Class extends StrucutreInterface {
     type: 'class';
-    name: string;
-    namespace?: string;
-    extends?: string;
-    implements?: string[];
+    parentClass?: Class;
     properties: Property[];
     methods: Method[];
     comment?: string;
@@ -64,12 +63,13 @@ export type Type = string;
 
 export type PropertyAccess = 'normal' | 'static' | 'constant';
 
+export type Structure = Class | Interface;
+
 //#region Page structures
 
 export interface Page {
     name: string;
-    extends?: string;
-    implements?: string[];
+    extends?: string[];
     events: Page.Event[];
     description?: string;
     constructorSection?: Page.MethodSection;
