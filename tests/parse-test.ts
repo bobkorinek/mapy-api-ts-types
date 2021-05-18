@@ -1,14 +1,50 @@
 import * as assert from 'assert';
 import { it } from 'mocha';
 import { insertStructureIntoNamespace } from '../src/scripts/parse/namespace';
-import { Interface, Namespace } from '../src/scripts/types';
+import { parsePages } from '../src/scripts/parse/structure';
+import { Class, Interface, Namespace, Page } from '../src/scripts/types';
 
 describe('parse', () => {
+    describe('structure', () => {
+        const createPage = (fullName: string): Page => {
+            return {
+                name: fullName,
+                events: [],
+                methodSections: [],
+                propertySections: [],
+                url: '',
+            };
+        };
+
+        it('parse basic page to class', () => {
+            const page = createPage('Class');
+            const result = parsePages([page]);
+
+            assert.ok(result.namespace.structures.find((s) => s.name === 'Class'));
+        });
+
+        it('parse page to class with parent', () => {
+            const page: Page = { ...createPage('Ns.ChildClass'), extends: ['ParentClass'] };
+            const parent = createPage('ParentClass');
+            const result = parsePages([parent, page]);
+
+            const parentClass = result.namespace.structures.find((s) => s.name === 'ParentClass');
+            const childClass = result.namespace.namespaces
+                .find((ns) => ns.name === 'Ns')
+                .structures.find((s) => s.name === 'ChildClass') as Class;
+
+            assert.ok(parentClass, "Parent class can't be inserted into proper namespace.");
+            assert.ok(childClass, "Child class can't be inserted into proper namespace.");
+            assert.deepStrictEqual(childClass.parentClass, parentClass, "Child class doesn't have proper parent class");
+        });
+    });
+
     describe('namespace', () => {
         const testInterface: Interface = {
             type: 'interface',
             name: 'ITest',
             methods: [],
+            interfaces: [],
         };
 
         const rootNamespace: Namespace = {

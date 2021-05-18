@@ -1,33 +1,111 @@
 import { Interface, Namespace, Page, Class, Structure } from '../types';
 import { insertStructureIntoNamespace } from './namespace';
 
-export const parsePages = (pages: Page[], rootNamespace: Namespace, pageIndex: number = 0): Namespace => {
-    const page = pages[pageIndex];
-    const namespaceName = namespaceFromPageName(page.name);
-
-    const enhancedRootNamespace = rootNamespace;
-
-    const nextIndex = pageIndex + 1;
-
-    if (nextIndex >= pages.length) {
-        return rootNamespace;
-    } else {
-        return parsePages(pages, enhancedRootNamespace, nextIndex);
-    }
+const defaultRootNamespace: Namespace = {
+    namespaces: [],
+    structures: [],
 };
 
-const parsePage = (page: Page, rootNamespace: Namespace): Namespace => {
-    const structure = pageToStructure(page);
+export const parsePages = (pages: Page[], rootNamespace: Namespace = defaultRootNamespace): Result => {
+    const parse = (index: number = 0): Namespace => {
+        if (!pages[index]) {
+            return rootNamespace;
+        }
 
-    return insertStructureIntoNamespace(structure, rootNamespace);
+        return parsePage(pages[index], parse(index + 1), pages);
+    };
+
+    return { namespace: parse() };
 };
 
-const pageToStructure = (page: Page): Structure => {};
+const parsePage = (page: Page, rootNamespace: Namespace, allPages: Page[]): Namespace => {
+    const getParentStructures = (ns: Namespace) =>
+        page.extends ? page.extends.map((pp) => getStructure(pp, ns)).filter((p) => p !== undefined) : [];
 
-const getStructure = (): Structure => {};
+    const insertWithParentStructures = (
+        enhancedNamespace: Namespace,
+        parentStructureRemaining: number = page.extends ? page.extends.length : 0
+    ) => {
+        if (parentStructureRemaining === 0) {
+            return insertStructureIntoNamespace(pageToStructure(page, getParentStructures(enhancedNamespace)), enhancedNamespace);
+        } else {
+            const parentStructureName = page.extends[parentStructureRemaining - 1];
+            const parentPage = allPages.find((p) => p.name === parentStructureName);
 
-const namespaceFromPageName = (pageName: string) => {
-    const namespace = pageName.match(/^.+(?=\.)/);
+            return insertWithParentStructures(
+                parentPage ? parsePage(parentPage, enhancedNamespace, allPages) : enhancedNamespace,
+                parentStructureRemaining - 1
+            );
+        }
+    };
 
-    return namespace ? namespace.toString() : null;
+    return insertWithParentStructures(rootNamespace);
 };
+
+const pageToStructure = (page: Page, extendingStructures: Structure[] = []): Structure => {
+    const parsedName = parsePageName(page.name);
+    const interfaces = extendingStructures.filter((s) => s.type === 'interface') as Interface[];
+    const parentClass = extendingStructures.find((s) => s.type === 'class') as Class;
+
+    const parse = (): Structure => {
+        if (isInterface(parsedName.name)) {
+            return {
+                type: 'interface',
+                name: parsedName.name,
+                methods: [],
+                comment: page.description,
+                interfaces: interfaces,
+            };
+        } else {
+            return {
+                type: 'class',
+                name: parsedName.name,
+                interfaces: interfaces,
+                methods: [],
+                events: [],
+                properties: [],
+                parentClass: parentClass,
+                comment: page.description,
+                url: page.url,
+            };
+        }
+    };
+
+    return parsedName.namespace ? { ...parse(), namespace: parsedName.namespace } : parse();
+};
+
+const getStructure = (fullName: string, namespace: Namespace) => {
+    const findInNamespace = (nameParts: string[], contextNamespace: Namespace): Structure | undefined => {
+        if (nameParts.length > 1) {
+            const nextNamespace = contextNamespace.namespaces.find((ns) => ns.name === nameParts[0]);
+
+            return nextNamespace === undefined ? undefined : findInNamespace(nameParts.slice(1), namespace);
+        } else {
+            return contextNamespace.structures.find((s) => s.name === nameParts[0]);
+        }
+    };
+
+    return findInNamespace(fullName.split('.'), namespace);
+};
+
+const isInterface = (structureName: string) => structureName.match(/^I[A-Z].+/);
+
+const parsePageName = (pageName: string): PageName => {
+    const info = pageName.match(/^(?:(?<ns>.+)\.)?(?<name>.+)$/);
+
+    const parsedName: PageName = {
+        name: info.groups['name'],
+    };
+
+    return info.groups['ns'] ? { ...parsedName, namespace: info.groups['ns'] } : parsedName;
+};
+
+interface PageName {
+    namespace?: string;
+    name: string;
+}
+
+interface Result {
+    namespace: Namespace;
+    // errors;
+}

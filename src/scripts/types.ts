@@ -8,7 +8,7 @@ export interface Namespace {
 interface StrucutreInterface extends Link {
     name: string;
     namespace?: string;
-    interfaces?: string[];
+    interfaces: Interface[];
     methods: Method[];
     comment?: string;
 }
@@ -75,6 +75,7 @@ export interface Page {
     constructorSection?: Page.MethodSection;
     propertySections: Page.PropertySection[];
     methodSections: Page.MethodSection[];
+    url: string;
 }
 
 export namespace Page {

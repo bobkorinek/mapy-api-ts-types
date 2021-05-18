@@ -33,7 +33,7 @@ export const insertStructureIntoNamespace = (structure: Structure, rootNamespace
 };
 
 const addStructureToNamespace = (namespace: Namespace, structure: Structure): Namespace => {
-    if (namespace.structures.find((s) => s.type === structure.type && s.name === structure.name)) {
+    if (namespace.structures.find((s) => s.name === structure.name)) {
         return namespace;
     }
 

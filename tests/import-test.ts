@@ -12,7 +12,7 @@ describe('import', () => {
         it("import page's name", () => {
             const doc = createDoc('<h1 class="classTitle">Třída SMap.Layer</h1>');
 
-            const page = importPage(doc);
+            const page = importPage(doc, 'https://api.mapy.cz/doc/SMap.Layer.html');
 
             assert.strictEqual(page.name, 'SMap.Layer');
         });
@@ -30,7 +30,7 @@ describe('import', () => {
                 </ul>
             `);
 
-            const page = importPage(doc);
+            const page = importPage(doc, 'https://api.mapy.cz/doc/SMap.html');
 
             assert.deepStrictEqual(page.events[0], {
                 name: 'map-redraw',
@@ -61,7 +61,7 @@ describe('import', () => {
                 <div class="description"></div>
             `);
 
-            const page = importPage(doc);
+            const page = importPage(doc, 'https://api.mapy.cz/doc/SMap.html');
 
             assert.deepStrictEqual(page.propertySections[0], {
                 name: 'MOUSE_PAN',
@@ -110,7 +110,7 @@ describe('import', () => {
                 </dl>
             `);
 
-            const page = importPage(doc);
+            const page = importPage(doc, 'https://api.mapy.cz/doc/SMap.html');
 
             const method = page.methodSections[0];
 
@@ -130,7 +130,7 @@ describe('import', () => {
                 <div class="description">Zavře vizitku</div>
             `);
 
-            const page = importPage(doc);
+            const page = importPage(doc, 'https://api.mapy.cz/doc/SMap.html');
 
             const method = page.methodSections[0];
 
@@ -164,7 +164,7 @@ describe('import', () => {
                 </dl>
             `);
 
-            const page = importPage(doc);
+            const page = importPage(doc, 'https://api.mapy.cz/doc/SMap.html');
 
             const method = page.methodSections[0];
 
@@ -205,7 +205,7 @@ describe('import', () => {
                 </dl>
             `);
 
-            const page = importPage(doc);
+            const page = importPage(doc, 'https://api.mapy.cz/doc/SMap.html');
 
             const method = page.methodSections[0];
             const returnValue = method.returnValueSection;
@@ -234,7 +234,7 @@ describe('import', () => {
                 </dl>
             `);
 
-            const page = importPage(doc);
+            const page = importPage(doc, 'https://api.mapy.cz/doc/SMap.html');
 
             assert.ok(page.constructorSection);
         });

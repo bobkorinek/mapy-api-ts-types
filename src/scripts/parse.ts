@@ -7,5 +7,7 @@ export const parse = (pages: Page[]): Namespace => {
         namespaces: [],
     };
 
-    return parsePages(pages, rootNamespace);
+    const result = parsePages(pages, rootNamespace);
+
+    return result.namespace;
 };

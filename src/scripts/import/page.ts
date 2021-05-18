@@ -2,7 +2,7 @@ import { Page } from '../types';
 import { parseMethodSection, getMethodsSections, getConstructorSection } from './method-section';
 import { getPropertiesSections, parsePropertySections } from './property-section';
 
-export const importPage = (doc: Document, url?: string): Page => {
+export const importPage = (doc: Document, url: string): Page => {
     const headerName = getHeader(doc).textContent;
 
     return {
@@ -11,6 +11,7 @@ export const importPage = (doc: Document, url?: string): Page => {
         propertySections: parsePropertySections(getPropertiesSections(doc)),
         constructorSection: parseMethodSection(getConstructorSection(doc)),
         methodSections: getMethodsSections(doc).map(parseMethodSection),
+        url: url,
     };
 };
 
