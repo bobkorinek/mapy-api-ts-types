@@ -91,12 +91,6 @@ export const getMethodsSections = (doc: Document): SectionElements[] => getSecti
 
 //#endregion Section selectors
 
-const getMethodReturnTypeElement = (methodSection: SectionElements) => {
-    const firstEle = methodSection.main.firstElementChild;
-
-    return firstEle.classList.contains('light') ? firstEle : null;
-};
-
 const findSpecificListElement = (methodSection: SectionElements, searchHeader: 'Parametry' | 'Vrací') => {
     return methodSection.detailLists.find((e) => {
         const listHeadElement = e.firstElementChild;
