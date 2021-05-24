@@ -92,6 +92,7 @@ export namespace Page {
     export interface MethodSection {
         name: string;
         type?: string;
+        static: boolean;
         argumentSections: ArgumentSection[];
         returnValueSection?: ReturnValueSection;
         description?: string;

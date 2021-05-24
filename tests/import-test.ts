@@ -124,6 +124,7 @@ describe('import', () => {
                 <div class="sectionTitle">Metody - detailně</div>
                 <a name="removeCard"> </a>
                 <div class="fixedFont">
+                    &lt;statická&gt;
                     <span class="light">{array}</span>
                     <b>removeCard</b>()
                 </div>
@@ -136,7 +137,7 @@ describe('import', () => {
 
             assert.strictEqual(method.name, 'removeCard', "Expected the method to have name 'removeCard'");
             assert.strictEqual(method.description, 'Zavře vizitku', 'Expected the method to have description');
-            assert.strictEqual(method.type, 'array', 'Expected the method to have return type of array');
+            assert.strictEqual(method.static, true, 'Expected the method to be static');
         });
 
         it("import method's argument section", () => {

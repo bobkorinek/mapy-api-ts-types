@@ -13,7 +13,7 @@ export const parseMethodSection = (methodSection: SectionElements): Page.MethodS
         argumentSections: parseArgumentSections(methodSection),
         description: methodSection?.description?.textContent.trim(),
         returnValueSection: parseReturnTypeSection(methodSection),
-        type: parseType(getMethodReturnTypeElement(methodSection)?.textContent),
+        static: isStatic(methodSection),
     };
 };
 
@@ -77,6 +77,10 @@ const parseReturnTypeSection = (methodSection: SectionElements): Page.ReturnValu
     return {
         type: parseType(typeElement.textContent),
     };
+};
+
+const isStatic = (methodSection: SectionElements) => {
+    return Boolean(methodSection.main.textContent.trim().match(/^<statická>/));
 };
 
 //#region Section selectors
