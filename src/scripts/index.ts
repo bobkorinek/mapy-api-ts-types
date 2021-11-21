@@ -1,7 +1,9 @@
-import { exportStructures } from './export';
-import { parse } from './parse/page';
-import { resolve } from 'path';
+import { importPage } from './import/page';
+import { loadPages } from './page';
+import { parsePages } from './parse/structure';
 
-parse().then((classes) => {
+loadPages().then((pages) => {
+    const result = parsePages(pages.map((page) => importPage(page.body, page.url)));
+
     return;
 });

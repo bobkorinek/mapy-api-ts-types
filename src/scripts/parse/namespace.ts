@@ -22,7 +22,6 @@ export const insertStructureIntoNamespace = (structure: Structure, rootNamespace
         const newNamespace: Namespace = {
             name: namespacePart,
             structures: [],
-            parent: contextNamespace,
             namespaces: [],
         };
 

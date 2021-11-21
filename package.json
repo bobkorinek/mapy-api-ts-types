@@ -11,7 +11,8 @@
     }
   ],
   "scripts": {
-    "test": "./node_modules/mocha/bin/mocha --require ts-node/register tests/**/*.ts"
+    "start": "ts-node src/scripts/index.ts",
+    "test": "mocha --require ts-node/register tests/**/*.ts"
   },
   "devDependencies": {
     "@types/jsdom": "^16.2.8",
