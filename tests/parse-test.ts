@@ -1,8 +1,9 @@
 import * as assert from 'assert';
 import { it } from 'mocha';
+import { parseMethodSection } from '../src/scripts/parse/method';
 import { insertStructureIntoNamespace } from '../src/scripts/parse/namespace';
 import { parsePages } from '../src/scripts/parse/structure';
-import { Class, Interface, Namespace, Page } from '../src/scripts/types';
+import { Argument, Class, Interface, Namespace, Page } from '../src/scripts/types';
 
 describe('parse', () => {
     describe('structure', () => {
@@ -52,6 +53,13 @@ describe('parse', () => {
             structures: [],
         };
 
+        it('assign depth of namespace', () => {
+            const ns = insertStructureIntoNamespace({ ...testInterface, namespace: 'N1.N2' }, rootNamespace);
+
+            assert.strictEqual(ns.namespaces[0].depth, 0);
+            assert.strictEqual(ns.namespaces[0].namespaces[0].depth, 1);
+        });
+
         it('insert structure into root namespace', () => {
             const namespaceWithStructure = insertStructureIntoNamespace(testInterface, rootNamespace);
 
@@ -90,6 +98,35 @@ describe('parse', () => {
             );
 
             assert.strictEqual(namespaceWithStructure.structures.length, 1);
+        });
+    });
+
+    describe('method', () => {
+        it('parse arguments', () => {
+            const methodSection: Page.MethodSection = {
+                name: 'testMethod',
+                description: 'test',
+                static: false,
+                argumentSections: [
+                    {
+                        name: 'arg1',
+                        type: 'boolean',
+                        description: 'Test arg 1',
+                    },
+                ],
+            };
+
+            const method = parseMethodSection(methodSection);
+
+            assert.deepStrictEqual(method.arguments, [
+                {
+                    name: 'arg1',
+                    type: 'boolean',
+                    comment: 'Test arg 1',
+                    defaultValue: null,
+                    optional: null,
+                },
+            ] as Argument[]);
         });
     });
 });

@@ -1,5 +1,6 @@
 export interface Namespace {
     name?: string;
+    depth?: number;
     namespaces: Namespace[];
     structures: Structure[];
 }

@@ -1,6 +1,6 @@
 import { JSDOM } from 'jsdom';
 import { mapNodeList } from '../util/dom';
-import { bulkGet, get, Result } from '../util/http';
+import { bulkGet, fileCache, get, Result } from '../util/http';
 import { SMAP_DOC_URL } from './vars';
 
 export interface HTMLPage {
@@ -9,7 +9,10 @@ export interface HTMLPage {
 }
 
 export const loadPages = async (): Promise<HTMLPage[]> => {
-    const results = await bulkGet(await getUrls());
+    const results = await bulkGet({
+        urls: await getUrls(),
+        cache: fileCache,
+    });
 
     return results.map(convertPage);
 };

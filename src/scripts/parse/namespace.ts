@@ -1,6 +1,8 @@
 import { Namespace, Structure } from '../types';
 
 export const insertStructureIntoNamespace = (structure: Structure, rootNamespace: Namespace): Namespace => {
+    const originalNamespaceParts = structure?.namespace?.split('.');
+
     const insert = (namespaceParts: string[], contextNamespace: Namespace, structureToInsert: Structure): Namespace => {
         if (!namespaceParts || namespaceParts.length === 0) {
             return addStructureToNamespace(contextNamespace, structure);
@@ -21,6 +23,7 @@ export const insertStructureIntoNamespace = (structure: Structure, rootNamespace
 
         const newNamespace: Namespace = {
             name: namespacePart,
+            depth: originalNamespaceParts.length - namespaceParts.length,
             structures: [],
             namespaces: [],
         };
@@ -28,7 +31,7 @@ export const insertStructureIntoNamespace = (structure: Structure, rootNamespace
         return { ...contextNamespace, namespaces: [...contextNamespace.namespaces, insert(nextNamespaceParts, newNamespace, structure)] };
     };
 
-    return insert(structure?.namespace?.split('.'), rootNamespace, structure);
+    return insert(originalNamespaceParts, rootNamespace, structure);
 };
 
 const addStructureToNamespace = (namespace: Namespace, structure: Structure): Namespace => {

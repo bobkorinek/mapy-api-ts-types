@@ -1,8 +1,19 @@
 import * as http from 'http';
+import { tmp } from './file';
 
 export interface Result {
     url: string;
     data: string;
+}
+
+export interface BulkOptions {
+    urls: string[];
+    bulkLimit?: number;
+    cache?: Cache;
+}
+
+export interface Cache {
+    (url: string, getData: () => Promise<string>): Promise<string>;
 }
 
 export const get = (url: string): Promise<Result> => {
@@ -18,6 +29,7 @@ export const get = (url: string): Promise<Result> => {
 
             response.on('end', () => {
                 console.log(`finished ${url}`);
+
                 resolve({
                     url: url,
                     data: data,
@@ -27,14 +39,19 @@ export const get = (url: string): Promise<Result> => {
     });
 };
 
-export const bulkGet = (urls: string[], bulkLimit: number = 10): Promise<Result[]> => {
+export const bulkGet = (options: BulkOptions): Promise<Result[]> => {
+    const urls = options.urls;
+    const bulkLimit = options.bulkLimit || 10;
+    const getter = createGetter(options);
+
     return new Promise((resolve) => {
         const promises = [];
 
         const request = async () => {
             if (urls.length > 0) {
                 const url = urls.shift();
-                return [await get(url), ...(await request())];
+
+                return [await getter(url), ...(await request())];
             }
 
             return [];
@@ -52,4 +69,21 @@ export const bulkGet = (urls: string[], bulkLimit: number = 10): Promise<Result[
             );
         });
     });
+};
+
+const createGetter = (options: BulkOptions): typeof get => {
+    if (options.cache) {
+        return async (url: string): Promise<Result> => {
+            return {
+                url: url,
+                data: await options.cache(url, async () => (await get(url)).data),
+            };
+        };
+    } else {
+        return get;
+    }
+};
+
+export const fileCache: Cache = async (url, getData) => {
+    return tmp(`bulkget-${url}`, getData);
 };
