@@ -10,7 +10,7 @@ export const importPage = (doc: Document, url: string): Page => {
         events: parseListOfEvents(getListOfEvents(doc)),
         propertySections: parsePropertySections(getPropertiesSections(doc)),
         constructorSection: parseMethodSection(getConstructorSection(doc)),
-        methodSections: getMethodsSections(doc).map(parseMethodSection),
+        methodSections: getMethodsSections(doc).map((ms) => parseMethodSection(ms, url)),
         url: url,
     };
 };

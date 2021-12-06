@@ -96,6 +96,7 @@ export namespace Page {
         argumentSections: ArgumentSection[];
         returnValueSection?: ReturnValueSection;
         description?: string;
+        url?: string;
     }
 
     export interface ArgumentSection {

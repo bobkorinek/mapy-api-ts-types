@@ -1,5 +1,5 @@
-import { Class, Interface, Method, Property } from "../types";
-import { createType } from "./variable";
+import { Class, Interface, Method, Property } from '../types';
+import { createType } from './variable';
 
 export const createComment = (o: Method | Class | Interface | Property) => {
     const commentSections = [];
@@ -8,15 +8,15 @@ export const createComment = (o: Method | Class | Interface | Property) => {
         commentSections.push(o.comment);
     }
     if ('events' in o) {
-        o.events.forEach(e => {
+        o.events.forEach((e) => {
             commentSections.push('@fires ' + e.name + (e.comment ? ' ' + e.comment : ''));
-        })
+        });
     }
     if (o.url) {
         commentSections.push('@see ' + o.url);
     }
     if ('arguments' in o) {
-        o.arguments.forEach(a => {
+        o.arguments.forEach((a) => {
             const createName = () => {
                 if (a.optional) {
                     if (a.defaultValue) {
@@ -31,10 +31,12 @@ export const createComment = (o: Method | Class | Interface | Property) => {
                 } else {
                     return a.name;
                 }
-            }
+            };
 
-            commentSections.push('@param ' + (a.type ? '{' + createType(a.type) + '} ' : '') + createName() + (a.comment ? ' ' + a.comment : ''));
-        })
+            commentSections.push(
+                '@param ' + (a.type ? '{' + createType(a.type) + '} ' : '') + createName() + (a.comment ? ' ' + a.comment : '')
+            );
+        });
 
         if (o.type && o.type !== 'void') {
             commentSections.push('@returns ' + ('{' + createType(o.type) + '}') + (o.returnComment ? ' ' + o.returnComment : ''));
@@ -46,4 +48,4 @@ export const createComment = (o: Method | Class | Interface | Property) => {
     }
 
     return '/**\n * ' + commentSections.join('\n * ') + '\n */\n';
-}
+};

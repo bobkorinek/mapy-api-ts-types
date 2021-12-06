@@ -8,6 +8,7 @@ export const parseMethodSection = (section: Page.MethodSection): Method => {
         comment: section?.description,
         type: section?.returnValueSection?.type,
         returnComment: section?.returnValueSection?.description,
+        url: section.url,
     };
 };
 

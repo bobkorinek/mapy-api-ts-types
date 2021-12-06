@@ -12,6 +12,8 @@ export const getSections = (doc: Document, header: string): SectionElements[] =>
             return { ...sectionElements, description: e };
         } else if (e.classList.contains('detailList')) {
             return { ...sectionElements, detailLists: [...sectionElements.detailLists, e] };
+        } else if (e.tagName == 'A' && (e as HTMLAnchorElement).name) {
+            return { ...sectionElements, linkElement: e as HTMLAnchorElement };
         } else {
             return sectionElements;
         }
@@ -59,4 +61,5 @@ export interface SectionElements {
     main: Element;
     description: Element;
     detailLists: Element[];
+    linkElement?: HTMLAnchorElement;
 }

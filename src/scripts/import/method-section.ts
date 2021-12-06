@@ -3,7 +3,7 @@ import { getSections, SectionElements } from './section';
 import { parseType } from './type';
 import { parseItemListToArgument } from './argument-section';
 
-export const parseMethodSection = (methodSection: SectionElements): Page.MethodSection => {
+export const parseMethodSection = (methodSection: SectionElements, pageUrl?: string): Page.MethodSection => {
     if (!methodSection) {
         return null;
     }
@@ -14,6 +14,7 @@ export const parseMethodSection = (methodSection: SectionElements): Page.MethodS
         description: methodSection?.description?.textContent.trim(),
         returnValueSection: parseReturnTypeSection(methodSection),
         static: isStatic(methodSection),
+        url: createMethodUrl(pageUrl, methodSection?.linkElement?.name),
     };
 };
 
@@ -108,3 +109,5 @@ const findSpecificListElement = (methodSection: SectionElements, searchHeader: '
 };
 
 const isListHeading = (listHeadElement: Element) => listHeadElement.classList.contains('heading');
+
+const createMethodUrl = (pageUrl?: string, methodLink?: string) => (pageUrl && methodLink ? `${pageUrl}#${methodLink}` : null);

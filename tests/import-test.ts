@@ -118,7 +118,7 @@ describe('import', () => {
             assert.strictEqual(method.description, 'Spočítá střed a zoom pro množinu bodů', 'Expected the method to have description');
         });
 
-        it("import page's method section", () => {
+        it("import page's method section 1", () => {
             const doc = createDoc(`<h1 class="classTitle">Třída SMap</h1>
                 <p class="description">SMap Mapa</p>
                 <div class="sectionTitle">Metody - detailně</div>
@@ -138,9 +138,10 @@ describe('import', () => {
             assert.strictEqual(method.name, 'removeCard', "Expected the method to have name 'removeCard'");
             assert.strictEqual(method.description, 'Zavře vizitku', 'Expected the method to have description');
             assert.strictEqual(method.static, true, 'Expected the method to be static');
+            assert.strictEqual(method.url, 'https://api.mapy.cz/doc/SMap.html#removeCard');
         });
 
-        it("import method's argument section", () => {
+        it("import method's argument section 2", () => {
             const doc = createDoc(`<h1 class="classTitle">Třída SMap</h1>
                 <p class="description">SMap Mapa</p>
                 <div class="sectionTitle">Metody - detailně</div>
