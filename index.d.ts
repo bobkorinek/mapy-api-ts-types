@@ -1,7 +1,12 @@
-//@ts-nocheck
+// @ts-nocheck
 declare namespace JAK {
   class Signals {
-    addListener(owner: object, type: string, handleFunction: string, sender: object): void;
+    addListener(
+      owner: object,
+      type: string,
+      handleFunction: string,
+      sender: object
+    ): void;
 
     removeListener(id: string): void;
 
@@ -25,7 +30,9 @@ declare namespace JAK {
   }
 
   class Promise<T, R> {
-    constructor(resolver: (resolve: (result: T) => any, reject: (result: R) => any) => any);
+    constructor(
+      resolver: (resolve: (result: T) => any, reject: (result: R) => any) => any
+    );
 
     when(all: Promise<any, any>[]);
 
@@ -34,12 +41,10 @@ declare namespace JAK {
     chain(promise);
   }
 
-  class Vector {
+  class Vector {}
 
-  }
-
-  abstract class AbstractDecorator {
-    decorate<T extends object>(instance: T): T;
+  abstract class AbstractDecorator<T extends object> {
+    decorate(instance: T): T;
   }
 
   class EXIF {
@@ -375,7 +380,12 @@ declare class SMap {
    * @param {number} [zoom] Zoom.
    * @param {object} [options] Konfigurační objekt.
    */
-  constructor(container: Node, center?: SMap.Coords, zoom?: number, options?: object);
+  constructor(
+    container: Node,
+    center?: SMap.Coords,
+    zoom?: number,
+    options?: object
+  );
 
   /**
    * Všechny destruktory dělají toto:
@@ -526,7 +536,11 @@ declare class SMap {
    * @param {SMap.Pixel | SMap.Coords} [fixedPoint] Bod, který by měl být vůči zoomu invariantní.
    * @param {boolean} [animate=false] Animovat?
    */
-  setZoom(z: number | string, fixedPoint?: SMap.Pixel | SMap.Coords, animate?: boolean): void;
+  setZoom(
+    z: number | string,
+    fixedPoint?: SMap.Pixel | SMap.Coords,
+    animate?: boolean
+  ): void;
 
   /**
    * Nastaví střed i zoom.
@@ -558,7 +572,10 @@ declare class SMap {
    * @param {boolean} [usePadding=false] Má-li se průhled zúžit o paddingy způsobené ovládacími prvky.
    * @returns {array} Střed a zoom.
    */
-  computeCenterZoom(arr: Array<SMap.Coords>, usePadding?: boolean): array;
+  computeCenterZoom(
+    arr: Array<SMap.Coords>,
+    usePadding?: boolean
+  ): Array<unknown>;
 
   /**
    * Přidá do mapy vrstvu.
@@ -715,7 +732,11 @@ declare class SMap {
    * @param {SMap.Projection} [projection] Volitelně projekce (pokud není zadána, použije se aktuální).
    * @returns {SMap.Coords}
    */
-  adjustCoordsByPadding(coords: SMap.Coords, zoom?: number, projection?: SMap.Projection): SMap.Coords;
+  adjustCoordsByPadding(
+    coords: SMap.Coords,
+    zoom?: number,
+    projection?: SMap.Projection
+  ): SMap.Coords;
 
   /**
    * Přepnout do režimu plynulého zoomu.
@@ -783,32 +804,36 @@ declare namespace SMap {
      * @see http://api.mapy.cz/doc/SMap.Coords.html#fromEvent
      * @param {Event} event
      * @param {SMap} map
+     * @returns {SMap.Coords}
      */
-    fromEvent(event: Event, map: SMap): this;
+    static fromEvent(event: Event, map: SMap): SMap.Coords;
 
     /**
      * Tovární metoda - výroba souřadnic z PP.
      * @see http://api.mapy.cz/doc/SMap.Coords.html#fromPP
      * @param {number} PPx Xová souřadnice.
      * @param {number} PPy Yová souřadnice.
+     * @returns {SMap.Coords}
      */
-    fromPP(PPx: number, PPy: number): this;
+    static fromPP(PPx: number, PPy: number): SMap.Coords;
 
     /**
      * Tovární metoda - výroba souřadnic z UTM33.
      * @see http://api.mapy.cz/doc/SMap.Coords.html#fromUTM33
      * @param {number} x Xová souřadnice.
      * @param {number} y Yová souřadnice.
+     * @returns {SMap.Coords}
      */
-    fromUTM33(x: number, y: number): this;
+    static fromUTM33(x: number, y: number): SMap.Coords;
 
     /**
      * Tovární metoda - výroba souřadnic z WGS 84.
      * @see http://api.mapy.cz/doc/SMap.Coords.html#fromWGS84
      * @param {number} lonD Longitude (zeměpisná délka) ve stupních jako desetinné číslo nebo řetězec.
      * @param {number} latD Latitude (zeměpisná šířka) ve stupních jako desetinné číslo nebo řetězec.
+     * @returns {SMap.Coords}
      */
-    static fromWGS84(lonD: number, latD: number): this;
+    static fromWGS84(lonD: number, latD: number): SMap.Coords;
 
     /**
      * Tovární metoda - výroba souřadnic z (S-)JTSK.
@@ -816,15 +841,17 @@ declare namespace SMap {
      * @see http://api.mapy.cz/doc/SMap.Coords.html#fromJTSK
      * @param {number} x
      * @param {number} y
+     * @returns {SMap.Coords}
      */
-    static fromJTSK(x: number, y: number): this;
+    static fromJTSK(x: number, y: number): SMap.Coords;
 
     /**
      * Tovární metoda - výroba souřadnic z EXIF GPS dat.
      * @see http://api.mapy.cz/doc/SMap.Coords.html#fromEXIF
      * @param {JAK.EXIF} exif Exif nadstavba nad obrazovými daty.
+     * @returns {SMap.Coords}
      */
-    static fromEXIF(exif: JAK.EXIF): this;
+    static fromEXIF(exif: JAK.EXIF): SMap.Coords;
 
     /**
      * @see http://api.mapy.cz/doc/SMap.Coords.html#stringToAltitude
@@ -927,222 +954,6 @@ declare namespace SMap {
     FIXME prepsat na bbox.
      */
     inMap(map: SMap, usePadding?: boolean): void;
-
-    /**
-     * Tovární metoda - výroba souřadnic z Mercator metrů (epsg:3857).
-     * @see http://api.mapy.cz/doc/SMap.Coords.html#fromMercator
-     * @param {number} x Xová souřadnice.
-     * @param {number} y Yová souřadnice.
-     */
-    fromMercator(x: number, y: number): void;
-
-    /**
-     * Převod do Mercator metrů (epsg:3857).
-     * @see http://api.mapy.cz/doc/SMap.Coords.html#toMercator
-     * @returns {Array<number>}
-     */
-    toMercator(): Array<number>;
-
-    /**
-     * @see http://api.mapy.cz/doc/SMap.Coords.html#fixedPoint
-     */
-    fixedPoint(): void;
-
-    /**
-     * @see http://api.mapy.cz/doc/SMap.Coords.html#newCenter
-     */
-    newCenter(): void;
-
-    /**
-     * @see http://api.mapy.cz/doc/SMap.Coords.html#wrap
-     */
-    wrap(): void;
-
-    /**
-     * Tovární metoda - výroba souřadnic z události.
-     * @see http://api.mapy.cz/doc/SMap.Coords.html#fromEvent
-     * @param {Event} event
-     * @param {SMap} map
-     */
-    fromEvent(event: Event, map: SMap): void;
-
-    /**
-     * Tovární metoda - výroba souřadnic z PP.
-     * @see http://api.mapy.cz/doc/SMap.Coords.html#fromPP
-     * @param {number} PPx Xová souřadnice.
-     * @param {number} PPy Yová souřadnice.
-     */
-    fromPP(PPx: number, PPy: number): void;
-
-    /**
-     * Tovární metoda - výroba souřadnic z UTM33.
-     * @see http://api.mapy.cz/doc/SMap.Coords.html#fromUTM33
-     * @param {number} x Xová souřadnice.
-     * @param {number} y Yová souřadnice.
-     */
-    fromUTM33(x: number, y: number): void;
-
-    /**
-     * Tovární metoda - výroba souřadnic z WGS 84.
-     * @see http://api.mapy.cz/doc/SMap.Coords.html#fromWGS84
-     * @param {number} lonD Longitude (zeměpisná délka) ve stupních jako desetinné číslo nebo řetězec.
-     * @param {number} latD Latitude (zeměpisná šířka) ve stupních jako desetinné číslo nebo řetězec.
-     */
-    static fromWGS84(lonD: number, latD: number): void;
-
-    /**
-     * Tovární metoda - výroba souřadnic z (S-)JTSK.
-    Kód z pascalové verze Jakuba Kerhata (http://www.geospeleos.com/Mapovani/WGS84toSJTSK/WGS84toSJTSK.htm) převedl Josef Zamrzla.
-     * @see http://api.mapy.cz/doc/SMap.Coords.html#fromJTSK
-     * @param {number} x
-     * @param {number} y
-     */
-    static fromJTSK(x: number, y: number): void;
-
-    /**
-     * Tovární metoda - výroba souřadnic z EXIF GPS dat.
-     * @see http://api.mapy.cz/doc/SMap.Coords.html#fromEXIF
-     * @param {JAK.EXIF} exif Exif nadstavba nad obrazovými daty.
-     */
-    static fromEXIF(exif: JAK.EXIF): void;
-
-    /**
-     * @see http://api.mapy.cz/doc/SMap.Coords.html#stringToAltitude
-     */
-    static stringToAltitude(): void;
-
-    /**
-     * Převod na pixel.
-     * @see http://api.mapy.cz/doc/SMap.Coords.html#toPixel
-     * @param {SMap} map Mapa, vůči jejímu středu se pozice počítá.
-     * @param {number} [zoom=map.zoom] Zoom.
-     * @returns {SMap.Pixel} Nový pixel.
-     */
-    toPixel(map: SMap, zoom?: number): SMap.Pixel;
-
-    /**
-     * Vrátí duplikát.
-     * @see http://api.mapy.cz/doc/SMap.Coords.html#clone
-     * @returns {SMap.Coords}
-     */
-    clone(): SMap.Coords;
-
-    /**
-     * Jsou shodné?
-     * @see http://api.mapy.cz/doc/SMap.Coords.html#equals
-     * @param {SMap.Coords} coords
-     */
-    equals(coords: SMap.Coords): void;
-
-    /**
-     * Vypočte azimut mezi dvěma souřadnicemi.
-     * @see http://api.mapy.cz/doc/SMap.Coords.html#azimuth
-     * @param {SMap.Coords} target Cílová souřadnice.
-     * @returns {number} Azimut k dané souřadnici ve stupních.
-     */
-    azimuth(target: SMap.Coords): number;
-
-    /**
-     * Spočte obloukovou vzdálenost (haversinový vzorec) mezi touto a druhou souřadnicí v zadané nadmořské výšce.
-    Výchozí výška je 0 m.n.m., aproximováno na 6371009 metrů.
-     * @see http://api.mapy.cz/doc/SMap.Coords.html#distance
-     * @param {SMap.Coords} target Cílová souřadnice.
-     * @param {number} [altitude=0] Nadmořská výška.
-     * @returns {number} Vzdálenost v metrech.
-     */
-    distance(target: SMap.Coords, altitude?: number): number;
-
-    /**
-     * @see http://api.mapy.cz/doc/SMap.Coords.html#distanceMiro
-     */
-    distanceMiro(): void;
-
-    /**
-     * Převod na řetězec.
-     * @see http://api.mapy.cz/doc/SMap.Coords.html#toString
-     * @returns {string}
-     */
-    toString(): string;
-
-    /**
-     * Převede souřadnice do WGS 84.
-     * @see http://api.mapy.cz/doc/SMap.Coords.html#toWGS84
-     * @param {number} [format] Formát pro převod na řetězec: čím větší číslo, tím detailnější je řetězec (0 = stupně, 1 = minuty, 2 = vteřiny). Při nezadání bude vrácena dvojice floatů.
-     * @returns {Array<number> | Array<string>} Pole [longitude, latitude].
-     */
-    toWGS84(format?: number): Array<number> | Array<string>;
-
-    /**
-     * Převede souřadnice do PP.
-     * @see http://api.mapy.cz/doc/SMap.Coords.html#toPP
-     * @returns {Array<number>}
-     */
-    toPP(): Array<number>;
-
-    /**
-     * Převede souřadnice do UTM33.
-     * @see http://api.mapy.cz/doc/SMap.Coords.html#toUTM33
-     * @returns {Array<number>}
-     */
-    toUTM33(): Array<number>;
-
-    /**
-     * Převede souřadnice do (S-)JTSK.
-     * @see http://api.mapy.cz/doc/SMap.Coords.html#toJTSK
-     * @returns {Array<number>}
-     */
-    toJTSK(): Array<number>;
-
-    /**
-     * @see http://api.mapy.cz/doc/SMap.Coords.html#isValid
-     */
-    isValid(): void;
-
-    /**
-     * Ověří, jsou-li tyto souřadnice v průhledu mapy.
-     * @see http://api.mapy.cz/doc/SMap.Coords.html#inMap
-     * @param {SMap} map
-     * @param {boolean} [usePadding=false] Má-li se průhled zúžit o paddingy způsobené ovládacími prvky
-    FIXME prepsat na bbox.
-     */
-    inMap(map: SMap, usePadding?: boolean): void;
-
-    /**
-     * Vrátí nadmořskou výšku.
-     * @see http://api.mapy.cz/doc/SMap.Coords.html#getAltitude
-     * @returns {Promise}
-     */
-    getAltitude(): Promise;
-
-    /**
-     * Převod z OpenLocation formátu na SMap.Coords.
-     * @see http://api.mapy.cz/doc/SMap.Coords.html#fromOLC
-     * @param {string} olc Řetězec s OLC kódem.
-     */
-    fromOLC(olc: string): void;
-
-    /**
-     * Převod do OpenLocation formátu.
-     * @see http://api.mapy.cz/doc/SMap.Coords.html#toOLC
-     * @param {number} [codeLength] Délka výstupního kódu, která nezahrnuje oddělovací znaky.
-     * @returns {string}
-     */
-    toOLC(codeLength?: number): string;
-
-    /**
-     * Převod z MGRS formátu na SMap.Coords.
-     * @see http://api.mapy.cz/doc/SMap.Coords.html#fromMGRS
-     * @param {string} mgrs Řetězec s MGRS kódem.
-     */
-    fromMGRS(mgrs: string): void;
-
-    /**
-     * Převod do MGRS formátu.
-     * @see http://api.mapy.cz/doc/SMap.Coords.html#toMGRS
-     * @param {number} [precision] Přesnost MGRS výstupního hashe.
-     * @returns {string}
-     */
-    toMGRS(precision?: number): string;
 
     /**
      * Tovární metoda - výroba souřadnic z Mercator metrů (epsg:3857).
@@ -1308,7 +1119,7 @@ declare namespace SMap {
    * Obecný ovládací prvek.
    * @see http://api.mapy.cz/doc/SMap.Control.html
    */
-  class Control implements SMap.IOwned {
+  class Control implements SMap.IOwned<SMap> {
     /**
      * @see http://api.mapy.cz/doc/SMap.Control.html#$destructor
      */
@@ -1595,7 +1406,7 @@ declare namespace SMap {
    * @fires card-close-click Zavření vizitky v důsledku kliknutí na zavírací tlačítko.
    * @see http://api.mapy.cz/doc/SMap.Card.html
    */
-  class Card implements SMap.IOwned {
+  class Card implements SMap.IOwned<SMap> {
     /**
      * @param {number} [width=312] Šířka vizitky.
      * @param {object} [options] Volitelná konfigurace.
@@ -1976,7 +1787,11 @@ declare namespace SMap {
      * @param {Function} callback Funkce zavolaná po nalezení trasy.
      * @param {object} [params] Volitelná konfigurace.
      */
-    constructor(coords: Array<SMap.Coords>, callback: Function, params?: object);
+    constructor(
+      coords: Array<SMap.Coords>,
+      callback: Function,
+      params?: object
+    );
 
     /**
      * @see http://api.mapy.cz/doc/SMap.Route.html#formatRouteDistance
@@ -2043,6 +1858,18 @@ declare namespace SMap {
      * @param {Object} paramsArgs Konfigurace vystupnich dat.
      */
     route(coords: Array<SMap.Coords>, paramsArgs: Object): void;
+
+    setInteface(intefaceName: string): JAK.Signals;
+
+    getInteface(): JAK.Signals;
+
+    addListener(type: string, handleFunction: string, sender: object): void;
+
+    removeListener(id: string): void;
+
+    removeListeners(array: string[]): void;
+
+    makeEvent(type: string, data: object): void;
   }
 
   /**
@@ -2404,7 +2231,7 @@ declare namespace SMap {
      * @param {string} phrase Hledaná fráze.
      * @returns {JAK.Promise}
      */
-    get(phrase: string): JAK.Promise;
+    get(phrase: string): JAK.Promise<unknown, unknown>;
 
     /**
      * Zrušení requestu.
@@ -2487,7 +2314,12 @@ declare namespace SMap {
      * @param {number} zoom
      * @param {number} orientation
      */
-    pixelToCoords(pixel: SMap.Pixel, center: SMap.Coords, zoom: number, orientation: number): void;
+    pixelToCoords(
+      pixel: SMap.Pixel,
+      center: SMap.Coords,
+      zoom: number,
+      orientation: number
+    ): void;
 
     /**
      * Převede zeměpisnou souřadnici na relativní pixelovou hodnotu.
@@ -2497,7 +2329,12 @@ declare namespace SMap {
      * @param {number} zoom
      * @param {number} orientation
      */
-    coordsToPixel(coords: SMap.Coords, center: SMap.Coords, zoom: number, orientation: number): void;
+    coordsToPixel(
+      coords: SMap.Coords,
+      center: SMap.Coords,
+      zoom: number,
+      orientation: number
+    ): void;
 
     /**
      * @see http://api.mapy.cz/doc/SMap.Projection.html#pixelToTile
@@ -2528,7 +2365,7 @@ declare namespace SMap {
    * Rozhraní pro všechny, kteří mají nadřízeného.
    * @see http://api.mapy.cz/doc/SMap.IOwned.html
    */
-  interface IOwned {
+  interface IOwned<O = SMap.IOwned<any>> {
     /**
      * Zjistí (směrem nahoru) mapu.
      * @see http://api.mapy.cz/doc/SMap.IOwned.html#getMap
@@ -2541,7 +2378,7 @@ declare namespace SMap {
      * @see http://api.mapy.cz/doc/SMap.IOwned.html#setOwner
      * @param {SMap.IOwned} owner
      */
-    setOwner(owner: SMap.IOwned): void;
+    setOwner(owner: O): void;
   }
 
   namespace Layer {
@@ -2766,8 +2603,9 @@ declare namespace SMap {
       /**
        * Vrátí kontejnery podřízených vrstev.
        * @see http://api.mapy.cz/doc/SMap.Layer.GPX.html#getContainer
+       * @returns {object}
        */
-      getContainer(): void;
+      getContainer(): object;
 
       /**
        * Přidá podřízenou vrstvu.
@@ -3179,7 +3017,12 @@ declare namespace SMap {
        * @param {number} [opacity=1] Průhlednost.
        * @returns {string} ID obrázku, používané pro odebrání.
        */
-      addImage(url: string, leftTop: SMap.Coords, rightBottom: SMap.Coords, opacity?: number): string;
+      addImage(
+        url: string,
+        leftTop: SMap.Coords,
+        rightBottom: SMap.Coords,
+        opacity?: number
+      ): string;
 
       /**
        * Odebere dříve přidaný obrázek.
@@ -3387,8 +3230,9 @@ declare namespace SMap {
       /**
        * Vrátí kontejnery podřízených vrstev.
        * @see http://api.mapy.cz/doc/SMap.Layer.KML.html#getContainer
+       * @returns {object}
        */
-      getContainer(): void;
+      getContainer(): object;
 
       /**
        * Přidá podřízenou vrstvu.
@@ -3500,7 +3344,10 @@ declare namespace SMap {
        * @param {SMap.Marker | Array<SMap.Marker>} marker Značka k přidání.
        * @param {boolean} [noRedraw=false] Zakázat překreslení.
        */
-      addMarker(marker: SMap.Marker | Array<SMap.Marker>, noRedraw?: boolean): void;
+      addMarker(
+        marker: SMap.Marker | Array<SMap.Marker>,
+        noRedraw?: boolean
+      ): void;
 
       /**
        * Odebere značku nebo značky z vrstvy.
@@ -3508,7 +3355,10 @@ declare namespace SMap {
        * @param {SMap.Marker | Array<SMap.Marker>} marker Značka k odebrání.
        * @param {boolean} [noRedraw=false] Zakázat překreslení.
        */
-      removeMarker(marker: SMap.Marker | Array<SMap.Marker>, noRedraw?: boolean): void;
+      removeMarker(
+        marker: SMap.Marker | Array<SMap.Marker>,
+        noRedraw?: boolean
+      ): void;
 
       /**
        * Odebere všechny značky.
@@ -3706,8 +3556,9 @@ declare namespace SMap {
       /**
        * Vrátí kontejnery podřízených vrstev.
        * @see http://api.mapy.cz/doc/SMap.Layer.Multi.html#getContainer
+       * @returns {object}
        */
-      getContainer(): void;
+      getContainer(): object;
 
       /**
        * Přidá podřízenou vrstvu.
@@ -3869,8 +3720,9 @@ declare namespace SMap {
       /**
        * Sloucene kontejnery vsech podrizenych vrstev.
        * @see http://api.mapy.cz/doc/SMap.Layer.Smart.html#getContainer
+       * @returns {object}
        */
-      getContainer(): void;
+      getContainer(): object;
 
       /**
        * @see http://api.mapy.cz/doc/SMap.Layer.Smart.html#$destructor
@@ -4725,8 +4577,9 @@ declare namespace SMap {
         /**
          * Sloucene kontejnery vsech podrizenych vrstev.
          * @see http://api.mapy.cz/doc/SMap.Layer.Smart.Turist.html#getContainer
+         * @returns {object}
          */
-        getContainer(): void;
+        getContainer(): object;
 
         /**
          * @see http://api.mapy.cz/doc/SMap.Layer.Smart.Turist.html#$destructor
@@ -4749,6 +4602,12 @@ declare namespace SMap {
         /**
          * Vrátí copyright pro daný zoom. Pokud není, vrací null.
          * @see http://api.mapy.cz/doc/SMap.Layer.Smart.Turist.html#getCopyright
+         */
+        getCopyright(): void;
+
+        /**
+         * Vrátí copyright pro daný zoom. Pokud není, vrací null.
+         * @see http://api.mapy.cz/doc/SMap.Layer.Smart.Turist.html#getCopyright
          * @param {number} zoom Zoom, pro který chceme zjistit copyright.
          * @returns {string | Array<string> | null} Copyright.
          */
@@ -4766,6 +4625,12 @@ declare namespace SMap {
          * @see http://api.mapy.cz/doc/SMap.Layer.Smart.Turist.html#disable
          */
         disable(): void;
+
+        /**
+         * Překreslení vrstvy.
+         * @see http://api.mapy.cz/doc/SMap.Layer.Smart.Turist.html#redraw
+         */
+        redraw(): void;
 
         /**
          * Překreslení vrstvy.
@@ -4817,13 +4682,6 @@ declare namespace SMap {
          * @returns {SMap}
          */
         getMap(): SMap;
-
-        /**
-         * Nastavení nadřízeného.
-         * @see http://api.mapy.cz/doc/SMap.Layer.Smart.Turist.html#setOwner
-         * @param {SMap.IOwned} owner
-         */
-        setOwner(owner: SMap.IOwned): void;
       }
     }
   }
@@ -4868,7 +4726,6 @@ declare namespace SMap {
      * @see http://api.mapy.cz/doc/SMap.Control.ContextMenu.html
      */
     class ContextMenu extends SMap.Control {
-
       /**
        * @see http://api.mapy.cz/doc/SMap.Control.ContextMenu.html#$destructor
        */
@@ -5396,7 +5253,7 @@ declare namespace SMap {
       nový formát:.
        * @param {Object} [conf]
        */
-      constructor(conf?: number, conf?: Object);
+      constructor(conf?: number, conf2?: Object);
 
       /**
        * @see http://api.mapy.cz/doc/SMap.Control.Scale.html#setOwner
@@ -5942,8 +5799,7 @@ declare namespace SMap {
      * Jmenný prostor dekorátorů.
      * @see http://api.mapy.cz/doc/SMap.Marker.Feature.html
      */
-    class Feature {
-    }
+    class Feature {}
 
     /**
      * Značka z typického POI serveru.
@@ -6165,14 +6021,23 @@ declare namespace SMap {
        * Dekorátor, přidávající značce otevření vizitky s obsahem.
        * @see http://api.mapy.cz/doc/SMap.Marker.Feature.Card.html
        */
-      class Card extends JAK.AbstractDecorator {
+      class Card extends JAK.AbstractDecorator<SMap.Marker> {
+        /**
+         * Dekorační metoda - nevolat přímo, ale přes marker.decorate().
+         * @see http://api.mapy.cz/doc/SMap.Marker.Feature.Card.html#decorate
+         * @param {SMap.Marker} marker Značka k odekorování.
+         * @returns {SMap.Marker}
+         */
+        decorate(marker: SMap.Marker): SMap.Marker;
+
         /**
          * Dekorační metoda - nevolat přímo, ale přes marker.decorate().
          * @see http://api.mapy.cz/doc/SMap.Marker.Feature.Card.html#decorate
          * @param {SMap.Marker} marker Značka k odekorování.
          * @param {SMap.Card} card Vizitka.
+         * @returns {SMap.Marker}
          */
-        decorate(marker: SMap.Marker, card: SMap.Card): void;
+        decorate(marker: SMap.Marker, card: SMap.Card): SMap.Marker;
 
         /**
          * @see http://api.mapy.cz/doc/SMap.Marker.Feature.Card.html#click
@@ -6194,13 +6059,14 @@ declare namespace SMap {
        * @fires marker-drag-stop Konec tažení značky.
        * @see http://api.mapy.cz/doc/SMap.Marker.Feature.Draggable.html
        */
-      class Draggable extends JAK.AbstractDecorator {
+      class Draggable extends JAK.AbstractDecorator<SMap.Marker> {
         /**
          * Dekorační metoda - nevolat přímo, ale přes marker.decorate().
          * @see http://api.mapy.cz/doc/SMap.Marker.Feature.Draggable.html#decorate
          * @param {SMap.Marker} marker Značka k odekorování.
+         * @returns {SMap.Marker}
          */
-        decorate(marker: SMap.Marker): void;
+        decorate(marker: SMap.Marker): SMap.Marker;
 
         /**
          * Změna stavu tahatelnosti.
@@ -6214,26 +6080,44 @@ declare namespace SMap {
        * Dekorátor přidávající značce klikací obrázkovou mapu.
        * @see http://api.mapy.cz/doc/SMap.Marker.Feature.ImageMap.html
        */
-      class ImageMap extends JAK.AbstractDecorator {
+      class ImageMap extends JAK.AbstractDecorator<SMap.Marker> {
+        /**
+         * Dekorační metoda - nevolat přímo, ale přes marker.decorate().
+         * @see http://api.mapy.cz/doc/SMap.Marker.Feature.ImageMap.html#decorate
+         * @param {SMap.Marker} marker Značka k odekorování.
+         * @returns {SMap.Marker}
+         */
+        decorate(marker: SMap.Marker): SMap.Marker;
+
         /**
          * Dekorační metoda - nevolat přímo, ale přes marker.decorate().
          * @see http://api.mapy.cz/doc/SMap.Marker.Feature.ImageMap.html#decorate
          * @param {SMap.Marker} marker Značka k odekorování.
          * @param {object} [options] Konfigurační objekt.
+         * @returns {SMap.Marker}
          */
-        decorate(marker: SMap.Marker, options?: object): void;
+        decorate(marker: SMap.Marker, options?: object): SMap.Marker;
       }
 
       /**
        * Dekorátor přidávající značce možnost relativního ukotvení.
        * @see http://api.mapy.cz/doc/SMap.Marker.Feature.RelativeAnchor.html
        */
-      class RelativeAnchor extends JAK.AbstractDecorator {
+      class RelativeAnchor extends JAK.AbstractDecorator<SMap.Marker> {
+        /**
+         * Dekorační metoda - nevolat přímo, ale přes marker.decorate().
+         * @see http://api.mapy.cz/doc/SMap.Marker.Feature.RelativeAnchor.html#decorate
+         * @param {SMap.Marker} marker Značka k odekorování.
+         * @returns {SMap.Marker}
+         */
+        decorate(marker: SMap.Marker): SMap.Marker;
+
         /**
          * Dekorační metoda - nevolat přímo, ale přes marker.decorate().
          * @see http://api.mapy.cz/doc/SMap.Marker.Feature.RelativeAnchor.html#decorate
          * @param {SMap.Marker} marker Značka k odekorování.
          * @param {object} options Konfigurační objekt.
+         * @returns {SMap.Marker}
          */
         decorate(marker: SMap.Marker, options: object): void;
       }
@@ -6242,14 +6126,23 @@ declare namespace SMap {
        * Přidání stínu.
        * @see http://api.mapy.cz/doc/SMap.Marker.Feature.Shadow.html
        */
-      class Shadow extends JAK.AbstractDecorator {
+      class Shadow extends JAK.AbstractDecorator<SMap.Marker> {
+        /**
+         * Dekorační metoda - nevolat přímo, ale přes marker.decorate().
+         * @see http://api.mapy.cz/doc/SMap.Marker.Feature.Shadow.html#decorate
+         * @param {SMap.Marker} marker Značka k odekorování.
+         * @returns {SMap.Marker}
+         */
+        decorate(marker: SMap.Marker): SMap.Marker;
+
         /**
          * Dekorační metoda - nevolat přímo, ale přes marker.decorate().
          * @see http://api.mapy.cz/doc/SMap.Marker.Feature.Shadow.html#decorate
          * @param {SMap.Marker} marker Značka k odekorování.
          * @param {string} url URL stínu.
+         * @returns {SMap.Marker}
          */
-        decorate(marker: SMap.Marker, url: string): void;
+        decorate(marker: SMap.Marker, url: string): SMap.Marker;
       }
     }
   }
@@ -6259,22 +6152,30 @@ declare namespace SMap {
      * Jmenný prostor dekorátorů.
      * @see http://api.mapy.cz/doc/SMap.Geometry.Feature.html
      */
-    class Feature {
-    }
+    class Feature {}
 
     namespace Feature {
       /**
        * Dekorátor, přidávající geometrii otevření vizitky s obsahem.
        * @see http://api.mapy.cz/doc/SMap.Geometry.Feature.Card.html
        */
-      class Card extends JAK.AbstractDecorator {
+      class Card extends JAK.AbstractDecorator<SMap.Geometry> {
+        /**
+         * Dekorační metoda - nevolat přímo, ale přes geometry.decorate().
+         * @see http://api.mapy.cz/doc/SMap.Geometry.Feature.Card.html#decorate
+         * @param {SMap.Geometry} geometry Geometrie k odekorování.
+         * @returns {SMap.Geometry}
+         */
+        decorate(geometry: SMap.Geometry): SMap.Geometry;
+
         /**
          * Dekorační metoda - nevolat přímo, ale přes geometry.decorate().
          * @see http://api.mapy.cz/doc/SMap.Geometry.Feature.Card.html#decorate
          * @param {SMap.Geometry} geometry Geometrie k odekorování.
          * @param {SMap.Card} card Vizitka.
+         * @returns {SMap.Geometry}
          */
-        decorate(geometry: SMap.Geometry, card: SMap.Card): void;
+        decorate(geometry: SMap.Geometry, card: SMap.Card): SMap.Geometry;
 
         /**
          * @see http://api.mapy.cz/doc/SMap.Geometry.Feature.Card.html#click
@@ -6984,7 +6885,12 @@ declare namespace SMap {
        * @param {unknown} Array Ctyri okrajove body.
        * @param {Array<number>} config Best bod.
        */
-      constructor(id: string, config: object, Array: unknown, config: Array<number>);
+      constructor(
+        id: string,
+        config: object,
+        Array: unknown,
+        config2: Array<number>
+      );
 
       /**
        * Statická tovární metoda: asynchronně začne vytvářet projekci; až je vyrobena, zavolá callback.
@@ -6994,7 +6900,12 @@ declare namespace SMap {
        * @param {Function} callback Bude volán jen pokud projekce uspěje.
        * @param {Function} [errorCallback] Bude volán jen pokud projekce neuspěje.
        */
-      static create(center: SMap.Coords, orientation: number, callback: Function, errorCallback?: Function): void;
+      static create(
+        center: SMap.Coords,
+        orientation: number,
+        callback: Function,
+        errorCallback?: Function
+      ): void;
 
       /**
        * @see http://api.mapy.cz/doc/SMap.Projection.Oblique.html#fromXML
@@ -7080,7 +6991,12 @@ declare namespace SMap {
        * @param {number} zoom
        * @param {number} orientation
        */
-      pixelToCoords(pixel: SMap.Pixel, center: SMap.Coords, zoom: number, orientation: number): void;
+      pixelToCoords(
+        pixel: SMap.Pixel,
+        center: SMap.Coords,
+        zoom: number,
+        orientation: number
+      ): void;
 
       /**
        * Převede zeměpisnou souřadnici na relativní pixelovou hodnotu.
@@ -7090,7 +7006,12 @@ declare namespace SMap {
        * @param {number} zoom
        * @param {number} orientation
        */
-      coordsToPixel(coords: SMap.Coords, center: SMap.Coords, zoom: number, orientation: number): void;
+      coordsToPixel(
+        coords: SMap.Coords,
+        center: SMap.Coords,
+        zoom: number,
+        orientation: number
+      ): void;
 
       /**
        * Zjistí (směrem nahoru) mapu.
