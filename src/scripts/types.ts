@@ -35,6 +35,11 @@ export interface Method extends Link {
     returnComment?: string;
 }
 
+export interface MethodRepair {
+    canBeRepaired: (method: Method, structureName: string, structureType: 'class' | 'interface') => boolean;
+    repair: (method: Method, structureName: string, structureType: 'class' | 'interface') => Method;
+}
+
 export interface Variable {
     name: string;
     type: Type | Type[];

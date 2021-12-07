@@ -1,5 +1,5 @@
 import { Interface, Namespace, Page, Class, Structure } from '../types';
-import { parseMethodSection } from './method';
+import { parseMethodSection, repair } from './method';
 import { insertStructureIntoNamespace } from './namespace';
 
 const defaultRootNamespace: Namespace = {
@@ -49,11 +49,14 @@ const pageToStructure = (page: Page, extendingStructures: Structure[] = []): Str
     const parentClass = extendingStructures.find((s) => s.type === 'class') as Class;
 
     const parse = (): Structure => {
+        const getMethods = (structureName: string, structureType: 'class' | 'interface') =>
+            page.methodSections.map(parseMethodSection).map((m) => repair(m, structureName, structureType));
+
         if (isInterface(parsedName.name)) {
             return {
                 type: 'interface',
                 name: parsedName.name,
-                methods: page.methodSections.map(parseMethodSection),
+                methods: getMethods(parsedName.name, 'interface'),
                 comment: page.description,
                 interfaces: interfaces,
             };
@@ -62,7 +65,7 @@ const pageToStructure = (page: Page, extendingStructures: Structure[] = []): Str
                 type: 'class',
                 name: parsedName.name,
                 interfaces: interfaces,
-                methods: page.methodSections.map(parseMethodSection),
+                methods: getMethods(parsedName.name, 'class'),
                 events: [],
                 properties: [],
                 parentClass: parentClass,

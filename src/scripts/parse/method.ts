@@ -1,4 +1,5 @@
-import { Argument, Method, Page } from '../types';
+import { Argument, Method, MethodRepair, Page } from '../types';
+import { repairs } from './repairs';
 
 export const parseMethodSection = (section: Page.MethodSection): Method => {
     return {
@@ -10,6 +11,20 @@ export const parseMethodSection = (section: Page.MethodSection): Method => {
         returnComment: section?.returnValueSection?.description,
         url: section.url,
     };
+};
+
+export const repair = (method: Method, structureName: string, structureType: 'class' | 'interface') => {
+    const methodsRepairs = repairs.filter((r) => r.canBeRepaired(method, structureName, structureType));
+
+    const apply = (currentMethod: Method, index: number = 0): Method => {
+        if (methodsRepairs[index]) {
+            return apply(methodsRepairs[index].repair(currentMethod, structureName, structureType), index + 1);
+        }
+
+        return currentMethod;
+    };
+
+    return apply(method);
 };
 
 const parseArguments = (section: Page.MethodSection) => {
