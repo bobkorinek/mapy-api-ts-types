@@ -14,7 +14,14 @@ export const parseItemListToArgument = (itemElement: Element): Page.ArgumentSect
         const parseArgumentAttribute = () => {
             switch (itemsContentElement.tagName.toUpperCase()) {
                 case 'SPAN':
-                    return { type: parseType(itemsContentElement.textContent) };
+                    if (itemsContentElement.nextElementSibling?.tagName === 'B') {
+                        return { type: parseType(itemsContentElement.textContent) };
+                    } else {
+                        return {
+                            type: parseType(itemsContentElement.textContent),
+                            name: parseBrokenArgument(itemsContentElement.textContent),
+                        };
+                    }
                 case 'B':
                     const name = itemsContentElement.textContent.trim();
                     return { name: name };
@@ -34,3 +41,5 @@ export const parseItemListToArgument = (itemElement: Element): Page.ArgumentSect
 
     return parseItemContentToArgument() as Page.ArgumentSection;
 };
+
+const parseBrokenArgument = (text: string) => text.trim().match(/[\w.]+$/)[0];

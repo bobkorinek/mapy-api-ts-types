@@ -1,7 +1,16 @@
 import * as assert from 'assert';
 import 'mocha';
 import { objectArgumentRepair } from '../src/scripts/parse/repairs/object-argument';
-import { Method } from '../src/scripts/types';
+import { Class, Method } from '../src/scripts/types';
+
+const testStructure: Class = {
+    events: [],
+    interfaces: [],
+    methods: [],
+    name: 'TestClass',
+    properties: [],
+    type: 'class',
+};
 
 describe('repair', () => {
     it('repair object as argument', () => {
@@ -24,9 +33,10 @@ describe('repair', () => {
             ],
         };
 
-        const repairedMethod = objectArgumentRepair.repair(method, 'test', 'class');
-        const args = repairedMethod.arguments;
+        const repairedStructure = objectArgumentRepair.tryRepair({ ...testStructure, methods: [method] });
+        const args = repairedStructure.methods[0].arguments;
 
         assert.ok(args.length === 1);
+        assert.ok(/^\{.+\}$/.test(args[0].type as string));
     });
 });

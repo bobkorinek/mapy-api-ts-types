@@ -1,6 +1,7 @@
-import { Interface, Namespace, Page, Class, Structure } from '../types';
-import { parseMethodSection, repair } from './method';
+import { Interface, Namespace, Page, Class, Structure, StructureRepair, Method } from '../types';
+import { parseMethodSection } from './method';
 import { insertStructureIntoNamespace } from './namespace';
+import { repairs } from './repairs';
 
 const defaultRootNamespace: Namespace = {
     namespaces: [],
@@ -49,30 +50,41 @@ const pageToStructure = (page: Page, extendingStructures: Structure[] = []): Str
     const parentClass = extendingStructures.find((s) => s.type === 'class') as Class;
 
     const parse = (): Structure => {
-        const getMethods = (structureName: string, structureType: 'class' | 'interface') =>
-            page.methodSections.map(parseMethodSection).map((m) => repair(m, structureName, structureType));
+        const addConstructor = (methodsWithoutConstructor: Method[]) => {
+            if (page?.constructorSection) {
+                return [{ ...parseMethodSection(page.constructorSection), name: 'constructor' } as Method, ...methodsWithoutConstructor];
+            }
 
-        if (isInterface(parsedName.name)) {
-            return {
-                type: 'interface',
-                name: parsedName.name,
-                methods: getMethods(parsedName.name, 'interface'),
-                comment: page.description,
-                interfaces: interfaces,
-            };
-        } else {
-            return {
-                type: 'class',
-                name: parsedName.name,
-                interfaces: interfaces,
-                methods: getMethods(parsedName.name, 'class'),
-                events: [],
-                properties: [],
-                parentClass: parentClass,
-                comment: page.description,
-                url: page.url,
-            };
-        }
+            return methodsWithoutConstructor;
+        };
+
+        const methods = addConstructor(page.methodSections.map(parseMethodSection));
+
+        const createStructure = () => {
+            if (isInterface(parsedName.name)) {
+                return {
+                    type: 'interface',
+                    name: parsedName.name,
+                    methods: methods,
+                    comment: page.description,
+                    interfaces: interfaces,
+                } as Interface;
+            } else {
+                return {
+                    type: 'class',
+                    name: parsedName.name,
+                    interfaces: interfaces,
+                    methods: methods,
+                    events: [],
+                    properties: [],
+                    parentClass: parentClass,
+                    comment: page.description,
+                    url: page.url,
+                } as Class;
+            }
+        };
+
+        return repair(createStructure());
     };
 
     return parsedName.namespace ? { ...parse(), namespace: parsedName.namespace } : parse();
@@ -102,6 +114,13 @@ const parsePageName = (pageName: string): PageName => {
     };
 
     return info.groups['ns'] ? { ...parsedName, namespace: info.groups['ns'] } : parsedName;
+};
+
+const repair = (structure: Structure) => {
+    return repairs.reduce(
+        (repairedStructure: Structure, structureRepair: StructureRepair) => structureRepair.tryRepair(repairedStructure),
+        structure
+    );
 };
 
 interface PageName {

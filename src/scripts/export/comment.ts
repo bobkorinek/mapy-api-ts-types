@@ -1,4 +1,4 @@
-import { Class, Interface, Method, Property } from '../types';
+import { Argument, Class, Interface, Method, Property } from '../types';
 import { createType } from './variable';
 
 export const createComment = (o: Method | Class | Interface | Property) => {
@@ -34,7 +34,10 @@ export const createComment = (o: Method | Class | Interface | Property) => {
             };
 
             commentSections.push(
-                '@param ' + (a.type ? '{' + createType(a.type) + '} ' : '') + createName() + (a.comment ? ' ' + a.comment : '')
+                '@param ' +
+                    (a.type ? '{' + (isArgumentTypeObject(a) ? 'object' : createType(a.type)) + '} ' : '') +
+                    createName() +
+                    (a.comment ? ' ' + a.comment : '')
             );
         });
 
@@ -49,3 +52,5 @@ export const createComment = (o: Method | Class | Interface | Property) => {
 
     return '/**\n * ' + commentSections.join('\n * ') + '\n */\n';
 };
+
+const isArgumentTypeObject = (arg: Argument) => arg.type[0] === '{';

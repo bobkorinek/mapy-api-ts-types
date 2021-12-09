@@ -40,6 +40,10 @@ export interface MethodRepair {
     repair: (method: Method, structureName: string, structureType: 'class' | 'interface') => Method;
 }
 
+export interface StructureRepair {
+    tryRepair: <T extends Structure>(structure: T) => T;
+}
+
 export interface Variable {
     name: string;
     type: Type | Type[];
