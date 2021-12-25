@@ -26,16 +26,14 @@ declare namespace JAK {
     class Promise<T, R> {
         constructor(resolver: (resolve: (result: T) => any, reject: (result: R) => any) => any);
 
-        when(all: Promise<any, any>[]);
-
         then(onFulfilled: (value: T) => any, onRejected: (value: R) => any);
 
         chain(promise);
+
+        static when(all: Promise<any, any>[]);
     }
 
-    class Vector {
-
-    }
+    class Vector {}
 
     abstract class AbstractDecorator {
         decorate<T extends object>(instance: T): T;

@@ -1,4 +1,4 @@
-import { Argument, Method, MethodRepair, StructureRepair } from '../../types';
+import { Argument, Method, StructureRepair } from '../../types';
 
 export const objectArgumentRepair: StructureRepair = {
     tryRepair: (structure) => {

@@ -45,6 +45,22 @@ const invalidTypes: Array<InvalidType> = [
         pattern: /^array$/,
         type: 'Array<unknown>',
     },
+    {
+        pattern: /^xmlDoc$/,
+        type: 'XMLDocument',
+    },
+    {
+        pattern: /^coords$/,
+        type: 'Array<number>',
+    },
+    {
+        pattern: /^(JAK\.)?Promise$/,
+        type: 'JAK.Promise<unknown,unknown>',
+    },
+    {
+        pattern: /^type$/,
+        type: 'number',
+    },
 ];
 
 const repairTypeCallbacks: CallableInvalidType[] = [
