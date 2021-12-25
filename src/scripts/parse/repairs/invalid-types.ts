@@ -41,6 +41,10 @@ const invalidTypes: Array<InvalidType> = [
         pattern: /^event$/,
         type: 'Event',
     },
+    {
+        pattern: /^array$/,
+        type: 'Array<unknown>',
+    },
 ];
 
 const repairTypeCallbacks: CallableInvalidType[] = [
@@ -50,7 +54,7 @@ const repairTypeCallbacks: CallableInvalidType[] = [
 
             if (match) {
                 const arrayType = match.groups?.['t'] || 'unknown';
-                return 'Array<' + arrayType + '>';
+                return 'Array<' + tryRepairType(arrayType) + '>';
             }
 
             return type;
@@ -85,28 +89,37 @@ const tryRepairArgumentsType = (method: Method): Method => {
 };
 
 const tryRepair = <T extends Property | Method | Argument>(p: T): T => {
-    const invalidReturnType = findInvalidType(p.type);
+    if (!p.type) {
+        return p;
+    }
+
+    const types = Array.isArray(p.type) ? p.type : [p.type];
+    const repairedType = types.map(tryRepairType).reduce((allTypes, t) => {
+        return [...allTypes, ...(Array.isArray(t) ? t : [t])];
+    }, []);
+
+    return {
+        ...p,
+        type: repairedType.length === 1 ? repairedType[0] : repairedType,
+    };
+};
+
+const tryRepairType = (t: Type): Type | Type[] => {
+    const invalidReturnType = findInvalidType(t);
 
     if (invalidReturnType) {
-        return { ...p, type: invalidReturnType.type } as T;
+        return invalidReturnType.type;
     }
 
-    return tryRepairWithCallableInvalidType(p);
+    return tryRepairWithCallableInvalidType(t);
 };
 
-const tryRepairWithCallableInvalidType = <T extends Property | Method | Argument>(item: T): T => {
-    if (!item.type) {
-        return item;
-    }
-
-    return repairTypeCallbacks.reduce((p, invalidType) => {
-        const repairedType = (Array.isArray(p.type) ? p.type : [p.type]).map(invalidType.tryRepair);
-
-        return { ...p, type: repairedType.length === 1 ? repairedType[0] : repairedType };
-    }, item);
+const tryRepairWithCallableInvalidType = (t: Type) => {
+    return repairTypeCallbacks.reduce((repairedType, invalidRepair) => {
+        return invalidRepair.tryRepair(repairedType);
+    }, t);
 };
 
-const findInvalidType = (typeName): InvalidType =>
-    typeof typeName === 'string' ? invalidTypes.find((t) => matchesInvalidType(t, typeName)) : null;
+const findInvalidType = (typeName): InvalidType => invalidTypes.find((t) => matchesInvalidType(t, typeName));
 
 const matchesInvalidType = (t: InvalidType, typeName: string) => t.pattern.test(typeName);

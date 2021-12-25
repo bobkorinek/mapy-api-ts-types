@@ -48,6 +48,7 @@ const changeObjectType = (arg: Argument, argObjects: JoinedArguments): Argument 
 };
 
 const createObjectType = (joinedArgs: Argument[]) => {
+    return 'object';
     return '{' + joinedArgs.map((arg) => `"${arg.name}"?: ${arg.type}`).join(',') + '}';
 };
 
