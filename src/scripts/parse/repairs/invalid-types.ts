@@ -18,7 +18,7 @@ const invalidTypes: Array<InvalidType> = [
         type: 'boolean',
     },
     {
-        pattern: /^(int|float)$/,
+        pattern: /^(int|float|integer)$/i,
         type: 'number',
     },
     {
@@ -107,7 +107,7 @@ const tryRepairArgumentsType = (method: Method): Method => {
     };
 };
 
-const tryRepair = <T extends Property | Method | Argument>(p: T): T => {
+export const tryRepair = <T extends Property | Method | Argument>(p: T): T => {
     if (!p.type) {
         return p;
     }

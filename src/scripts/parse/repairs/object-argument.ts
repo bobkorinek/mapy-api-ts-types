@@ -1,4 +1,5 @@
 import { Argument, Method, StructureRepair } from '../../types';
+import { tryRepair } from './invalid-types';
 
 export const objectArgumentRepair: StructureRepair = {
     tryRepair: (structure) => {
@@ -48,9 +49,12 @@ const changeObjectType = (arg: Argument, argObjects: JoinedArguments): Argument 
 };
 
 const createObjectType = (joinedArgs: Argument[]) => {
-    return 'object';
-    return '{' + joinedArgs.map((arg) => `"${arg.name}"?: ${arg.type}`).join(',') + '}';
+    const repairedArgs = joinedArgs.map(tryRepair);
+
+    return '{' + repairedArgs.map((arg) => `"${arg.name}"?: ${convertTypeToString(arg.type)}`).join(',') + '}';
 };
+
+const convertTypeToString = (type: string | string[]) => (Array.isArray(type) ? type.join(' | ') : type);
 
 const isObjectsProperty = (arg: Argument) => arg.name.includes('.');
 
