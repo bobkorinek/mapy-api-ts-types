@@ -1,5 +1,6 @@
 import * as http from 'http';
 import { tmp } from './file';
+import { projectPackage } from './package';
 
 export interface Result {
     url: string;
@@ -16,26 +17,39 @@ export interface Cache {
     (url: string, getData: () => Promise<string>): Promise<string>;
 }
 
+const userAgent = `MapyApiTypeScriptTypesBot/${String(projectPackage.version)} (+${projectPackage.homepage})`;
+
 export const get = (url: string): Promise<Result> => {
     console.log(`getting ${url}`);
 
+    const urlObject = new URL(url);
+
     return new Promise((resolve) => {
-        http.get(url, (response) => {
-            let data = '';
+        http.get(
+            {
+                host: urlObject.hostname,
+                path: urlObject.pathname,
+                headers: {
+                    'User-Agent': userAgent,
+                },
+            },
+            (response) => {
+                let data = '';
 
-            response.on('data', (c) => {
-                data += c;
-            });
-
-            response.on('end', () => {
-                console.log(`finished ${url}`);
-
-                resolve({
-                    url: url,
-                    data: data,
+                response.on('data', (c) => {
+                    data += c;
                 });
-            });
-        });
+
+                response.on('end', () => {
+                    console.log(`finished ${url}`);
+
+                    resolve({
+                        url: url,
+                        data: data,
+                    });
+                });
+            }
+        );
     });
 };
 
