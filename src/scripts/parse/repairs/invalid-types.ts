@@ -49,6 +49,9 @@ const invalidTypes: Array<InvalidType> = [
 
 const repairTypeCallbacks: CallableInvalidType[] = [
     {
+        /**
+         * Convert type Array[] to Array<> and repair its generic type
+         */
         tryRepair: (type) => {
             const match = type.match(/^Array(?:\[(?<t>.+)\])?/);
 
@@ -94,15 +97,18 @@ const tryRepair = <T extends Property | Method | Argument>(p: T): T => {
     }
 
     const types = Array.isArray(p.type) ? p.type : [p.type];
-    const repairedType = types.map(tryRepairType).reduce((allTypes, t) => {
-        return [...allTypes, ...(Array.isArray(t) ? t : [t])];
-    }, []);
+    const repairedType = convertTypesToSingleArray(types.map(tryRepairType));
 
     return {
         ...p,
         type: repairedType.length === 1 ? repairedType[0] : repairedType,
     };
 };
+
+const convertTypesToSingleArray = (types: Array<Type | Type[]>) =>
+    types.reduce((allTypes, t) => {
+        return [...allTypes, ...(Array.isArray(t) ? t : [t])];
+    }, []);
 
 const tryRepairType = (t: Type): Type | Type[] => {
     const invalidReturnType = findInvalidType(t);
