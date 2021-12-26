@@ -1,6 +1,7 @@
 import { Interface, Namespace, Page, Class, Structure, StructureRepair, Method } from '../types';
 import { parseMethodSection } from './method';
 import { insertStructureIntoNamespace } from './namespace';
+import { parseProperties } from './property';
 import { repairs } from './repairs';
 
 const defaultRootNamespace: Namespace = {
@@ -76,7 +77,7 @@ const pageToStructure = (page: Page, extendingStructures: Structure[] = []): Str
                     interfaces: interfaces,
                     methods: methods,
                     events: [],
-                    properties: [],
+                    properties: parseProperties(page.propertySections),
                     parentClass: parentClass,
                     comment: page.description,
                     url: page.url,

@@ -2,8 +2,9 @@ import * as assert from 'assert';
 import { it } from 'mocha';
 import { parseMethodSection } from '../src/scripts/parse/method';
 import { insertStructureIntoNamespace } from '../src/scripts/parse/namespace';
+import { parseProperties } from '../src/scripts/parse/property';
 import { parsePages } from '../src/scripts/parse/structure';
-import { Argument, Class, Interface, Namespace, Page } from '../src/scripts/types';
+import { Argument, Class, Interface, Namespace, Page, PropertyAccess } from '../src/scripts/types';
 
 describe('parse', () => {
     describe('structure', () => {
@@ -127,6 +128,35 @@ describe('parse', () => {
                     optional: null,
                 },
             ] as Argument[]);
+        });
+    });
+
+    describe('property', () => {
+        it('parse properies', () => {
+            const propertySections: Page.PropertySection[] = [
+                {
+                    name: 'p1',
+                    visibility: 'statická',
+                },
+                {
+                    name: 'p2',
+                },
+                {
+                    name: 'p3',
+                    visibility: 'konstanta',
+                },
+            ];
+
+            const properties = parseProperties(propertySections);
+
+            assert.strictEqual(properties[0].name, 'p1');
+            assert.strictEqual(properties[0].access, 'static' as PropertyAccess);
+
+            assert.strictEqual(properties[1].name, 'p2');
+            assert.strictEqual(properties[1].access, 'normal' as PropertyAccess);
+
+            assert.strictEqual(properties[2].name, 'p3');
+            assert.strictEqual(properties[2].access, 'constant' as PropertyAccess);
         });
     });
 });

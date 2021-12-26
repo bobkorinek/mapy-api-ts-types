@@ -28,15 +28,12 @@ export const getSections = (doc: Document, header: string): SectionElements[] =>
     const getNext = (e: Element, prev = emptySection, i: number = 0): SectionElements[] => {
         const sectionElements = addSectionElement(prev, e, i);
 
-        if (e.nextElementSibling) {
+        if (e.nextElementSibling && !e.nextElementSibling.classList.contains('sectionTitle')) {
             const nextElement = e.nextElementSibling;
 
-            if (nextElement.tagName.toLowerCase() !== 'hr' && !nextElement.classList.contains('sectionTitle')) {
+            if (nextElement.tagName.toLowerCase() !== 'hr') {
                 return getNext(e.nextElementSibling, sectionElements, i + 1);
-            } else if (
-                nextElement.nextElementSibling?.tagName.toLowerCase() === 'a' &&
-                nextElement.nextElementSibling?.hasAttribute('name')
-            ) {
+            } else if (nextElement.nextElementSibling?.tagName === 'A' && nextElement.nextElementSibling?.hasAttribute('name')) {
                 return [...getNext(nextElement.nextElementSibling), sectionElements];
             }
         }

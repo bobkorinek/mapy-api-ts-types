@@ -3,6 +3,7 @@ import { JSDOM } from 'jsdom';
 import 'mocha';
 import { Page } from '../src/scripts/types';
 import { importPage } from '../src/scripts/import/page';
+import { getPropertiesSections } from '../src/scripts/import/property-section';
 
 const createDoc = (html: string, insertContent = true) =>
     new JSDOM(`<!DOCTYPE html>` + (insertContent ? '<div id="content">' + html + `</div>` : html)).window.document;
@@ -59,10 +60,20 @@ describe('import', () => {
 					<span class="light">SMap.</span><b>Card</b>
 				</div>
                 <div class="description"></div>
+                <div class="sectionTitle">Metody - detailně</div>
+                <a name="removeCard"> </a>
+                <div class="fixedFont">
+                    &lt;statická&gt;
+                    <span class="light">{array}</span>
+                    <b>removeCard</b>()
+                </div>
+                <div class="description">Zavře vizitku</div>
+                <hr>
             `);
 
             const page = importPage(doc, 'https://api.mapy.cz/doc/SMap.html');
 
+            assert.strictEqual(page.propertySections.length, 2);
             assert.deepStrictEqual(page.propertySections[0], {
                 name: 'MOUSE_PAN',
                 visibility: 'konstanta',
@@ -239,6 +250,40 @@ describe('import', () => {
             const page = importPage(doc, 'https://api.mapy.cz/doc/SMap.html');
 
             assert.ok(page.constructorSection);
+        });
+    });
+
+    describe('property', () => {
+        it('get property sections', () => {
+            const doc = createDoc(`<h1 class="classTitle">Třída SMap</h1>
+                <p class="description">SMap Mapa</p>
+                <div class="sectionTitle">Vlastnosti - detailně</div>
+                <a name="MOUSE_PAN"> </a>
+                <div class="fixedFont">
+                    &lt;konstanta&gt;
+					<span class="light">SMap.</span><b>MOUSE_PAN</b>
+				</div>
+                <div class="description"></div>
+                <hr>
+                <a name="MOUSE_PAN"> </a>
+                <div class="fixedFont">
+                    &lt;statická&gt;
+					<span class="light">SMap.</span><b>Card</b>
+				</div>
+                <div class="description"></div>
+                <div class="sectionTitle">Metody - detailně</div>
+                <a name="removeCard"> </a>
+                <div class="fixedFont">
+                    &lt;statická&gt;
+                    <span class="light">{array}</span>
+                    <b>removeCard</b>()
+                </div>
+                <div class="description">Zavře vizitku</div>
+                <hr>
+            `);
+            const propertySections = getPropertiesSections(doc);
+
+            assert.strictEqual(propertySections.length, 2);
         });
     });
 });
