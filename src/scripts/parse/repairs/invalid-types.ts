@@ -18,7 +18,7 @@ const invalidTypes: Array<InvalidType> = [
         type: 'boolean',
     },
     {
-        pattern: /^(int|float|integer)$/i,
+        pattern: /^(int|float|integer|number)$/i,
         type: 'number',
     },
     {
@@ -60,6 +60,14 @@ const invalidTypes: Array<InvalidType> = [
     {
         pattern: /^type$/,
         type: 'number',
+    },
+    {
+        pattern: /^String$/,
+        type: 'string',
+    },
+    {
+        pattern: /^Object$/,
+        type: 'object',
     },
 ];
 

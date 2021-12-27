@@ -12,6 +12,7 @@ export const parseProperty = (section: Page.PropertySection): Property => {
         access: mapPropertyAccess(section.visibility),
         name: section.name,
         type: 'unknown',
+        url: section.url,
     };
 };
 

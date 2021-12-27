@@ -96,6 +96,7 @@ export namespace Page {
     export interface PropertySection {
         name: string;
         visibility?: string;
+        url?: string;
     }
 
     export interface MethodSection {

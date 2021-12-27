@@ -1,7 +1,7 @@
 import { Page } from '../types';
 import { getSections, SectionElements } from './section';
 
-export const parsePropertySections = (propertiesSections: SectionElements[]): Page.PropertySection[] => {
+export const parsePropertySections = (propertiesSections: SectionElements[], url?: string): Page.PropertySection[] => {
     if (propertiesSections.length === 0) {
         return [];
     }
@@ -14,6 +14,7 @@ export const parsePropertySections = (propertiesSections: SectionElements[]): Pa
             {
                 name: elements.main.lastElementChild.textContent.trim(),
                 visibility: visibility?.groups['v'] ? visibility.groups['v'] : null,
+                url: url && elements.linkElement ? `${url}#${elements.linkElement.name}` : undefined,
             },
             ...(propertiesSections[i + 1] ? parse(i + 1) : []),
         ];

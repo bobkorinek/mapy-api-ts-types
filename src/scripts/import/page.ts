@@ -8,7 +8,7 @@ export const importPage = (doc: Document, url: string): Page => {
     return {
         name: parseHeaderToClassName(headerName),
         events: parseListOfEvents(getListOfEvents(doc)),
-        propertySections: parsePropertySections(getPropertiesSections(doc)),
+        propertySections: parsePropertySections(getPropertiesSections(doc), url),
         constructorSection: parseMethodSection(getConstructorSection(doc)),
         methodSections: getMethodsSections(doc).map((ms) => parseMethodSection(ms, url)),
         url: url,

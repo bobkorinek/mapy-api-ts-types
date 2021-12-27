@@ -54,7 +54,7 @@ describe('import', () => {
 				</div>
                 <div class="description"></div>
                 <hr>
-                <a name="MOUSE_PAN"> </a>
+                <a name="Card"> </a>
                 <div class="fixedFont">
                     &lt;statická&gt;
 					<span class="light">SMap.</span><b>Card</b>
@@ -77,10 +77,12 @@ describe('import', () => {
             assert.deepStrictEqual(page.propertySections[0], {
                 name: 'MOUSE_PAN',
                 visibility: 'konstanta',
+                url: 'https://api.mapy.cz/doc/SMap.html#MOUSE_PAN',
             } as Page.PropertySection);
             assert.deepStrictEqual(page.propertySections[1], {
                 name: 'Card',
                 visibility: 'statická',
+                url: 'https://api.mapy.cz/doc/SMap.html#Card',
             } as Page.PropertySection);
         });
 
