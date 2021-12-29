@@ -5,6 +5,8 @@ import { Page } from '../src/scripts/types';
 import { importPage } from '../src/scripts/import/page';
 import { getPropertiesSections } from '../src/scripts/import/property-section';
 
+const baseUrl = 'https://api.mapy.cz/doc/SMap.html';
+
 const createDoc = (html: string, insertContent = true) =>
     new JSDOM(`<!DOCTYPE html>` + (insertContent ? '<div id="content">' + html + `</div>` : html)).window.document;
 
@@ -31,7 +33,7 @@ describe('import', () => {
                 </ul>
             `);
 
-            const page = importPage(doc, 'https://api.mapy.cz/doc/SMap.html');
+            const page = importPage(doc, baseUrl);
 
             assert.deepStrictEqual(page.events[0], {
                 name: 'map-redraw',
@@ -71,7 +73,7 @@ describe('import', () => {
                 <hr>
             `);
 
-            const page = importPage(doc, 'https://api.mapy.cz/doc/SMap.html');
+            const page = importPage(doc, baseUrl);
 
             assert.strictEqual(page.propertySections.length, 2);
             assert.deepStrictEqual(page.propertySections[0], {
@@ -123,7 +125,7 @@ describe('import', () => {
                 </dl>
             `);
 
-            const page = importPage(doc, 'https://api.mapy.cz/doc/SMap.html');
+            const page = importPage(doc, baseUrl);
 
             const method = page.methodSections[0];
 
@@ -144,7 +146,7 @@ describe('import', () => {
                 <div class="description">Zavře vizitku</div>
             `);
 
-            const page = importPage(doc, 'https://api.mapy.cz/doc/SMap.html');
+            const page = importPage(doc, baseUrl);
 
             const method = page.methodSections[0];
 
@@ -179,7 +181,7 @@ describe('import', () => {
                 </dl>
             `);
 
-            const page = importPage(doc, 'https://api.mapy.cz/doc/SMap.html');
+            const page = importPage(doc, baseUrl);
 
             const method = page.methodSections[0];
 
@@ -220,13 +222,26 @@ describe('import', () => {
                 </dl>
             `);
 
-            const page = importPage(doc, 'https://api.mapy.cz/doc/SMap.html');
+            const page = importPage(doc, baseUrl);
 
             const method = page.methodSections[0];
             const returnValue = method.returnValueSection;
 
             assert.strictEqual(returnValue.type, 'SMap.Card');
             assert.strictEqual(returnValue.description, 'Zobrazená vizitka');
+        });
+
+        it("import page's parent structures", () => {
+            const doc = createDoc(`<h1 class="classTitle">Třída SMap.Layer.Canvas</h1>
+                <p class="description">
+                    Canvasová vrstva
+                    <br>Rozšiřuje
+                    <a href="SMap.Layer.html#">SMap.Layer</a>
+                </p>`);
+
+            const page = importPage(doc, baseUrl);
+
+            assert.deepStrictEqual(page.extends, ['SMap.Layer']);
         });
 
         it("find page's constructor section", () => {
@@ -249,7 +264,7 @@ describe('import', () => {
                 </dl>
             `);
 
-            const page = importPage(doc, 'https://api.mapy.cz/doc/SMap.html');
+            const page = importPage(doc, baseUrl);
 
             assert.ok(page.constructorSection);
         });

@@ -1,6 +1,6 @@
 import { JSDOM } from 'jsdom';
-import { mapNodeList } from '../util/dom';
 import { bulkGet, fileCache, get, Result } from '../util/http';
+import { mapIterator } from '../util/iterator';
 import { SMAP_DOC_URL } from './vars';
 
 export interface HTMLPage {
@@ -28,5 +28,5 @@ const getUrls = async (indexUrl: string = SMAP_DOC_URL + '/SMap.html'): Promise<
     const prefix = SMAP_DOC_URL + '/';
     const doc = convertPage(await get(indexUrl)).body;
 
-    return mapNodeList(doc.querySelectorAll<HTMLAnchorElement>('#index a'), (linkElement) => prefix + linkElement.href);
+    return mapIterator(doc.querySelectorAll<HTMLAnchorElement>('#index a').values(), (linkElement) => prefix + linkElement.href);
 };

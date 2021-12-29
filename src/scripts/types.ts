@@ -8,7 +8,7 @@ export interface Namespace {
 interface StrucutreInterface extends Link {
     name: string;
     namespace?: string;
-    interfaces: Interface[];
+    interfaces: string[];
     methods: Method[];
     comment?: string;
 }
@@ -19,7 +19,7 @@ export interface Interface extends StrucutreInterface {
 
 export interface Class extends StrucutreInterface {
     type: 'class';
-    parentClass?: Class;
+    parentClass?: string;
     properties: Property[];
     methods: Method[];
     comment?: string;

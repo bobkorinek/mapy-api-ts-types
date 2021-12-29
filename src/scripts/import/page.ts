@@ -1,3 +1,4 @@
+import { reduceIterator } from '../../util/iterator';
 import { Page } from '../types';
 import { parseMethodSection, getMethodsSections, getConstructorSection } from './method-section';
 import { getPropertiesSections, parsePropertySections } from './property-section';
@@ -12,6 +13,7 @@ export const importPage = (doc: Document, url: string): Page => {
         constructorSection: parseMethodSection(getConstructorSection(doc)),
         methodSections: getMethodsSections(doc).map((ms) => parseMethodSection(ms, url)),
         url: url,
+        extends: getParents(doc),
     };
 };
 
@@ -59,6 +61,26 @@ const getListOfEvents = (doc: Document) => {
     } else {
         return null;
     }
+};
+
+const getParents = (doc: Document) => {
+    const descriptionElement = doc.querySelector('p.description');
+
+    if (!descriptionElement) {
+        return [];
+    }
+
+    return reduceIterator(
+        descriptionElement.children,
+        (elements, element) => {
+            if (element.tagName === 'A' && element.textContent.trim().match(/^\w+(?:\.\w+)*$/)) {
+                return [...elements, element.textContent.trim()];
+            }
+
+            return elements;
+        },
+        []
+    );
 };
 
 //#endregion Selectors

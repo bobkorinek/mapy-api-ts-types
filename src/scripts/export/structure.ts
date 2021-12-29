@@ -15,7 +15,7 @@ export const createStructure = (s: Class | Interface, ns: Namespace) =>
     (s.type === 'class' ? createClass(s, ns) : createInterface(s, ns));
 
 const createClass = (c: Class, ns: Namespace) =>
-    (c.parentClass ? ' extends ' + c.parentClass.name : '') +
+    (c.parentClass ? ' extends ' + c.parentClass : '') +
     (c?.interfaces.length > 0 ? ' implements ' + c.interfaces.join(', ') : '') +
     ' {\n' +
     createProperties(c, ns) +

@@ -37,7 +37,7 @@ describe('parse', () => {
 
             assert.ok(parentClass, "Parent class can't be inserted into proper namespace.");
             assert.ok(childClass, "Child class can't be inserted into proper namespace.");
-            assert.deepStrictEqual(childClass.parentClass, parentClass, "Child class doesn't have proper parent class");
+            assert.strictEqual(childClass.parentClass, parentClass.name, "Child class doesn't have proper parent class");
         });
     });
 

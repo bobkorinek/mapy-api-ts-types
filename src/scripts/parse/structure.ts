@@ -47,7 +47,7 @@ const parsePage = (page: Page, rootNamespace: Namespace, allPages: Page[]): Name
 
 const pageToStructure = (page: Page, extendingStructures: Structure[] = []): Structure => {
     const parsedName = parsePageName(page.name);
-    const interfaces = extendingStructures.filter((s) => s.type === 'interface') as Interface[];
+    const interfaces = extendingStructures.filter((s) => s.type === 'interface').map((i) => i.name);
     const parentClass = extendingStructures.find((s) => s.type === 'class') as Class;
 
     const parse = (): Structure => {
@@ -78,7 +78,7 @@ const pageToStructure = (page: Page, extendingStructures: Structure[] = []): Str
                     methods: methods,
                     events: [],
                     properties: parseProperties(page.propertySections),
-                    parentClass: parentClass,
+                    parentClass: parentClass?.name,
                     comment: page.description,
                     url: page.url,
                 } as Class;
