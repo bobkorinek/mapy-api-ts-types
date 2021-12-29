@@ -47,8 +47,7 @@ const parsePage = (page: Page, rootNamespace: Namespace, allPages: Page[]): Name
 
 const pageToStructure = (page: Page, extendingStructures: Structure[] = []): Structure => {
     const parsedName = parsePageName(page.name);
-    const interfaces = extendingStructures.filter((s) => s.type === 'interface').map((i) => i.name);
-    const parentClass = extendingStructures.find((s) => s.type === 'class') as Class;
+    const parentStructures = groupParentStructures(page.extends);
 
     const parse = (): Structure => {
         const addConstructor = (methodsWithoutConstructor: Method[]) => {
@@ -68,17 +67,17 @@ const pageToStructure = (page: Page, extendingStructures: Structure[] = []): Str
                     name: parsedName.name,
                     methods: methods,
                     comment: page.description,
-                    interfaces: interfaces,
+                    interfaces: parentStructures.interfaces,
                 } as Interface;
             } else {
                 return {
                     type: 'class',
                     name: parsedName.name,
-                    interfaces: interfaces,
+                    interfaces: parentStructures.interfaces,
                     methods: methods,
                     events: [],
                     properties: parseProperties(page.propertySections),
-                    parentClass: parentClass?.name,
+                    parentClass: parentStructures.class,
                     comment: page.description,
                     url: page.url,
                 } as Class;
@@ -105,7 +104,7 @@ const getStructure = (fullName: string, namespace: Namespace) => {
     return findInNamespace(fullName.split('.'), namespace);
 };
 
-const isInterface = (structureName: string) => structureName.match(/^I[A-Z].+/);
+const isInterface = (structureName: string) => structureName.match(/I[A-Z].+$/);
 
 const parsePageName = (pageName: string): PageName => {
     const info = pageName.match(/^(?:(?<ns>.+)\.)?(?<name>.+)$/);
@@ -123,6 +122,30 @@ const repair = (structure: Structure) => {
         structure
     );
 };
+
+const groupParentStructures = (parents: string[]): GroupedParentStructures => {
+    const emptyGroupedStructures: GroupedParentStructures = {
+        interfaces: [] as string[],
+        class: undefined as string,
+    };
+
+    if (!parents || parents.length === 0) {
+        return emptyGroupedStructures;
+    }
+
+    return parents.reduce((groupedStructures, structureName) => {
+        if (isInterface(structureName)) {
+            return { ...groupedStructures, interfaces: [...groupedStructures.interfaces, structureName] };
+        } else {
+            return { ...groupedStructures, class: structureName };
+        }
+    }, emptyGroupedStructures);
+};
+
+interface GroupedParentStructures {
+    interfaces: string[];
+    class?: string;
+}
 
 interface PageName {
     namespace?: string;
