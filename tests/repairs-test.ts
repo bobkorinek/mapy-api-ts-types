@@ -1,6 +1,6 @@
 import * as assert from 'assert';
 import 'mocha';
-import { removeDuplicateProperties } from '../src/scripts/parse/repairs/duplicate-properties';
+import { duplicateMembersRepair } from '../src/scripts/parse/repairs/duplicate-members';
 import { objectArgumentRepair } from '../src/scripts/parse/repairs/object-argument';
 import { Class, Method, Property } from '../src/scripts/types';
 
@@ -43,7 +43,16 @@ describe('repair', () => {
         });
     });
 
-    describe('duplicate properties', () => {
+    describe('duplicate members', () => {
+        const testClass: Class = {
+            name: 'Test',
+            events: [],
+            interfaces: [],
+            methods: [],
+            type: 'class',
+            properties: [],
+        };
+
         it('remove duplicate property', () => {
             const classesProperties: Property[] = [
                 {
@@ -64,19 +73,45 @@ describe('repair', () => {
             ];
 
             const c: Class = {
-                name: 'Test',
-                events: [],
-                interfaces: [],
-                methods: [],
-                type: 'class',
+                ...testClass,
                 properties: classesProperties,
             };
 
-            const alteredClass = removeDuplicateProperties(c);
+            const alteredClass = duplicateMembersRepair.tryRepair(c);
 
             assert.strictEqual(alteredClass.properties.length, 2);
             assert.strictEqual(alteredClass.properties[0].name, 'p1');
             assert.strictEqual(alteredClass.properties[1].name, 'p2');
+        });
+
+        it('remove duplicate methods', () => {
+            const classesMethods: Method[] = [
+                {
+                    name: 'm1',
+                    arguments: [],
+                    static: false,
+                },
+                {
+                    name: 'm2',
+                    arguments: [],
+                    static: false,
+                },
+                {
+                    name: 'm1',
+                    arguments: [],
+                    static: false,
+                },
+            ];
+            const c: Class = {
+                ...testClass,
+                methods: classesMethods,
+            };
+
+            const alteredClass = duplicateMembersRepair.tryRepair(c);
+
+            assert.strictEqual(alteredClass.methods.length, 2);
+            assert.strictEqual(alteredClass.methods[0].name, 'm1');
+            assert.strictEqual(alteredClass.methods[1].name, 'm2');
         });
     });
 });
