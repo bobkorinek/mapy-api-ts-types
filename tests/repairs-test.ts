@@ -4,13 +4,14 @@ import { duplicateMembersRepair } from '../src/scripts/parse/repairs/duplicate-m
 import { objectArgumentRepair } from '../src/scripts/parse/repairs/object-argument';
 import { Class, Method, Property } from '../src/scripts/types';
 
-const testStructure: Class = {
+const testClass: Class = {
     events: [],
     interfaces: [],
     methods: [],
     name: 'TestClass',
     properties: [],
     type: 'class',
+    fullName: 'TestClass',
 };
 
 describe('repair', () => {
@@ -35,7 +36,7 @@ describe('repair', () => {
                 ],
             };
 
-            const repairedStructure = objectArgumentRepair.tryRepair({ ...testStructure, methods: [method] });
+            const repairedStructure = objectArgumentRepair.tryRepair({ ...testClass, methods: [method] });
             const args = repairedStructure.methods[0].arguments;
 
             assert.ok(args.length === 1);
@@ -44,15 +45,6 @@ describe('repair', () => {
     });
 
     describe('duplicate members', () => {
-        const testClass: Class = {
-            name: 'Test',
-            events: [],
-            interfaces: [],
-            methods: [],
-            type: 'class',
-            properties: [],
-        };
-
         it('remove duplicate property', () => {
             const classesProperties: Property[] = [
                 {

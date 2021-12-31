@@ -65,6 +65,7 @@ const pageToStructure = (page: Page, extendingStructures: Structure[] = []): Str
                 return {
                     type: 'interface',
                     name: parsedName.name,
+                    fullName: page.name,
                     methods: methods,
                     comment: page.description,
                     interfaces: parentStructures.interfaces,
@@ -73,6 +74,7 @@ const pageToStructure = (page: Page, extendingStructures: Structure[] = []): Str
                 return {
                     type: 'class',
                     name: parsedName.name,
+                    fullName: page.name,
                     interfaces: parentStructures.interfaces,
                     methods: methods,
                     events: [],

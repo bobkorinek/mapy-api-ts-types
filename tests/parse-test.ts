@@ -45,6 +45,7 @@ describe('parse', () => {
         const testInterface: Interface = {
             type: 'interface',
             name: 'ITest',
+            fullName: 'ITest',
             methods: [],
             interfaces: [],
         };
