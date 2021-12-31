@@ -34,10 +34,7 @@ export const createComment = (o: Method | Class | Interface | Property) => {
             };
 
             commentSections.push(
-                '@param ' +
-                    (a.type ? '{' + (isArgumentTypeObject(a) ? 'object' : createType(a.type)) + '} ' : '') +
-                    createName() +
-                    (a.comment ? ' ' + a.comment : '')
+                '@param ' + (a.type ? '{' + exportTypes(a.type) + '} ' : '') + createName() + (a.comment ? ' ' + a.comment : '')
             );
         });
 
@@ -53,4 +50,10 @@ export const createComment = (o: Method | Class | Interface | Property) => {
     return '/**\n * ' + commentSections.join('\n * ') + '\n */\n';
 };
 
-const isArgumentTypeObject = (arg: Argument) => arg.type[0] === '{';
+const isTypeObject = (type: string) => type[0] === '{';
+
+const exportTypes = (type: string | string[]) => {
+    const types = Array.isArray(type) ? type : [type];
+
+    return createType(types.map((t) => (isTypeObject(t) ? 'object' : t)));
+};
