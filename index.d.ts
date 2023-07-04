@@ -1553,7 +1553,7 @@ declare namespace SMap {
      * @param {number} radius V metrech.
      * @param {object} attribute Objekt s upřesněním.
      */
-    getBest(coords: SMap.Coords, radius: number, attribute: object): void;
+    static async getBest(coords: SMap.Coords, radius: number, attribute: object): Promise;
 
     /**
      * Vytvoření pano místa.
